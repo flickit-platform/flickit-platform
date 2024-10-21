@@ -56,7 +56,7 @@ const SpacesList = (props: ISpaceListProps) => {
   const { items = [] } = data || {};
 
   return (
-    <Box sx={{ overflowX: "auto", py: 1 }}>
+    <Box sx={{ overflowX: "hidden", py: 1 }}>
       <Box sx={{ minWidth: { xs: "320px", sm: "440px" } }}>
         {items.map((item: any) => {
           return (

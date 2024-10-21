@@ -1,4 +1,5 @@
-import { Box, IconButton } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import { Trans } from "react-i18next";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -16,7 +17,7 @@ import toastError from "@utils/toastError";
 import { toast } from "react-toastify";
 import FormProviderWithForm from "@common/FormProviderWithForm";
 import { useForm } from "react-hook-form";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
@@ -39,11 +40,12 @@ import { theme } from "@/config/theme";
 interface IAssessmentKitSectionAuthorInfo {
   setExpertGroup: any;
   setAssessmentKitTitle: any;
+  setHasActiveVersion: any;
 }
 const AssessmentKitSectionGeneralInfo = (
   props: IAssessmentKitSectionAuthorInfo,
 ) => {
-  const { setExpertGroup, setAssessmentKitTitle } = props;
+  const { setExpertGroup, setAssessmentKitTitle, setHasActiveVersion } = props;
   const { assessmentKitId } = useParams();
   const { service } = useServiceContext();
   const formMethods = useForm({ shouldUnregister: true });
@@ -55,22 +57,16 @@ const AssessmentKitSectionGeneralInfo = (
   const fetchAssessmentKitStatsQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.fetchAssessmentKitStats(args, config),
-    runOnMount: true,
+    runOnMount: false,
   });
-  // const publishAssessmentKit = async () => {
-  //   try {
-  //     const res = await publishQuery.query();
-  //     res.message && toast.success(res.message);
-  //     query();
-  //   } catch (e) {}
-  // };
-  // const unPublishAssessmentKit = async () => {
-  //   try {
-  //     const res = await unPublishQuery.query();
-  //     res.message && toast.success(res.message);
-  //     query();
-  //   } catch (e) {}
-  // };
+  useEffect(() => {
+    if (
+      fetchAssessmentKitInfoQuery?.data?.hasActiveVersion &&
+      fetchAssessmentKitStatsQuery.data === undefined
+    ) {
+      fetchAssessmentKitStatsQuery.query();
+    }
+  }, [fetchAssessmentKitInfoQuery.data]);
 
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
@@ -105,242 +101,142 @@ const AssessmentKitSectionGeneralInfo = (
     }
   };
   return (
-    <Box>
-      <QueryBatchData
-        queryBatchData={[
-          fetchAssessmentKitInfoQuery,
-          fetchAssessmentKitStatsQuery,
-        ]}
-        loadingComponent={
-          <LoadingSkeleton
-            width="58%"
-            height="360px"
-            sx={{ mt: 1, borderRadius: 2 }}
-          />
-        }
-        render={([info, stats]) => {
-          const {
-            title,
-            summary,
-            published,
-            isPrivate,
-            about,
-            tags,
-            editable,
-          } = info as AssessmentKitInfoType;
-          const {
-            creationTime,
-            lastModificationTime,
-            questionnairesCount,
-            attributesCount,
-            questionsCount,
-            maturityLevelsCount,
-            likes,
-            assessmentCounts,
-            subjects,
-            expertGroup,
-          } = stats as AssessmentKitStatsType;
-          setExpertGroup(expertGroup);
-          setAssessmentKitTitle(title);
-          return (
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={7}>
+    <Grid container spacing={4}>
+      <Grid item xs={12} md={7}>
+        <QueryBatchData
+          queryBatchData={[fetchAssessmentKitInfoQuery]}
+          loadingComponent={
+            <LoadingSkeleton
+              width="100%"
+              height="360px"
+              sx={{ mt: 1, borderRadius: 2 }}
+            />
+          }
+          render={([info]) => {
+            const {
+              title,
+              summary,
+              published,
+              isPrivate,
+              about,
+              tags,
+              editable,
+              hasActiveVersion,
+            } = info as AssessmentKitInfoType;
+            setAssessmentKitTitle(title);
+            setHasActiveVersion(hasActiveVersion);
+            return (
+              <Box
+                sx={{
+                  mt: 1,
+                  p: 2.5,
+                  borderRadius: 2,
+                  background: "white",
+                }}
+              >
+                <OnHoverInput
+                  formMethods={formMethods}
+                  data={title}
+                  title={<Trans i18nKey="title" />}
+                  infoQuery={fetchAssessmentKitInfoQuery.query}
+                  type="title"
+                  editable={editable}
+                />
+                <OnHoverInput
+                  formMethods={formMethods}
+                  data={summary}
+                  title={<Trans i18nKey="summary" />}
+                  infoQuery={fetchAssessmentKitInfoQuery.query}
+                  type="summary"
+                  editable={editable}
+                />
+                <OnHoverStatus
+                  data={published}
+                  title={<Trans i18nKey="status" />}
+                  infoQuery={fetchAssessmentKitInfoQuery.query}
+                  editable={editable}
+                />
+                <OnHoverVisibilityStatus
+                  data={isPrivate}
+                  title={<Trans i18nKey="visibility" />}
+                  infoQuery={fetchAssessmentKitInfoQuery.query}
+                  editable={editable}
+                />
                 <Box
                   sx={{
-                    mt: 1,
-                    p: 2.5,
-                    borderRadius: 2,
-                    background: "white",
+                    height: "38px",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
                   }}
                 >
-                  <OnHoverInput
-                    formMethods={formMethods}
-                    data={title}
-                    title={<Trans i18nKey="title" />}
-                    infoQuery={fetchAssessmentKitInfoQuery.query}
-                    type="title"
-                    editable={editable}
-                  />
-                  <OnHoverInput
-                    formMethods={formMethods}
-                    data={summary}
-                    title={<Trans i18nKey="summary" />}
-                    infoQuery={fetchAssessmentKitInfoQuery.query}
-                    type="summary"
-                    editable={editable}
-                  />
-                  <OnHoverStatus
-                    data={published}
-                    title={<Trans i18nKey="status" />}
-                    infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={editable}
-                  />
-                  <OnHoverVisibilityStatus
-                    data={isPrivate}
-                    title={<Trans i18nKey="visibility" />}
-                    infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={editable}
-                  />
-                  <Box
-                    sx={{
-                      height: "38px",
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                  <Typography
+                    variant="body2"
+                    mr={4}
+                    sx={{ minWidth: "64px !important" }}
                   >
-                    <Typography
-                      variant="body2"
-                      mr={4}
-                      sx={{ minWidth: "64px !important" }}
-                    >
-                      <Trans i18nKey="price" />
-                    </Typography>
-                    <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
-                      FREE
-                    </Typography>
-                  </Box>
-                  {/* <OnHoverAutocompleteAsyncField
+                    <Trans i18nKey="price" />
+                  </Typography>
+                  <Typography variant="body2" fontWeight="700" mr={4} ml={1}>
+                    <Trans i18nKey={"free"} />
+                  </Typography>
+                </Box>
+                {/* <OnHoverAutocompleteAsyncField
                     data={tags}
                     title={<Trans i18nKey="tags" />}
                     infoQuery={fetchAssessmentKitInfoQuery.query}
                     editable ={editable }
                   /> */}
 
-                  <Box
-                    my={1.5}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
+                <Box
+                  my={1.5}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    mr={4}
+                    sx={{ minWidth: "64px !important" }}
                   >
-                    <Typography
-                      variant="body2"
-                      mr={4}
-                      sx={{ minWidth: "64px !important" }}
-                    >
-                      <Trans i18nKey="tags" />
-                    </Typography>
-                    {editable && show ? (
-                      <FormProviderWithForm formMethods={formMethods}>
-                        <Box
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <AutocompleteAsyncField
-                            {...useConnectAutocompleteField({
-                              service: (args, config) =>
-                                service.fetchAssessmentKitTags(args, config),
-                            })}
-                            name="tags"
-                            multiple={true}
-                            defaultValue={tags}
-                            searchOnType={false}
-                            required={true}
-                            label={""}
-                            editable={true}
-                            sx={{ width: "100%" }}
-                          />
-                          <Box
-                            sx={{
-                              display: "flex",
-                              flexDirection: "row",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              height: "100%",
-                            }}
-                          >
-                            <IconButton
-                              edge="end"
-                              sx={{
-                                background: theme.palette.primary.main,
-                                "&:hover": {
-                                  background: theme.palette.primary.dark,
-                                },
-                                borderRadius: "3px",
-                                height: "36px",
-                                marginBottom: "2px",
-                                marginRight:
-                                  theme.direction === "ltr" ? "3px" : "unset",
-                                marginLeft:
-                                  theme.direction === "rtl" ? "3px" : "unset",
-                              }}
-                              onClick={formMethods.handleSubmit(onSubmit)}
-                            >
-                              <CheckCircleOutlineRoundedIcon
-                                sx={{ color: "#fff" }}
-                              />
-                            </IconButton>
-                            <IconButton
-                              edge="end"
-                              sx={{
-                                background: theme.palette.primary.main,
-                                "&:hover": {
-                                  background: theme.palette.primary.dark,
-                                },
-                                borderRadius: "4px",
-                                height: "36px",
-                                marginBottom: "2px",
-                              }}
-                              onClick={handleCancel}
-                            >
-                              <CancelRoundedIcon sx={{ color: "#fff" }} />
-                            </IconButton>
-                          </Box>
-                        </Box>
-                      </FormProviderWithForm>
-                    ) : (
+                    <Trans i18nKey="tags" />
+                  </Typography>
+                  {editable && show ? (
+                    <FormProviderWithForm formMethods={formMethods}>
                       <Box
                         sx={{
-                          height: "38px",
-                          borderRadius: "4px",
-                          paddingLeft:
-                            theme.direction === "ltr" ? "12px" : "0px",
-                          paddingRight:
-                            theme.direction === "rtl" ? "12px" : "8px",
                           width: "100%",
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          "&:hover": {
-                            border: editable ? "1px solid #1976d299" : "unset",
-                            borderColor: editable
-                              ? theme.palette.primary.main
-                              : "unset",
-                          },
                         }}
-                        onClick={() => setShow(!show)}
-                        onMouseOver={() => handleMouseOver(editable ?? false)}
-                        onMouseOut={handleMouseOut}
                       >
-                        <Box sx={{ display: "flex" }}>
-                          {tags.map((tag: any, index: number) => {
-                            return (
-                              <Box
-                                sx={{
-                                  background: "#00000014",
-                                  fontSize: "0.875rem",
-                                  borderRadius: "8px",
-                                  fontWeight: "700",
-                                }}
-                                mr={1}
-                                px={1}
-                              >
-                                <Typography variant="body2" fontWeight="700">
-                                  {tag.title}
-                                </Typography>
-                              </Box>
-                            );
+                        <AutocompleteAsyncField
+                          {...useConnectAutocompleteField({
+                            service: (args, config) =>
+                              service.fetchAssessmentKitTags(args, config),
                           })}
-                        </Box>
-                        {isHovering && (
+                          name="tags"
+                          multiple={true}
+                          defaultValue={tags}
+                          searchOnType={false}
+                          required={true}
+                          label={""}
+                          editable={true}
+                          sx={{ width: "100%" }}
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
+                        >
                           <IconButton
-                            title="Edit"
                             edge="end"
                             sx={{
                               background: theme.palette.primary.main,
@@ -349,126 +245,243 @@ const AssessmentKitSectionGeneralInfo = (
                               },
                               borderRadius: "3px",
                               height: "36px",
+                              marginBottom: "2px",
+                              marginRight:
+                                theme.direction === "ltr" ? "3px" : "unset",
+                              marginLeft:
+                                theme.direction === "rtl" ? "3px" : "unset",
                             }}
-                            onClick={() => setShow(!show)}
+                            onClick={formMethods.handleSubmit(onSubmit)}
                           >
-                            <EditRoundedIcon sx={{ color: "#fff" }} />
+                            <CheckCircleOutlineRoundedIcon
+                              sx={{ color: "#fff" }}
+                            />
                           </IconButton>
-                        )}
+                          <IconButton
+                            edge="end"
+                            sx={{
+                              background: theme.palette.primary.main,
+                              "&:hover": {
+                                background: theme.palette.primary.dark,
+                              },
+                              borderRadius: "4px",
+                              height: "36px",
+                              marginBottom: "2px",
+                            }}
+                            onClick={handleCancel}
+                          >
+                            <CancelRoundedIcon sx={{ color: "#fff" }} />
+                          </IconButton>
+                        </Box>
                       </Box>
-                    )}
-                  </Box>
+                    </FormProviderWithForm>
+                  ) : (
+                    <Box
+                      sx={{
+                        height: "38px",
+                        borderRadius: "4px",
+                        paddingLeft: theme.direction === "ltr" ? "12px" : "0px",
+                        paddingRight:
+                          theme.direction === "rtl" ? "12px" : "8px",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        "&:hover": {
+                          border: editable ? "1px solid #1976d299" : "unset",
+                          borderColor: editable
+                            ? theme.palette.primary.main
+                            : "unset",
+                        },
+                      }}
+                      onClick={() => setShow(!show)}
+                      onMouseOver={() => handleMouseOver(editable ?? false)}
+                      onMouseOut={handleMouseOut}
+                    >
+                      <Box sx={{ display: "flex" }}>
+                        {tags.map((tag: any, index: number) => {
+                          return (
+                            <Box
+                              sx={{
+                                background: "#00000014",
+                                fontSize: "0.875rem",
+                                borderRadius: "8px",
+                                fontWeight: "700",
+                              }}
+                              mr={1}
+                              px={1}
+                            >
+                              <Typography variant="body2" fontWeight="700">
+                                {tag.title}
+                              </Typography>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                      {isHovering && (
+                        <IconButton
+                          title="Edit"
+                          edge="end"
+                          sx={{
+                            background: theme.palette.primary.main,
+                            "&:hover": {
+                              background: theme.palette.primary.dark,
+                            },
+                            borderRadius: "3px",
+                            height: "36px",
+                          }}
+                          onClick={() => setShow(!show)}
+                        >
+                          <EditRoundedIcon sx={{ color: "#fff" }} />
+                        </IconButton>
+                      )}
+                    </Box>
+                  )}
+                </Box>
 
-                  <OnHoverRichEditor
-                    data={about}
-                    title={<Trans i18nKey="about" />}
-                    infoQuery={fetchAssessmentKitInfoQuery.query}
-                    editable={editable}
+                <OnHoverRichEditor
+                  data={about}
+                  title={<Trans i18nKey="about" />}
+                  infoQuery={fetchAssessmentKitInfoQuery.query}
+                  editable={editable}
+                />
+              </Box>
+            );
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} md={5}>
+        <QueryBatchData
+          queryBatchData={[fetchAssessmentKitStatsQuery]}
+          loadingComponent={
+            <LoadingSkeleton
+              width="100%"
+              height="360px"
+              sx={{ mt: 1, borderRadius: 2 }}
+            />
+          }
+          render={([stats]) => {
+            const {
+              creationTime,
+              lastModificationTime,
+              questionnairesCount,
+              attributesCount,
+              questionsCount,
+              maturityLevelsCount,
+              likes,
+              assessmentCounts,
+              subjects,
+              expertGroup,
+            } = stats as AssessmentKitStatsType;
+            setExpertGroup(expertGroup);
+            return (
+              <Box
+                sx={{
+                  mt: 1,
+                  p: 2.5,
+                  borderRadius: 2,
+                  background: "white",
+                }}
+              >
+                {creationTime && (
+                  <Box my={1.5}>
+                    <InfoItem
+                      bg="white"
+                      info={{
+                        item:
+                          theme.direction == "rtl"
+                            ? formatDate(creationTime, "Shamsi")
+                            : formatDate(creationTime, "Miladi"),
+                        title: t("creationDate"),
+                      }}
+                    />
+                  </Box>
+                )}
+                {lastModificationTime && (
+                  <Box my={1.5}>
+                    <InfoItem
+                      bg="white"
+                      info={{
+                        item:
+                          theme.direction == "rtl"
+                            ? formatDate(lastModificationTime, "Shamsi")
+                            : formatDate(lastModificationTime, "Miladi"),
+                        title: t("lastUpdated"),
+                      }}
+                    />
+                  </Box>
+                )}
+
+                <Box my={1.5}>
+                  <InfoItem
+                    bg="white"
+                    info={{
+                      item: subjects.map((sub: any) => sub?.title),
+                      title: t("subjects"),
+                      type: "array",
+                    }}
                   />
                 </Box>
-              </Grid>
-              <Grid item xs={12} md={5}>
-                <Box
-                  sx={{
-                    mt: 1,
-                    p: 2.5,
-                    borderRadius: 2,
-                    background: "white",
-                  }}
-                >
-                  {creationTime && (
-                    <Box my={1.5}>
-                      <InfoItem
-                        bg="white"
-                        info={{
-                          item: theme.direction == "rtl" ? formatDate(creationTime, "Shamsi") : formatDate(creationTime, "Miladi"),
-                          title: t("creationDate"),
-                        }}
-                      />
-                    </Box>
-                  )}
-                  {lastModificationTime && (
-                    <Box my={1.5}>
-                      <InfoItem
-                        bg="white"
-                        info={{
-                          item: theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi"),
-                          title: t("lastUpdated"),
-                        }}
-                      />
-                    </Box>
-                  )}
+                <Box my={1.5}>
+                  <InfoItem
+                    bg="white"
+                    info={{
+                      item: questionnairesCount,
+                      title: t("questionnairesCount"),
+                    }}
+                  />
+                </Box>
+                <Box my={1.5}>
+                  <InfoItem
+                    bg="white"
+                    info={{
+                      item: attributesCount,
+                      title: t("attributesCount"),
+                    }}
+                  />
+                </Box>
+                <Box my={1.5}>
+                  <InfoItem
+                    bg="white"
+                    info={{
+                      item: questionsCount,
+                      title: t("totalQuestionsCount"),
+                    }}
+                  />
+                </Box>
+                <Box my={1.5}>
+                  <InfoItem
+                    bg="white"
+                    info={{
+                      item: maturityLevelsCount,
+                      title: t("maturitylevels"),
+                    }}
+                  />
+                </Box>
 
-                  <Box my={1.5}>
-                    <InfoItem
-                      bg="white"
-                      info={{
-                        item: subjects.map((sub: any) => sub?.title),
-                        title: t("subjects"),
-                        type: "array",
-                      }}
-                    />
+                <Box sx={{ display: "flex" }} px={1} mt={4}>
+                  <Box sx={{ display: "flex" }} mr={4}>
+                    <FavoriteRoundedIcon color="primary" />
+                    <Typography color="primary" ml={1}>
+                      {likes}
+                    </Typography>
                   </Box>
-                  <Box my={1.5}>
-                    <InfoItem
-                      bg="white"
-                      info={{
-                        item: questionnairesCount,
-                        title: t("questionnairesCount"),
-                      }}
-                    />
-                  </Box>
-                  <Box my={1.5}>
-                    <InfoItem
-                      bg="white"
-                      info={{
-                        item: attributesCount,
-                        title: t("attributesCount"),
-                      }}
-                    />
-                  </Box>
-                  <Box my={1.5}>
-                    <InfoItem
-                      bg="white"
-                      info={{
-                        item: questionsCount,
-                        title: t("totalQuestionsCount"),
-                      }}
-                    />
-                  </Box>
-                  <Box my={1.5}>
-                    <InfoItem
-                      bg="white"
-                      info={{
-                        item: maturityLevelsCount,
-                        title: t("maturitylevels"),
-                      }}
-                    />
-                  </Box>
-
-                  <Box sx={{ display: "flex" }} px={1} mt={4}>
-                    <Box sx={{ display: "flex" }} mr={4}>
-                      <FavoriteRoundedIcon color="primary" />
-                      <Typography color="primary" ml={1}>
-                        {likes}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex" }}>
-                      <ShoppingCartRoundedIcon color="primary" />
-                      <Typography color="primary" ml={1}>
-                        {assessmentCounts}
-                      </Typography>
-                    </Box>
+                  <Box sx={{ display: "flex" }}>
+                    <ShoppingCartRoundedIcon color="primary" />
+                    <Typography color="primary" ml={1}>
+                      {assessmentCounts}
+                    </Typography>
                   </Box>
                 </Box>
-              </Grid>
-            </Grid>
-          );
-        }}
-      />
-    </Box>
+              </Box>
+            );
+          }}
+        />
+      </Grid>
+    </Grid>
   );
 };
+
 const OnHoverInput = (props: any) => {
   const [show, setShow] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);

@@ -47,11 +47,13 @@ const AssessmentKitExpertViewContainer = () => {
   const [details, setDetails] = useState<AssessmentKitDetailsType>();
   const [expertGroup, setExpertGroup] = useState<any>();
   const [assessmentKitTitle, setAssessmentKitTitle] = useState<any>();
+  const [hasActiveVersion, setHasActiveVersion] = useState<any>(false);
   const [loaded, setLoaded] = React.useState<boolean | false>(false);
 
   const AssessmentKitDetails = async () => {
-    const data: AssessmentKitDetailsType =
-      await fetchAssessmentKitDetailsQuery.query();
+    const data: AssessmentKitDetailsType = hasActiveVersion
+      ? await fetchAssessmentKitDetailsQuery.query()
+      : undefined;
     setDetails(data);
   };
   const handleDownload = async () => {
@@ -73,7 +75,7 @@ const AssessmentKitExpertViewContainer = () => {
     if (!loaded) {
       AssessmentKitDetails();
     }
-  }, [loaded, update]);
+  }, [loaded, update, hasActiveVersion]);
   useEffect(() => {
     setDocumentTitle(
       `${t("assessmentKit")}: ${assessmentKitTitle || ""}`,
@@ -83,71 +85,69 @@ const AssessmentKitExpertViewContainer = () => {
   return (
     <Box>
       <Box sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-        {expertGroup && (
-          <Title
-            backLink={"/"}
-            size="large"
-            wrapperProps={{
-              sx: {
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: { xs: "flex-start", md: "flex-end" },
-              },
-            }}
-            sup={
-              <SupTitleBreadcrumb
-                routes={[
-                  {
-                    title: t("expertGroups") as string,
-                    to: `/user/expert-groups`,
-                  },
-                  {
-                    title: expertGroup?.title,
-                    to: `/user/expert-groups/${expertGroupId}`,
-                  },
-                  {
-                    title: assessmentKitTitle,
-                    to: `/user/expert-groups`,
-                  },
-                ]}
-                displayChip
-              />
-            }
-            toolbar={
-              <Box>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ ml: 2 }}
-                  onClick={() => {
-                    dialogProps.openDialog({});
-                  }}
-                >
-                  <Typography mx={1} variant="button">
-                    <Trans i18nKey="updateDSL" />
-                  </Typography>
-                  <CloudUploadRoundedIcon />
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ ml: 2 }}
-                  onClick={handleDownload}
-                >
-                  <Typography mx={1} variant="button">
-                    <Trans i18nKey="downloadDSL" />
-                  </Typography>
-                  <CloudDownloadRoundedIcon />
-                </Button>
-              </Box>
-            }
-          >
-            {assessmentKitTitle}
-          </Title>
-        )}
+        <Title
+          backLink={"/"}
+          size="large"
+          wrapperProps={{
+            sx: {
+              flexDirection: { xs: "column", md: "row" },
+              alignItems: { xs: "flex-start", md: "flex-end" },
+            },
+          }}
+          sup={
+            <SupTitleBreadcrumb
+              routes={[
+                {
+                  title: t("expertGroups") as string,
+                  to: `/user/expert-groups`,
+                },
+                // {
+                //   title: expertGroup?.title,
+                //   to: `/user/expert-groups/${expertGroupId}`,
+                // },
+                {
+                  title: assessmentKitTitle,
+                },
+              ]}
+              displayChip
+            />
+          }
+          toolbar={
+            <Box>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={() => {
+                  dialogProps.openDialog({});
+                }}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="updateDSL" />
+                </Typography>
+                <CloudUploadRoundedIcon />
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ ml: 2 }}
+                onClick={handleDownload}
+              >
+                <Typography mr={1} variant="button">
+                  <Trans i18nKey="downloadDSL" />
+                </Typography>
+                <CloudDownloadRoundedIcon />
+              </Button>
+            </Box>
+          }
+        >
+          {assessmentKitTitle}
+        </Title>
         <Box mt={3}>
           <AssessmentKitSectionGeneralInfo
             setExpertGroup={setExpertGroup}
             setAssessmentKitTitle={setAssessmentKitTitle}
+            setHasActiveVersion={setHasActiveVersion}
           />
           <UpdateAssessmentKitDialog
             setForceUpdate={setForceUpdate}
