@@ -81,7 +81,7 @@ const toastError = (
       !data?.message &&
       !data?.error &&
       !data?.detail &&
-      !(data?.non_field_errors?.length > 0)
+      !(data?.non_field_errors?.length <= 0)
     ) {
       return;
     }

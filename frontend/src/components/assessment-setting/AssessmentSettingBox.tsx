@@ -241,7 +241,7 @@ export const AssessmentSettingGeneralBox = (props: {
                 <Grid
                   item
                   sx={{ display: "flex", justifyContent: "center" }}
-                  key={index}
+                  key={itemList}
                 >
                   <Grid
                     item

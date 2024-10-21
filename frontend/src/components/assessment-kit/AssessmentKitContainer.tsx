@@ -155,7 +155,7 @@ const AssessmentKit = (props: any) => {
                 >
                   {tags.map((tag: any, index: number) => (
                     <Chip
-                      key={index}
+                      key={tag?.id}
                       label={tag.title}
                       size="small"
                       sx={{
@@ -241,7 +241,9 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="created" />:{" "}
                 <Box component="span" color="black">
-                    {theme.direction == "rtl" ?   formatDate(creationTime, "Shamsi") :  formatDate(creationTime, "Miladi")}
+                  {theme.direction == "rtl"
+                    ? formatDate(creationTime, "Shamsi")
+                    : formatDate(creationTime, "Miladi")}
                 </Box>
               </Box>
               <Box
@@ -257,7 +259,9 @@ const AssessmentKit = (props: any) => {
               >
                 <Trans i18nKey="updated" />:{" "}
                 <Box component="span" color="black">
-                    {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
+                  {theme.direction == "rtl"
+                    ? formatDate(lastModificationTime, "Shamsi")
+                    : formatDate(lastModificationTime, "Miladi")}
                 </Box>
               </Box>
             </Box>
@@ -297,7 +301,9 @@ const AssessmentKit = (props: any) => {
                   <Typography variant="body2">
                     <Trans i18nKey="price" />:
                   </Typography>
-                  <Typography fontWeight={"bold"}><Trans i18nKey={"free"} /></Typography>
+                  <Typography fontWeight={"bold"}>
+                    <Trans i18nKey={"free"} />
+                  </Typography>
                 </Box>
                 <Box
                   sx={{ ...styles.centerV, justifyContent: "space-between" }}
@@ -366,7 +372,7 @@ const AssessmentKit = (props: any) => {
                     const colorCode = colorPallet[item.index - 1];
                     return (
                       <Box
-                        key={index}
+                        key={item?.id}
                         sx={{
                           background: colorCode,
                           fontSize: "1rem",
@@ -396,7 +402,7 @@ const AssessmentKit = (props: any) => {
                 <Box component="ul" mt={3}>
                   {maturityLevels.map((item: any) => {
                     return (
-                      <Box sx={{ ml: 4, mt: 1 }} component="li">
+                      <Box sx={{ ml: 4, mt: 1 }} component="li" key={item?.id}>
                         <Typography
                           variant="body2"
                           sx={{
@@ -410,12 +416,16 @@ const AssessmentKit = (props: any) => {
                             component="span"
                             fontSize="1rem"
                             fontWeight="bold"
-                            sx={{unicodeBidi:"plaintext"}}
+                            sx={{ unicodeBidi: "plaintext" }}
                           >
                             {item.title}
                           </Box>
                           :{" "}
-                          <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
+                          <Box
+                            sx={{ unicodeBidi: "plaintext" }}
+                            component="span"
+                            fontSize="1rem"
+                          >
                             {item.description}
                           </Box>
                         </Typography>
@@ -435,7 +445,7 @@ const AssessmentKit = (props: any) => {
                     <Box
                       component="li"
                       mb={2}
-                      key={index}
+                      key={subject?.id}
                       sx={{
                         mt: 1,
                         fontSize: "1.2rem",
@@ -473,7 +483,7 @@ const AssessmentKit = (props: any) => {
                               },
                             }}
                             component="div"
-                            key={index}
+                            key={att?.id}
                           >
                             <Typography
                               variant="body2"
@@ -488,12 +498,16 @@ const AssessmentKit = (props: any) => {
                                 component="span"
                                 fontSize="1rem"
                                 fontWeight="bold"
-                                sx={{unicodeBidi:"plaintext"}}
+                                sx={{ unicodeBidi: "plaintext" }}
                               >
                                 {att.title}
                               </Box>
                               :{" "}
-                              <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
+                              <Box
+                                sx={{ unicodeBidi: "plaintext" }}
+                                component="span"
+                                fontSize="1rem"
+                              >
                                 {att.description}
                               </Box>
                             </Typography>
@@ -517,7 +531,11 @@ const AssessmentKit = (props: any) => {
               <Box component="ul" mt={3}>
                 {questionnaires.map((questionnaire: any, index: number) => {
                   return (
-                    <Box sx={{ ml: 4, mt: 2 }} component="li">
+                    <Box
+                      sx={{ ml: 4, mt: 2 }}
+                      component="li"
+                      key={questionnaire?.id}
+                    >
                       <Typography
                         variant="body2"
                         sx={{
@@ -527,11 +545,20 @@ const AssessmentKit = (props: any) => {
                           display: "inline",
                         }}
                       >
-                        <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem" fontWeight="bold">
+                        <Box
+                          sx={{ unicodeBidi: "plaintext" }}
+                          component="span"
+                          fontSize="1rem"
+                          fontWeight="bold"
+                        >
                           {questionnaire.title}
                         </Box>
                         :{" "}
-                        <Box sx={{unicodeBidi:"plaintext"}} component="span" fontSize="1rem">
+                        <Box
+                          sx={{ unicodeBidi: "plaintext" }}
+                          component="span"
+                          fontSize="1rem"
+                        >
                           {questionnaire.description}
                         </Box>
                       </Typography>

@@ -484,7 +484,7 @@ const SUbjectAttributeCard = (props: any) => {
             {maturityScores
               .map((item: any, index: number) => {
                 return (
-                  <div key={index}>
+                  <div key={item?.id}>
                     <MaturityLevelDetailsContainer
                       maturity_score={item}
                       totalml={maturityLevel?.index}

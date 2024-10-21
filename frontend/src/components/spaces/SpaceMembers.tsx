@@ -209,11 +209,15 @@ export const SpaceMembers = (props: any) => {
                             ></Avatar>
                           </Box>
                           <Box
-                          style={{
-                            marginRight: theme.direction == "rtl" ? "1rem" : "unset",
-                            marginLeft: theme.direction == "rtl" ? "unset" : "1rem"
-                          }}
-                          >{displayName}</Box>
+                            style={{
+                              marginRight:
+                                theme.direction == "rtl" ? "1rem" : "unset",
+                              marginLeft:
+                                theme.direction == "rtl" ? "unset" : "1rem",
+                            }}
+                          >
+                            {displayName}
+                          </Box>
                         </Box>
                         <Box
                           ml={`${is_farsi ? 0 : "auto"}`}
@@ -283,13 +287,7 @@ export const SpaceMembers = (props: any) => {
                     </Title>
                     <Box mt={1}>
                       {items.map((invitees: any) => {
-                        const {
-                          createdBy,
-                          creationTime,
-                          id,
-                          email,
-                          expirationDate,
-                        } = invitees;
+                        const { id, email, expirationDate } = invitees;
 
                         const expirationDateTime = new Date(
                           expirationDate,
@@ -351,7 +349,9 @@ export const SpaceMembers = (props: any) => {
                                   }}
                                 />
                                 <Typography variant="body2">
-                                  {theme.direction == "rtl" ? formatDate(expirationDate, "Shamsi") : formatDate(expirationDate, "Miladi")}
+                                  {theme.direction == "rtl"
+                                    ? formatDate(expirationDate, "Shamsi")
+                                    : formatDate(expirationDate, "Miladi")}
                                 </Typography>
                               </Box>
                               {
@@ -436,8 +436,8 @@ const Actions = (props: any) => {
     runOnMount: false,
     toastError: false,
   });
-  const { query: deleteSpaceInvite, loading: inviteLoading } = useQuery({
-    service: (arg, config) => service.deleteSpaceInvite({ inviteId }, config),
+  const { query: deleteSpaceInvite } = useQuery({
+    service: (config) => service.deleteSpaceInvite({ inviteId }, config),
     runOnMount: false,
     toastError: false,
   });

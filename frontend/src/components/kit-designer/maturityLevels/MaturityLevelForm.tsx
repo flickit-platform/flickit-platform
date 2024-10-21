@@ -1,9 +1,7 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
-import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Trans } from "react-i18next";

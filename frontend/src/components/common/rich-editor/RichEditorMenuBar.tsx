@@ -44,7 +44,7 @@ const RichEditorMenuBar = (props: IRichEditorMenuBarProps) => {
     >
       {menuItems.map((menuItem, index) => (
         <Box
-          key={index}
+          key={menuItem?.type}
           sx={{ display: "flex", flexWrap: "wrap" }}
           onFocus={(e) => e.preventDefault()}
           onClick={(e) => {

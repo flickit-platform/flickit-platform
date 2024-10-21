@@ -37,7 +37,7 @@ const SupTitleBreadcrumb = (
           (!route.hasOwnProperty("disabled") || route.disabled);
         const isActive = routes.length - 1 === index;
         return (
-          <Box display="flex" flexDirection={"column"} key={index}>
+          <Box display="flex" flexDirection={"column"} key={route?.sup}>
             <MuiLink
               component={disabled ? "div" : Link}
               underline={disabled ? "none" : "hover"}

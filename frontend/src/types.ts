@@ -138,7 +138,6 @@ export interface IUserInfo {
   displayName: string;
   email: string;
   // current_space: ISpaceInfo | null;
-  is_expert?: boolean;
   bio?: string;
   pictureLink?: null | string;
   linkedin?: string | null;

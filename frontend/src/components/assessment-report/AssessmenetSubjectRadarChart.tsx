@@ -76,7 +76,7 @@ const SubjectRadar: React.FC<SubjectRadarProps> = ({
               <g>
                 {lines.map((line, index) => (
                   <text
-                    key={index}
+                    key={line}
                     {...rest}
                     y={y + (y - cy) / (theme.direction === "rtl" ? 7 : 15) + index * 12}
                     x={x + (x - cx) / (theme.direction === "rtl" ? 7 : 15)}

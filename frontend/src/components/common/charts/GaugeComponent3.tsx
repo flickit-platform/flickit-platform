@@ -2,7 +2,7 @@ import { IDynamicGaugeSVGProps } from "@/types";
 import "./style.css";
 
 const GaugeComponent3 = (props: IDynamicGaugeSVGProps) => {
-  const { colorCode, value, confidence_value, height, className } = props;
+  const { colorCode, value, height, className } = props;
   return (
     <svg
       width="100%"

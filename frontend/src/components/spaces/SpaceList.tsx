@@ -117,7 +117,6 @@ const SpaceCard = (props: ISpaceCardProps) => {
       })
       .catch((e) => {});
   };
-  const is_farsi = localStorage.getItem("lang") === "fa" ? true : false;
   return (
     <Box
       sx={{

@@ -5,7 +5,6 @@ import {
   EAssessmentStatus,
   questionActions,
   useQuestionDispatch,
-  useQuestionContext,
 } from "@/providers/QuestionProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
@@ -87,12 +86,10 @@ export const QuestionsContainerC = (
 
 export const useQuestions = () => {
   const { service } = useServiceContext();
-  const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
   const [page, setPage] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const dispatch = useQuestionDispatch();
-  const { assessmentStatus } = useQuestionContext();
   const {
     questionnaireId = "",
     assessmentId = "",
