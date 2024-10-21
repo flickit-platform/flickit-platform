@@ -302,7 +302,7 @@ const Actions = (props: any) => {
       await fetchSpaces();
     } catch (e) {
       const err = e as ICustomError;
-      console.log(err);
+      // console.log(err);
       toastError(err);
     }
   };
