@@ -228,7 +228,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                   aria-hidden={true}
                   onClick={downloadTemplate}
                 >
-                  here
+               <Trans i18nKey={"here"} />
                 </span>
               </Box>
             </Box>

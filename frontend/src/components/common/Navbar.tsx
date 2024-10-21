@@ -49,6 +49,7 @@ import { format } from "date-fns";
 import { farsiFontFamily, secondaryFontFamily, theme } from "@/config/theme";
 import LanguageSelector from "./LangSelector";
 import { t } from "i18next";
+import { MULTILINGUALITY } from "@/config/constants";
 
 const drawerWidth = 240;
 
@@ -317,9 +318,9 @@ const NotificationCenterComponent = ({ setNotificationCount }: any) => {
                     format(
                       new Date(
                         new Date(selectedMessage.createdAt).getTime() -
-                          new Date(
-                            selectedMessage.createdAt,
-                          ).getTimezoneOffset(),
+                        new Date(
+                          selectedMessage.createdAt,
+                        ).getTimezoneOffset(),
                       ),
                       "yyyy/MM/dd HH:mm",
                     ) +
@@ -414,12 +415,14 @@ const Navbar = () => {
     try {
       const res = await fetchPathInfo.query();
       dispatch(authActions.setCurrentSpace(res?.space));
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (spaceId) {
       fetchSpaceInfo();
     }
+    console.log(MULTILINGUALITY)
+    console.log(MULTILINGUALITY)
   }, [spaceId]);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -658,7 +661,9 @@ const Navbar = () => {
               mr: theme.direction !== "rtl" ? "unset" : "auto",
             }}
           >
-            <LanguageSelector />
+            {MULTILINGUALITY.toString() == "true" ?
+              <LanguageSelector /> : ""
+            }
             <IconButton onClick={toggleNotificationCenter} ref={bellButtonRef}>
               <Badge
                 max={99}
@@ -776,7 +781,8 @@ const SpacesButton = () => {
           <Box
             sx={{
               minWidth: "8px",
-              ml: 0.6,
+              ml: theme.direction === "rtl" ? "unset" : 0.6,
+              mr: theme.direction === "rtl" ? 0.6 : "unset",
               px: 0.2,
               borderLeft: "1px solid #80808000",
               transition: "border .1s ease",

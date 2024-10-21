@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -32,7 +32,7 @@ const SpaceContainer = () => {
   const PAGESIZE: number = 10;
 
   const pageNumber = Number(page);
-
+  const [pageCount,setCountPage] = useState<any>()
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number,
@@ -43,25 +43,22 @@ const SpaceContainer = () => {
   const spacesQueryData = useQuery<ISpacesModel>({
     service: (args = { size: PAGESIZE, page: pageNumber }, config) =>
       service.fetchSpaces(args, config),
-    toastError: true,
+      toastError: true,
   });
 
-  // useEffect(() => {
-  //   spacesQueryData.query({ size: PAGESIZE, page: pageNumber }).then((res) => {
-  //     const { size, total } = res;
-  //     if (Math.ceil(total / size) < pageNumber) {
-  //       return navigate(`*`);
-  //     }
-  //   });
-  // }, [pageNumber]);
+  useEffect(() => {
+    if(isNaN(pageNumber)){
+      return navigate(`*`);
+    }
+    if(pageCount < pageNumber){
+        spacesQueryData.query({ size: PAGESIZE, page: pageCount })
+        navigate(`/spaces/${pageCount}`);
+    } else {
+       spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
+    }
 
-  const pageCount =
-    !spacesQueryData.data ||
-    !spacesQueryData?.data?.total ||
-    !spacesQueryData?.data?.size ||
-    spacesQueryData.data?.size === 0
-      ? 1
-      : Math.ceil(spacesQueryData?.data?.total / spacesQueryData?.data?.size);
+  }, [pageNumber,pageCount]);
+
 
   const isEmpty = spacesQueryData?.data?.items?.length === 0;
 
@@ -184,6 +181,8 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
+          const { total,size } = data
+          setCountPage(Math.ceil(total / size ))
           return (
             <SpacesList
               dialogProps={dialogProps}

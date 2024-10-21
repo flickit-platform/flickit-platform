@@ -49,7 +49,7 @@ const SpaceSettingContainer = () => {
         toolbar={editable ? <EditSpaceButton fetchSpace={query} /> : <div />}
         backLink={"/"}
       >
-        <Box sx={{ ...styles.centerV, opacity: 0.9 }}>
+        <Box sx={{ ...styles.centerV, opacity: 0.9, unicodeBidi:"plaintext" }}>
           {loading ? (
             <Skeleton
               variant="rounded"

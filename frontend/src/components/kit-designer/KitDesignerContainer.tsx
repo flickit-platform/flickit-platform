@@ -7,6 +7,7 @@ import Tab from "@mui/material/Tab";
 import KitDesignerTitle from "./KitDesignerContainerTitle";
 import { Trans } from "react-i18next";
 import MaturityLevelsContent from "./maturityLevels/MaturityLevelsContent";
+import PublishContent from "./publish/PublishContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -110,8 +111,17 @@ const KitDesignerContainer = () => {
                   </Typography>
                 }
               />
-
-              {/* Add more tabs as needed */}
+              <Tab
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="publish" />
+                  </Typography>
+                }
+              />
             </Tabs>
           </Grid>
 
@@ -137,6 +147,7 @@ const KitDesignerContainer = () => {
                 <Trans i18nKey="questionnairesContent" />
               </Typography>
             )}
+            {selectedTab === 4 && <PublishContent />}
           </Grid>
         </Grid>
       </Grid>

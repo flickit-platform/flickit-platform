@@ -580,6 +580,7 @@ export interface AssessmentKitInfoType {
   about: string;
   tags: [];
   editable?: boolean;
+  hasActiveVersion?: boolean;
 }
 export interface AssessmentKitStatsType {
   creationTime: string;
