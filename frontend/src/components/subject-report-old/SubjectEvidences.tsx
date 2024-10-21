@@ -24,6 +24,7 @@ import arrowBtn from "@/assets/svg/arrow.svg";
 import attachmentIcon from "@/assets/svg/AttachmentIcon.svg";
 import { theme } from "@config/theme";
 import useScreenResize from "@/utils/useScreenResize";
+import languageDetector from "@utils/languageDetector";
 
 export enum evidenceType {
   positive = "POSITIVE",
@@ -336,7 +337,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                         mt: "4px",
                       }}
                     >
-                      {evidence?.type}
+                   <Trans i18nKey={`${evidence?.type?.toLowerCase()}`} />
                     </Typography>
                   )}
                   {index == 2 && (
@@ -420,7 +421,7 @@ const EvidenceAttachmentsDialogs = (props: any) => {
                       style={{
                         color: evidenceBG.borderColor,
                         ...theme.typography.labelLarge,
-                        textAlign: "left",
+                        textAlign: (name && languageDetector(name)) ?  "right"  : "left",
                         cursor: "pointer",
                         textDecoration: "underline",
                       }}

@@ -20,6 +20,7 @@ import { ArticleRounded } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import BetaSvg from "@assets/svg/beta.svg";
 import PermissionControl from "../common/PermissionControl";
+import {theme} from "@config/theme";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
@@ -271,7 +272,11 @@ const AssessmentReportContainer = (props: any) => {
                       alignItems="center"
                     >
                       <Trans i18nKey="advice" />
-                      <Box sx={{ ml: 1, mt: 1 }}>
+                      <Box sx={{
+                        ml: theme.direction == "ltr" ? 1 : "unset",
+                        mr: theme.direction == "rtl" ? 1 : "unset",
+                        mt: 1
+                      }}>
                         <img src={BetaSvg} alt="beta" width={34} />
                       </Box>
                     </Typography>
