@@ -14,7 +14,7 @@ sentry_sdk.init(
     profiles_sample_rate=1.0,
 )
 
-__version__ = "1.31.0"
+__version__ = "1.32.0-SNAPSHOT"
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
