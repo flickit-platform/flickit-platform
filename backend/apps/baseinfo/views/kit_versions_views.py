@@ -7,6 +7,14 @@ from rest_framework.permissions import IsAuthenticated
 from baseinfo.services import kit_versions_services
 
 
+class KitVersionsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.load_kit_with_version_id(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class KitVersionSubjectsApi(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -34,7 +42,7 @@ class KitVersionSubjectApi(APIView):
         type=openapi.TYPE_OBJECT), responses={200: ""})
     def put(self, request, kit_version_id, subject_id):
         result = kit_versions_services.update_subject(request, kit_version_id,
-                                                                              subject_id)
+                                                      subject_id)
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
