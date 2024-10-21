@@ -71,34 +71,34 @@ const AssessmentExportContainer = () => {
   });
 
   const progressInfo = useQuery<IAssessmentResponse>({
-    service: ({ assessmentId }, config) =>
-      service.fetchAssessmentTotalProgress({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchAssessmentTotalProgress(args, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
 
   const AssessmentReport = useQuery({
-    service: ({ assessmentId }, config) =>
-      service.fetchAssessment({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchAssessment(args, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
 
   const calculateMaturityLevelQuery = useQuery({
-    service: ({ assessmentId }, config) =>
-      service.calculateMaturityLevel({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
 
   const calculateConfidenceLevelQuery = useQuery({
-    service: ({ assessmentId }, config) =>
-      service.calculateConfidenceLevel({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.calculateConfidenceLevel(args, config),
     runOnMount: false,
   });
 
   const fetchAdviceNarration = useQuery<any>({
-    service: ({ assessmentId }, config) =>
-      service.fetchAdviceNarration({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchAdviceNarration(args, config),
     toastError: false,
   });
 
@@ -1133,7 +1133,7 @@ const AssessmentExportContainer = () => {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} lg={6} xl={6}>
-                    <Tooltip title={<Trans i18nKey={"copy"} />} >
+                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                       <IconButton
                         size="small"
                         onClick={() => handleCopyClick("globalChart")}
