@@ -202,7 +202,7 @@ export const QuestionCard = (props: IQuestionCardProps) => {
             }
           >
             {title.split("\n").map((line, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={line}>
                 {line}
                 <br />
               </React.Fragment>
@@ -554,7 +554,7 @@ const AnswerTemplate = (props: {
             const { index: templateValue, title } = option || {};
             return (
               <Box
-                key={index}
+                key={option?.id}
                 mb={2}
                 mr={2}
                 sx={{ minWidth: { xs: "180px", sm: "320px" } }}
@@ -778,7 +778,7 @@ const AnswerDetails = ({
           }}
         >
           {data.map((item: IAnswerHistory, index: number) => (
-            <Box key={index} width="100%">
+            <Box key={item?.creationTime} width="100%">
               <AnswerHistoryItem item={item} questionInfo={questionInfo} />
               <Divider sx={{ width: "100%", marginBlock: 2 }} />
             </Box>
@@ -1423,7 +1423,7 @@ const Evidence = (props: any) => {
           permissions.viewEvidenceList &&
           evidencesData.map((item: any, index: number) => (
             <EvidenceDetail
-              key={index}
+              key={item?.id}
               setValue={setValue}
               item={item}
               setLoadingEvidence={setLoadingEvidence}
@@ -1709,7 +1709,7 @@ const CreateEvidenceAttachment = (props: any) => {
                 ? skeleton.map((item, index) => {
                     return (
                       <Skeleton
-                        key={index}
+                        key={item}
                         animation="wave"
                         variant="rounded"
                         width={40}
@@ -1720,7 +1720,7 @@ const CreateEvidenceAttachment = (props: any) => {
                 : attachments.map((item, index) => {
                     return (
                       <FileIcon
-                        key={index}
+                        key={item}
                         setEvidenceId={setEvidenceId}
                         setExpandedDeleteAttachmentDialog={
                           setExpandedDeleteAttachmentDialog
@@ -2673,7 +2673,7 @@ const EvidenceDetail = (props: any) => {
                               ? skeleton.map((item, index) => {
                                   return (
                                     <Skeleton
-                                      key={index}
+                                      key={item}
                                       animation="wave"
                                       variant="rounded"
                                       width={40}
@@ -2692,7 +2692,7 @@ const EvidenceDetail = (props: any) => {
                                       }
                                       evidenceBG={evidenceBG}
                                       downloadFile={downloadFile}
-                                      key={index}
+                                      key={item?.id}
                                     />
                                   );
                                 })}
@@ -3482,13 +3482,13 @@ const QuestionGuide = (props: any) => {
                       .substring(1)
                       .split("\n")
                       .map((line: string, index: number) => (
-                        <React.Fragment key={index}>
+                        <React.Fragment key={line}>
                           {line}
                           <br />
                         </React.Fragment>
                       ))
                   : hint.split("\n").map((line: string, index: number) => (
-                      <React.Fragment key={index}>
+                      <React.Fragment key={line}>
                         {line}
                         <br />
                       </React.Fragment>

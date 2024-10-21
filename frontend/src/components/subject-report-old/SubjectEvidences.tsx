@@ -141,7 +141,7 @@ const RelatedEvidencesContainer: React.FC<RelatedEvidencesContainerProps> = ({
       >
         {fetchRelatedEvidences?.data?.items?.map((item: any, index: number) => (
           <EvidanceDescription
-            key={index}
+            key={item?.id}
             number={index + 1}
             item={item}
             color={type === evidenceType.positive ? "#A4E7E7" : "#EFA5BD"}

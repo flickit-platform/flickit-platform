@@ -59,7 +59,8 @@
     "react-router-dom": "6.8.1",
     "react-toastify": "9.1.1",
     "react-transition-group": "4.4.5",
-    "recharts": "2.4.1"
+    "recharts": "2.4.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.10.0",

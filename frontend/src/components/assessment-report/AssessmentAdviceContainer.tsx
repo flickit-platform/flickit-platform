@@ -370,7 +370,7 @@ const AssessmentAdviceContainer = (props: any) => {
                       container
                       spacing={2}
                       sx={{ alignItems: "center", mb: 2 }}
-                      key={index}
+                      key={item?.id}
                     >
                       <Grid
                         item

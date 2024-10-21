@@ -26,7 +26,7 @@ const ListAccordion = (props: IListAccordion) => {
         return (
           <LiComponent
             render={(isExpanded) => renderItem(item, index, isExpanded)}
-            key={index}
+            key={item?.id}
           />
         );
       })}

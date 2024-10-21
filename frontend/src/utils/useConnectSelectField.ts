@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useServiceContext } from "@providers/ServiceProvider";
 
 /**
@@ -62,13 +62,8 @@ const useConnectSelectField = (props: {
           setOptions([]);
           setError(true);
         }
-        if (default_color) {
-          setDefaultOption(default_color);
-          setError(false);
-        } else {
-          setDefaultOption({});
-          setError(true);
-        }
+        setDefaultOption(default_color);
+        setError(false);
       }
 
       setLoading(false);

@@ -140,9 +140,6 @@ const useQuestion = () => {
   const { questionIndex, questionsInfo, assessmentStatus, isSubmitting } =
     useQuestionContext();
   const loaded = !!questionsInfo?.questions;
-  const hasAnyQuestions = loaded
-    ? (questionsInfo?.questions as any).length > 0
-    : false;
   const hasAnyQuestion = loaded
     ? (questionsInfo?.questions as any).length > 0
     : false;

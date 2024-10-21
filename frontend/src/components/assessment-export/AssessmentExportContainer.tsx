@@ -71,33 +71,33 @@ const AssessmentExportContainer = () => {
   });
 
   const progressInfo = useQuery<IAssessmentResponse>({
-    service: (args = { assessmentId }, config) =>
-      service.fetchAssessmentTotalProgress(args, config),
+    service: ({ assessmentId }, config) =>
+      service.fetchAssessmentTotalProgress({ assessmentId }, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
 
   const AssessmentReport = useQuery({
-    service: (args = { assessmentId }, config) =>
-      service.fetchAssessment(args, config),
+    service: ({ assessmentId }, config) =>
+      service.fetchAssessment({ assessmentId }, config),
     toastError: false,
     toastErrorOptions: { filterByStatus: [404] },
   });
 
   const calculateMaturityLevelQuery = useQuery({
-    service: (args = { assessmentId }, config) =>
-      service.calculateMaturityLevel(args, config),
+    service: ({ assessmentId }, config) =>
+      service.calculateMaturityLevel({ assessmentId }, config),
     runOnMount: false,
   });
 
   const calculateConfidenceLevelQuery = useQuery({
-    service: (args = { assessmentId }, config) =>
-      service.calculateConfidenceLevel(args, config),
+    service: ({ assessmentId }, config) =>
+      service.calculateConfidenceLevel({ assessmentId }, config),
     runOnMount: false,
   });
 
   const fetchAdviceNarration = useQuery<any>({
-    service: (args, config) =>
+    service: ({ assessmentId }, config) =>
       service.fetchAdviceNarration({ assessmentId }, config),
     toastError: false,
   });
@@ -340,11 +340,7 @@ const AssessmentExportContainer = () => {
           adviceSection,
         ]) => {
           const { items } = questionnaireData;
-          const {
-            assessment,
-            subjects,
-            assessmentPermissions: { manageable },
-          } = (data as IAssessmentResponse) || {};
+          const { assessment, subjects } = (data as IAssessmentResponse) || {};
           const { assessmentKit, maturityLevel, confidenceValue } =
             assessment || {};
           const { questionsCount, answersCount } = progress;
@@ -891,7 +887,7 @@ const AssessmentExportContainer = () => {
                                           feature: IAttribute,
                                           featureIndex: number,
                                         ) => (
-                                          <TableRow key={featureIndex}>
+                                          <TableRow key={feature?.id}>
                                             <TableCell
                                               sx={{
                                                 borderRight:
@@ -985,7 +981,7 @@ const AssessmentExportContainer = () => {
                         (level, index) => (
                           <Box
                             component="li"
-                            key={index}
+                            key={level?.id}
                             sx={{ marginBottom: 1 }}
                           >
                             <Typography
@@ -1068,7 +1064,7 @@ const AssessmentExportContainer = () => {
                         </TableHead>
                         <TableBody>
                           {items?.map((questionnaire: any, index: number) => (
-                            <TableRow key={index}>
+                            <TableRow key={questionnaire?.id}>
                               <TableCell
                                 sx={{
                                   borderRight:
@@ -1165,9 +1161,6 @@ const AssessmentExportContainer = () => {
                       ) : (
                         <AssessmentSubjectRadialChart
                           data={subjects}
-                          maturityLevelsCount={
-                            assessmentKit?.maturityLevelCount ?? 5
-                          }
                           loading={false}
                         />
                       )}
@@ -1270,9 +1263,6 @@ const AssessmentExportContainer = () => {
                         ) : (
                           <AssessmentSubjectRadialChart
                             data={subject?.attributes}
-                            maturityLevelsCount={
-                              assessmentKit?.maturityLevelCount ?? 5
-                            }
                             loading={false}
                           />
                         )}
