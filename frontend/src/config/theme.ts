@@ -96,8 +96,8 @@ declare module "@mui/material/Typography" {
     subMedium?: true;
     subLarge?: true;
     semiBoldXLarge?: true;
-    semiBoldLarge?: true
-    semiBoldMedium?: true
+    semiBoldLarge?: true;
+    semiBoldMedium?: true;
   }
 }
 
@@ -279,14 +279,14 @@ export const theme = createTheme({
       lineHeight: "1.5rem",
       letterSpacing: is_farsi ? "0px" : "0.15px",
     },
-    semiBoldMedium:{
+    semiBoldMedium: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "600",
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
       letterSpacing: is_farsi ? "0px" : "0.1px",
     },
-    semiBoldXLarge:{
+    semiBoldXLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "600",
       fontSize: "1.375rem",
@@ -374,7 +374,7 @@ export const theme = createTheme({
       defaultProps: {
         bgcolor: palette.primary.main,
         color: palette.primary.contrastText,
-        fontFamily: secondaryFontFamily,
+        fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
         marginBottom: "8px",
       },
     },
@@ -422,18 +422,18 @@ export const theme = createTheme({
           color: "rgba(0, 0, 0, 0.6)", // Default text color
 
           // Adding hover state for background color and text color
-          '&:hover': {
+          "&:hover": {
             // backgroundColor: "#f0f0f0",
             // color: "#2466A8",
           },
-          '&.Mui-selected': {
+          "&.Mui-selected": {
             color: palette.secondary.main,
             fontWeight: "bold",
             // background: "rgba(36, 102, 168, 0.08)"
           },
-          '&.MuiTabs-indicator': {
-            backgroundColor: "#2466A8"
-          }
+          "&.MuiTabs-indicator": {
+            backgroundColor: "#2466A8",
+          },
         },
       },
     },
@@ -460,42 +460,39 @@ export const theme = createTheme({
       },
     },
 
-
     MuiSelect: {
       styleOverrides: {
         select: {
-          paddingRight: is_farsi ? "unset !important"  : "24px !important",
-          paddingLeft: is_farsi ? "24px !important" : "unset !important",
+          paddingInline: "24px",
         },
         icon: {
           left: is_farsi ? "7px" : "unset",
           right: is_farsi ? "unset" : "7px",
-        }
-      }
+        },
+      },
     },
 
     MuiChip: {
       styleOverrides: {
         root: {
           ".MuiChip-label": {
-            unicodeBidi : "plaintext"
+            unicodeBidi: "plaintext",
           },
           ".MuiChip-deleteIcon": {
             marginLeft: is_farsi ? "4px" : "-4px",
             marginRight: is_farsi ? "-4px" : "4px",
           },
-        }
-      }
+        },
+      },
     },
 
     MuiFormHelperText: {
       styleOverrides: {
-        root :{
-          textAlign : is_farsi ? "right" : "left",
-        }
-      }
+        root: {
+          textAlign: is_farsi ? "right" : "left",
+        },
+      },
     },
-
 
     MuiOutlinedInput: {
       styleOverrides: {
@@ -507,19 +504,19 @@ export const theme = createTheme({
       },
     },
 
-    MuiIconButton:{
-      styleOverrides:{
-        root:{
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
           marginRight: is_farsi ? "unset" : "-12px",
           marginLeft: is_farsi ? "-12px" : "unset",
         },
-     }
+      },
     },
     MuiInputAdornment: {
       styleOverrides: {
         root: {
-          marginRight:is_farsi? "8px" : "unset",
-          marginLeft: is_farsi ? "unset" : "8px"
+          marginRight: is_farsi ? "8px" : "unset",
+          marginLeft: is_farsi ? "unset" : "8px",
         },
       },
     },
