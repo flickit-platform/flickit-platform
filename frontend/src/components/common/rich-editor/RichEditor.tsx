@@ -17,7 +17,8 @@ interface IRichEditorProps {
   field?: ControllerRenderProps<FieldValues, any>;
   content?: string;
   boxProps?: BoxProps;
-  checkLang?: boolean
+  checkLang?: boolean,
+  setLangDir?: any,
 }
 
 const RichEditor = (props: IRichEditorProps) => {
@@ -29,7 +30,8 @@ const RichEditor = (props: IRichEditorProps) => {
     className,
     field,
     boxProps = {},
-    checkLang
+    checkLang,
+    setLangDir
   } = props;
   const [isFarsi, setIsFarsi] = useState<any>(checkLang);
   const editor = useEditor({
@@ -49,6 +51,7 @@ const RichEditor = (props: IRichEditorProps) => {
         field.onChange(props.editor.getHTML());
 
         setIsFarsi(firstCharDetector(props.editor.getText()));
+        setLangDir(firstCharDetector(props.editor.getText()))
       }
     },
     onCreate(props) {

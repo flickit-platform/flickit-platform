@@ -74,6 +74,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
         //   </Box>
         // }
         sx={{ width: "100%", height: `${HEIGHT_TITLE}vh` }}
+        titleProps={{ sx:{height:"100%",...theme.typography.titleLarge} }}
         sub={
           <Box
             sx={{

@@ -610,7 +610,10 @@ const Navbar = () => {
           >
             <img src={config.appLogoUrl} alt={"logo"} />
           </Typography>
-          <Box sx={{ display: { xs: "none", md: "block" }, ml: 3 }}>
+          <Box sx={{ display: { xs: "none", md: "block" },
+              mr: theme.direction === "rtl" ? 3 : 0,
+              ml: theme.direction === "ltr" ? 3 : 0,
+          }}>
             <SpacesButton />
             <Button
               component={NavLink}
@@ -622,8 +625,8 @@ const Navbar = () => {
               }
               sx={{
                 ...styles.activeNavbarLink,
-                marginRight: theme.direction === "ltr" ? 0.8 : 0.1,
-                marginLeft: theme.direction === "rtl" ? 0.8 : 0.1,
+                marginRight: theme.direction === "rtl" ? 0.8 : 0.1,
+                marginLeft: theme.direction === "ltr" ? 0.8 : 0.1,
               }}
               size="small"
             >
@@ -632,7 +635,10 @@ const Navbar = () => {
             <Button
               component={NavLink}
               to={`/assessment-kits`}
-              sx={{ ...styles.activeNavbarLink, ml: 0.1 }}
+              sx={{ ...styles.activeNavbarLink,
+                  marginRight: theme.direction === "rtl" ? 0.8 : 0.1,
+                  marginLeft: theme.direction === "ltr" ? 0.8 : 0.1,
+              }}
               size="small"
               startIcon={
                 <AssessmentRoundedIcon
@@ -759,8 +765,8 @@ const SpacesButton = () => {
         onClick={() => navigate("/spaces/1")}
         sx={{
           ...styles.activeNavbarLink,
-          marginRight: theme.direction === "ltr" ? 0.8 : 0.1,
-          marginLeft: theme.direction === "rtl" ? 0.8 : 0.1,
+            marginRight: theme.direction === "rtl" ? 0.8 : 0.1,
+            marginLeft: theme.direction === "ltr" ? 0.8 : 0.1,
           "&:hover .MuiButton-endIcon > div": {
             borderLeftColor: "#8080802b",
           },
