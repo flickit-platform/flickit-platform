@@ -78,7 +78,8 @@ const CompareButton = (props: { disabled?: boolean }) => {
         variant="contained"
         size="large"
         disabled={disabled}
-        sx={{ ...styles.compareButton,...theme.typography.labelLarge }}
+        sx={{ ...styles.compareButton }}
+        style={{...theme.typography.labelLarge}}
         onClick={handleClick}
       >
         <Trans i18nKey="compare" />

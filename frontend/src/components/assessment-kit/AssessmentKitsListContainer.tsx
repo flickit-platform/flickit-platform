@@ -35,16 +35,16 @@ const AssessmentKitsListContainer = () => {
           <TabList onChange={handleTabChange}>
             <Tab
               label={
-                <Box sx={{ ...styles.centerV,...theme.typography.titleSmall }}>
-                  <Trans i18nKey="public" />
+                <Box sx={{ ...styles.centerV }}>
+                  <Trans style={{...theme.typography.titleSmall}} i18nKey="public" />
                 </Box>
               }
               value="public"
             />
             <Tab
               label={
-                <Box sx={{ ...styles.centerV, ...theme.typography.titleSmall }}>
-                  <Trans i18nKey="private" />
+                <Box sx={{ ...styles.centerV }}>
+                  <Trans style={{...theme.typography.titleSmall}} i18nKey="private" />
                 </Box>
               }
               value="private"
