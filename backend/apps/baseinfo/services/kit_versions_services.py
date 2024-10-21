@@ -109,3 +109,13 @@ def get_subjects_list(request, kit_version_id):
         params=request.query_params,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def update_subject(request, kit_version_id, subject_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects/{subject_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
