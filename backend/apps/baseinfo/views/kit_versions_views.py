@@ -7,7 +7,15 @@ from rest_framework.permissions import IsAuthenticated
 from baseinfo.services import kit_versions_services
 
 
-class KitVersionSubjectApi(APIView):
+class KitVersionsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.load_kit_with_version_id(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class KitVersionSubjectsApi(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=openapi.Schema(
@@ -24,6 +32,26 @@ class KitVersionSubjectApi(APIView):
     @swagger_auto_schema(manual_parameters=[size_param, page_param])
     def get(self, request, kit_version_id):
         result = kit_versions_services.get_subjects_list(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class KitVersionSubjectApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, subject_id):
+        result = kit_versions_services.update_subject(request, kit_version_id,
+                                                      subject_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, subject_id):
+        result = kit_versions_services.delete_subject_with_kit_version_id(request, kit_version_id,
+                                                                          subject_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
 

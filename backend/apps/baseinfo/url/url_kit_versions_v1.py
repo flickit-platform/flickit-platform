@@ -3,7 +3,9 @@ from django.urls import path
 from baseinfo.views import kit_versions_views
 
 urlpatterns = [
-    path("<str:kit_version_id>/subjects/", kit_versions_views.KitVersionSubjectApi.as_view()),
+    path("<str:kit_version_id>/", kit_versions_views.KitVersionsApi.as_view()),
+    path("<str:kit_version_id>/subjects/", kit_versions_views.KitVersionSubjectsApi.as_view()),
+    path("<str:kit_version_id>/subjects/<str:subject_id>/", kit_versions_views.KitVersionSubjectApi.as_view()),
     path("<str:kit_version_id>/activate/", kit_versions_views.KitActiveApi.as_view()),
     path("<str:kit_version_id>/maturity-levels/", kit_versions_views.KitVersionMaturityLevelsApi.as_view()),
     path("<str:kit_version_id>/maturity-levels/<str:maturity_level_id>/",
