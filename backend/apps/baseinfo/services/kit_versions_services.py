@@ -2,6 +2,13 @@ import requests
 from assessmentplatform.settings import ASSESSMENT_URL
 
 
+def load_kit_with_version_id(request, kit_version_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
 def create_subject_kit_version(request, kit_version_id):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects',
