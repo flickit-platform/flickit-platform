@@ -464,8 +464,7 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         select: {
-          paddingRight: is_farsi ? "unset !important"  : "24px !important",
-          paddingLeft: is_farsi ? "24px !important" : "unset !important",
+          paddingInline: "24px",
         },
         icon: {
           left: is_farsi ? "7px" : "unset",
