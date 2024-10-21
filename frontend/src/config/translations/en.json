@@ -153,6 +153,7 @@
   "subjectsListEmptyState": "Oops! No Subject is Created.",
   "subjectListEmptyStateDatailed": "No subjects in this kit so far? Create your first subject just by one click!",
   "subjectsKitDesignerDescrption":"Subjects are the most critical components of an evaluation. The maturity level of an evaluation is determined based on the maturity levels of the subjects and by calculating their weighted average. Each subject consists of several attributes, and its score is derived from the weighted average of these attributes.<br/>In this section, you can define the subjects relevant to your evaluation, add the necessary descriptions for them, and finally, determine the weight of each subject in the final calculation of the evaluation's maturity level.",
+  "questionnairesAndImpacts": "Questionaires And Impacts",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",
   "submitAnswerAutomatically": "Submit answer automatically",
