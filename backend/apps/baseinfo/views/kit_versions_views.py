@@ -167,3 +167,13 @@ class KitActiveApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AttributesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_attribute(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
