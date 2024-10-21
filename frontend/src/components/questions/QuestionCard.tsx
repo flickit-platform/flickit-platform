@@ -1705,8 +1705,7 @@ const CreateEvidenceAttachment = (props: any) => {
                 px: "40px",
               }}
             >
-              {loadingFile
-                ? skeleton.map((item, index) => {
+              {loadingFile ? skeleton.map((item, index) => {
                     return (
                       <Skeleton
                         key={item}
@@ -1720,7 +1719,7 @@ const CreateEvidenceAttachment = (props: any) => {
                 : attachments.map((item, index) => {
                     return (
                       <FileIcon
-                        key={item}
+                        key={index}
                         setEvidenceId={setEvidenceId}
                         setExpandedDeleteAttachmentDialog={
                           setExpandedDeleteAttachmentDialog
@@ -2532,7 +2531,7 @@ const EvidenceDetail = (props: any) => {
                 sx={{
                   display: "flex",
                   flexDirection: { xs: "column", sm: "row" },
-                  gap: 1,
+                  gap: 2,
                 }}
               >
                 <IconButton
@@ -2774,7 +2773,7 @@ const EvidenceDetail = (props: any) => {
                 sx={{
                   display: "flex",
                   flexDirection: { xs: "column", sm: "row" },
-                  gap: 1,
+                  gap: 2,
                 }}
               >
                 {permissions.updateEvidence && editable && (
