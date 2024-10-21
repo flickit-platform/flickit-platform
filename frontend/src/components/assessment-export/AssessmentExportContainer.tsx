@@ -85,19 +85,19 @@ const AssessmentExportContainer = () => {
   });
 
   const calculateMaturityLevelQuery = useQuery({
-    service: (args = { assessmentId }, config) =>
+    service: (args={ assessmentId }, config) =>
       service.calculateMaturityLevel(args, config),
     runOnMount: false,
   });
 
   const calculateConfidenceLevelQuery = useQuery({
-    service: (args = { assessmentId }, config) =>
+    service: (args={ assessmentId }, config) =>
       service.calculateConfidenceLevel(args, config),
     runOnMount: false,
   });
 
   const fetchAdviceNarration = useQuery<any>({
-    service: (args = { assessmentId }, config) =>
+    service: (args={ assessmentId }, config) =>
       service.fetchAdviceNarration(args, config),
     toastError: false,
   });

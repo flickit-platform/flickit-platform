@@ -504,14 +504,6 @@ export const theme = createTheme({
       },
     },
 
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          marginRight: is_farsi ? "unset" : "-12px",
-          marginLeft: is_farsi ? "-12px" : "unset",
-        },
-      },
-    },
     MuiInputAdornment: {
       styleOverrides: {
         root: {
