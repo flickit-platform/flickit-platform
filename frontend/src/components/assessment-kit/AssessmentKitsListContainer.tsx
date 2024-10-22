@@ -75,7 +75,7 @@ const AssessmentKitsListContainer = () => {
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {items.map((assessmentKit: any) => {
+                    {items?.map((assessmentKit: any) => {
                       return (
                         <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem
@@ -116,7 +116,7 @@ const AssessmentKitsListContainer = () => {
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {items.map((assessmentKit: any) => {
+                    {items?.map((assessmentKit: any) => {
                       return (
                         <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem

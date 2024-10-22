@@ -1283,7 +1283,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                     </Title>
                   )}
                   <Box mt={1}>
-                    {items.map((member: any) => {
+                    {items?.map((member: any) => {
                       const { id, email, inviteExpirationDate, displayName } =
                         member;
 
