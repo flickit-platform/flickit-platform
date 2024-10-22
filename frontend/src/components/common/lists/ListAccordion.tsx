@@ -22,7 +22,7 @@ const ListAccordion = (props: IListAccordion) => {
         listStyle: { xs: "none", md: "none" },
       }}
     >
-      {items.map((item: any, index: number) => {
+      {items?.map((item: any, index: number) => {
         return (
           <LiComponent
             render={(isExpanded) => renderItem(item, index, isExpanded)}

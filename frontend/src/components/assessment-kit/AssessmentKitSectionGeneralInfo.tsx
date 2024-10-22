@@ -57,16 +57,8 @@ const AssessmentKitSectionGeneralInfo = (
   const fetchAssessmentKitStatsQuery = useQuery({
     service: (args = { assessmentKitId }, config) =>
       service.fetchAssessmentKitStats(args, config),
-    runOnMount: false,
+    runOnMount: true,
   });
-  useEffect(() => {
-    if (
-      fetchAssessmentKitInfoQuery?.data?.hasActiveVersion &&
-      fetchAssessmentKitStatsQuery.data === undefined
-    ) {
-      fetchAssessmentKitStatsQuery.query();
-    }
-  }, [fetchAssessmentKitInfoQuery.data]);
 
   const abortController = useRef(new AbortController());
   const [show, setShow] = useState<boolean>(false);
@@ -416,7 +408,7 @@ const AssessmentKitSectionGeneralInfo = (
                   <InfoItem
                     bg="white"
                     info={{
-                      item: subjects.map((sub: any) => sub?.title),
+                      item: subjects?.map((sub: any) => sub?.title),
                       title: t("subjects"),
                       type: "array",
                     }}
