@@ -36,6 +36,7 @@ declare module "@mui/material/styles" {
     labelSmall: React.CSSProperties;
     labelMedium: React.CSSProperties;
     labelLarge: React.CSSProperties;
+    labelCondensed: React.CSSProperties;
     subSmall: React.CSSProperties;
     subMedium: React.CSSProperties;
     subLarge: React.CSSProperties;
@@ -60,6 +61,7 @@ declare module "@mui/material/styles" {
     labelSmall?: React.CSSProperties;
     labelMedium?: React.CSSProperties;
     labelLarge?: React.CSSProperties;
+    labelCondensed?: React.CSSProperties;
     subSmall?: React.CSSProperties;
     subMedium?: React.CSSProperties;
     subLarge?: React.CSSProperties;
@@ -92,6 +94,7 @@ declare module "@mui/material/Typography" {
     labelSmall?: true;
     labelMedium?: true;
     labelLarge?: true;
+    labelCondensed?: true;
     subSmall?: true;
     subMedium?: true;
     subLarge?: true;
@@ -271,6 +274,13 @@ export const theme = createTheme({
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
       letterSpacing: is_farsi ? "0px" : "0.1px",
+    },
+    labelCondensed: {
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
+      fontWeight: 500,
+      fontSize: "0.75rem",
+      lineHeight: "0.75rem",
+      letterSpacing: "0.5px",
     },
     semiBoldLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
