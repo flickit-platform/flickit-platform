@@ -140,7 +140,7 @@ const ListOfItems = ({
                               "& .MuiFormLabel-root": {
                                 fontSize: 14,
                               },
-                              width:"60%",
+                              width: {sx:"100%", md:"60%"},
                               background:"#fff",
                               borderRadius:"8px"
                             }}
@@ -231,7 +231,7 @@ const ListOfItems = ({
                             },
                             background:"#fff",
                             borderRadius:"8px",
-                            width:"85%",
+                            width: {xs:'100%', md: "85%"},
                           }}
                         />
                       ) : (
@@ -264,7 +264,7 @@ const ListOfItems = ({
                                             const inputValue = e.target.value;
                                               setTempValues({
                                                 ...tempValues,
-                                                weight: eval(inputValue),
+                                                weight: Number(inputValue),
                                               })
                                             }
                                         }
