@@ -96,8 +96,8 @@ declare module "@mui/material/Typography" {
     subMedium?: true;
     subLarge?: true;
     semiBoldXLarge?: true;
-    semiBoldLarge?: true
-    semiBoldMedium?: true
+    semiBoldLarge?: true;
+    semiBoldMedium?: true;
   }
 }
 
@@ -150,7 +150,7 @@ export const theme = createTheme({
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
-      letterSpacing: "0.09em",
+      letterSpacing: is_farsi ? "0px" : "0.09em",
       textTransform: "none",
       color: "GrayText",
     },
@@ -158,14 +158,14 @@ export const theme = createTheme({
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
-      letterSpacing: "0.09em",
+      letterSpacing: is_farsi ? "0px" : "0.09em",
       color: "GrayText",
     },
     subLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       lineHeight: 1.57,
-      letterSpacing: "0.09em",
+      letterSpacing: is_farsi ? "0px" : "0.09em",
       color: "GrayText",
     },
     headlineSmall: {
@@ -173,104 +173,104 @@ export const theme = createTheme({
       fontWeight: 500,
       fontSize: "1.5rem",
       lineHeight: "2rem",
-      letterSpacing: "-3%",
+      letterSpacing: is_farsi ? "0px" : "-3%",
     },
     headlineMedium: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2rem",
       lineHeight: "2.25rem",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     headlineLarge: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: "bold",
       fontSize: "2.5rem",
       lineHeight: "2.7rem",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     displaySmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontSize: "1rem",
       fontWeight: "normal",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     displayMedium: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontSize: "1.75rem",
       fontWeight: "Bold",
       lineHeight: "2.25rem",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     displayLarge: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontSize: "4rem",
       fontWeight: "bold",
       lineHeight: "5.75rem",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     titleSmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 600,
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      letterSpacing: ".1px",
+      letterSpacing: is_farsi ? "0px" : ".1px",
     },
     titleMedium: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 600,
       fontSize: "1rem",
       lineHeight: "1.5rem",
-      letterSpacing: ".15px",
+      letterSpacing: is_farsi ? "0px" : ".15px",
     },
     titleLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 500,
       fontSize: "1.375rem",
       lineHeight: "1.75rem",
-      letterSpacing: "0",
+      letterSpacing: is_farsi ? "0px" : "0",
     },
     bodySmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "normal",
       fontSize: "0.75rem",
       lineHeight: "1rem",
-      letterSpacing: "0.4px",
+      letterSpacing: is_farsi ? "0px" : "0.4px",
     },
     bodyMedium: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: 200,
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
-      letterSpacing: "0.25px",
+      letterSpacing: is_farsi ? "0px" : "0.25px",
     },
     bodyLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "lighter",
       fontSize: "1rem",
       lineHeight: "1.5rem",
-      letterSpacing: "0.5px",
+      letterSpacing: is_farsi ? "0px" : "0.5px",
     },
     labelSmall: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "lighter",
       fontSize: "0.6875rem",
       lineHeight: "0.75rem",
-      letterSpacing: "0.5px",
+      letterSpacing: is_farsi ? "0px" : "0.5px",
     },
     labelMedium: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
       fontWeight: 500,
       fontSize: "0.75rem",
       lineHeight: "1rem",
-      letterSpacing: "0.5px",
+      letterSpacing: is_farsi ? "0px" : "0.5px",
     },
     labelLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "bold",
       fontSize: "0.875rem",
       lineHeight: "1.125rem",
-      letterSpacing: "0.1px",
+      letterSpacing: is_farsi ? "0px" : "0.1px",
     },
     labelCondensed: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
@@ -284,16 +284,16 @@ export const theme = createTheme({
       fontWeight: "600",
       fontSize: "1rem",
       lineHeight: "1.5rem",
-      letterSpacing: "0.15px",
+      letterSpacing: is_farsi ? "0px" : "0.15px",
     },
-    semiBoldMedium:{
+    semiBoldMedium: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "600",
       fontSize: "0.875rem",
       lineHeight: "1.25rem",
-      letterSpacing: "0.1px",
+      letterSpacing: is_farsi ? "0px" : "0.1px",
     },
-    semiBoldXLarge:{
+    semiBoldXLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "600",
       fontSize: "1.375rem",
@@ -302,7 +302,7 @@ export const theme = createTheme({
     },
     button: {
       fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
-      letterSpacing: ".05em",
+      letterSpacing: is_farsi ? "0px" : ".05em",
     },
     h3: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
@@ -324,6 +324,9 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
+        .top-nav-bar-ZwZd20 {
+          display: none !important
+        }
         html {
           scroll-behavior: smooth;
           font-size: ${fontSize[4]};
@@ -381,7 +384,7 @@ export const theme = createTheme({
       defaultProps: {
         bgcolor: palette.primary.main,
         color: palette.primary.contrastText,
-        fontFamily: secondaryFontFamily,
+        fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
         marginBottom: "8px",
       },
     },
@@ -429,18 +432,18 @@ export const theme = createTheme({
           color: "rgba(0, 0, 0, 0.6)", // Default text color
 
           // Adding hover state for background color and text color
-          '&:hover': {
+          "&:hover": {
             // backgroundColor: "#f0f0f0",
             // color: "#2466A8",
           },
-          '&.Mui-selected': {
+          "&.Mui-selected": {
             color: palette.secondary.main,
             fontWeight: "bold",
             // background: "rgba(36, 102, 168, 0.08)"
           },
-          '&.MuiTabs-indicator': {
-            backgroundColor: "#2466A8"
-          }
+          "&.MuiTabs-indicator": {
+            backgroundColor: "#2466A8",
+          },
         },
       },
     },
@@ -467,42 +470,39 @@ export const theme = createTheme({
       },
     },
 
-
     MuiSelect: {
       styleOverrides: {
         select: {
-          paddingRight: is_farsi ? "unset !important"  : "24px !important",
-          paddingLeft: is_farsi ? "24px !important" : "unset !important",
+          paddingInline: "24px",
         },
         icon: {
           left: is_farsi ? "7px" : "unset",
           right: is_farsi ? "unset" : "7px",
-        }
-      }
+        },
+      },
     },
 
     MuiChip: {
       styleOverrides: {
         root: {
           ".MuiChip-label": {
-            unicodeBidi : "plaintext"
+            unicodeBidi: "plaintext",
           },
           ".MuiChip-deleteIcon": {
             marginLeft: is_farsi ? "4px" : "-4px",
             marginRight: is_farsi ? "-4px" : "4px",
           },
-        }
-      }
+        },
+      },
     },
 
     MuiFormHelperText: {
       styleOverrides: {
-        root :{
-          textAlign : is_farsi ? "right" : "left",
-        }
-      }
+        root: {
+          textAlign: is_farsi ? "right" : "left",
+        },
+      },
     },
-
 
     MuiOutlinedInput: {
       styleOverrides: {
@@ -514,19 +514,11 @@ export const theme = createTheme({
       },
     },
 
-    MuiIconButton:{
-      styleOverrides:{
-        root:{
-          marginRight: is_farsi ? "unset" : "-12px",
-          marginLeft: is_farsi ? "-12px" : "unset",
-        },
-     }
-    },
     MuiInputAdornment: {
       styleOverrides: {
         root: {
-          marginRight:is_farsi? "8px" : "unset",
-          marginLeft: is_farsi ? "unset" : "8px"
+          marginRight: is_farsi ? "8px" : "unset",
+          marginLeft: is_farsi ? "unset" : "8px",
         },
       },
     },

@@ -19,6 +19,7 @@ import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
 import { styles } from "@styles";
 import { theme } from "@/config/theme";
 import { t } from "i18next";
+import formatDate from "@utils/formatDate";
 
 export const AssessmentInsight = () => {
   const { service } = useServiceContext();
@@ -86,17 +87,26 @@ export const AssessmentInsight = () => {
           />
           {aboutSection?.creationTime && (
             <Typography variant="bodyMedium" mx={1}>
-              {format(
+              {theme.direction == "rtl" ? formatDate(
+                format(
                 new Date(
                   new Date(aboutSection?.creationTime).getTime() -
                     new Date(aboutSection?.creationTime).getTimezoneOffset() *
                       60000,
                 ),
                 "yyyy/MM/dd HH:mm",
-              ) +
-                " (" +
+              ), "Shamsi")  + " (" +
+                  t(convertToRelativeTime(aboutSection?.creationTime)) +
+                  ")"   :   format(
+                  new Date(
+                      new Date(aboutSection?.creationTime).getTime() -
+                      new Date(aboutSection?.creationTime).getTimezoneOffset() *
+                      60000,
+                  ),
+                  "yyyy/MM/dd HH:mm",
+              ) + " (" +
                 t(convertToRelativeTime(aboutSection?.creationTime)) +
-                ")"}
+                ")"  }
             </Typography>
           )}
           {(aboutSection.hasOwnProperty("isValid") || editable) &&

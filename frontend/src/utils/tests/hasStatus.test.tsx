@@ -1,4 +1,4 @@
-import { assert, expect, test } from "vitest";
+import { expect, test } from "vitest";
 import hasStatus from "../hasStatus";
 
 test("has status must return boolean", () => {

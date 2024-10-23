@@ -10,7 +10,6 @@ import {
   useFormContext,
 } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
-import { useServiceContext } from "@providers/ServiceProvider";
 import Box from "@mui/material/Box";
 import { LoadingSkeleton } from "../loadings/LoadingSkeleton";
 import forLoopComponent from "@utils/forLoopComponent";
@@ -144,7 +143,6 @@ const AutocompleteBaseField = (
   } = useFormContext();
   const isFirstFetchRef = useRef(true);
   const { hasError, errorMessage } = getFieldError(errors, name);
-  const { service } = useServiceContext();
 
   const [inputValue, setInputValue] = useState(
     () => getOptionLabel(defaultValue) || "",
@@ -192,7 +190,6 @@ const AutocompleteBaseField = (
   useEffect(() => {
     let active = true;
     if (loaded && active) {
-      const opt = filterSelectedOption(optionsData, value);
       setOptions(optionsData as any);
       defaultValue && onChange(defaultValue);
     }

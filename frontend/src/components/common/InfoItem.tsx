@@ -3,6 +3,7 @@ import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import { styles } from "@styles";
 import Box from "@mui/material/Box";
+import { theme } from "@config/theme";
 
 interface IInfoItems {
   renderMap?: Record<string, (...args: any) => JSX.Element>;
@@ -70,14 +71,16 @@ const DefaultInfoItemComponent = (
 const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
   tags: (title: string, items: string[], props: any) => (
     <DefaultInfoItemComponent title={title} {...props}>
-      {items.map((item) => (
-        <Chip
-          size="small"
-          label={item}
-          sx={{ ml: 0.3, mt: 0.5 }}
-          component="span"
-        />
-      ))}
+      {items.length !== 0
+        ? items?.map((item) => (
+            <Chip
+              size="small"
+              label={item}
+              sx={{ ml: 0.3, mt: 0.5 }}
+              component="span"
+            />
+          ))
+        : "-"}
     </DefaultInfoItemComponent>
   ),
   array: (title: string, items: string[], props: any) => (
@@ -87,12 +90,16 @@ const defaultRenderMap: Record<string, (...args: any) => JSX.Element> = {
           display: "flex",
           justifyContent: "start",
           flexWrap: "wrap",
-          ml: 4,
+          ml: theme.direction == "ltr" ? 4 : "unset",
+          mr: theme.direction == "rtl" ? 4 : "unset",
         }}
       >
-        {items.map(
-          (item, index) => `${item}${index === items.length - 1 ? "" : ","} `,
-        )}
+        {items?.length !== 0
+          ? items?.map(
+              (item, index) =>
+                `${item}${index === items.length - 1 ? "" : ","} `,
+            )
+          : "-"}
       </Box>
     </DefaultInfoItemComponent>
   ),
@@ -125,7 +132,7 @@ const renderInfo = (
     renderMap[key](title, item, { bg, action })
   ) : (
     <Component title={title} bg={bg} action={action}>
-      {item}
+      {item ? item : "-"}
     </Component>
   );
 };

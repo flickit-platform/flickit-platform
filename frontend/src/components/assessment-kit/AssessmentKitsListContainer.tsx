@@ -13,6 +13,7 @@ import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
 import { Trans } from "react-i18next";
+import {theme} from "@config/theme";
 const AssessmentKitsListContainer = () => {
   const { service } = useServiceContext();
   const [value, setValue] = useState("public");
@@ -35,7 +36,7 @@ const AssessmentKitsListContainer = () => {
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
-                  <Trans i18nKey="public" />
+                  <Trans style={{...theme.typography.titleSmall}} i18nKey="public" />
                 </Box>
               }
               value="public"
@@ -43,7 +44,7 @@ const AssessmentKitsListContainer = () => {
             <Tab
               label={
                 <Box sx={{ ...styles.centerV }}>
-                  <Trans i18nKey="private" />
+                  <Trans style={{...theme.typography.titleSmall}} i18nKey="private" />
                 </Box>
               }
               value="private"
@@ -74,7 +75,7 @@ const AssessmentKitsListContainer = () => {
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {items.map((assessmentKit: any) => {
+                    {items?.map((assessmentKit: any) => {
                       return (
                         <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem
@@ -115,7 +116,7 @@ const AssessmentKitsListContainer = () => {
               return (
                 <Box mt={3}>
                   <Grid container spacing={2}>
-                    {items.map((assessmentKit: any) => {
+                    {items?.map((assessmentKit: any) => {
                       return (
                         <Grid item xs={12} md={4} lg={3} key={assessmentKit.id}>
                           <AssessmentKitsMarketListItem

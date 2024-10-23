@@ -2,6 +2,13 @@ import requests
 from assessmentplatform.settings import ASSESSMENT_URL
 
 
+def load_kit_with_version_id(request, kit_version_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
 def create_subject_kit_version(request, kit_version_id):
     response = requests.post(
         ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects',
@@ -101,3 +108,56 @@ def kit_active(request, kit_version_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def get_subjects_list(request, kit_version_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def update_subject(request, kit_version_id, subject_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects/{subject_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_subject_with_kit_version_id(request, kit_version_id, subject_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects/{subject_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def change_subject_order(request, kit_version_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/subjects-change-order',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def create_attribute(request, kit_version_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/attributes',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_attributes_list(request, kit_version_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/attributes',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

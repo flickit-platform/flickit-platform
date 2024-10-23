@@ -135,7 +135,7 @@ export const MostSigItems = ({
           <MostSigItemLoadingSkeleton />
         ) : (
           (att || items)?.map((item: any, index: any) => {
-            return <li key={index}>{att ? item?.title : item}</li>;
+            return <li key={item?.id}>{att ? item?.title : item}</li>;
           })
         )}
       </ul>

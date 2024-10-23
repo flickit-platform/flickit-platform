@@ -11,11 +11,15 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
       <Navbar />
       <Box
         sx={{
-          p: { xs: 1, sm: 1, md: 4 },
-          pt: {
-            xs: "84px !important",
-            minHeight: "100%",
-          },
+          p: !location.pathname.endsWith("/html-document/")
+            ? { xs: 1, sm: 1, md: 4 }
+            : "0",
+          pt: !location.pathname.endsWith("/html-document/")
+            ? {
+                xs: "84px !important",
+                minHeight: "100%",
+              }
+            : 0,
         }}
         m="auto"
       >

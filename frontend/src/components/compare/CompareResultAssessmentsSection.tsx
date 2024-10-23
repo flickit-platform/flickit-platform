@@ -37,7 +37,7 @@ const CompareResultAssessmentsSection = (props: {
                 // ...styles.compareResultBorder,
                 width: "300px",
               }}
-              key={index}
+              key={item?.id}
             >
               <Box
                 sx={{

@@ -85,10 +85,6 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
     service: (args, config) => service.fetchExcelToDSLSampleFile(args, config),
     runOnMount: false,
   });
-  const convertExcelToDSLFile = useQuery({
-    service: (args, config) => service.convertExcelToDSLFile(args, config),
-    runOnMount: false,
-  });
 
   useEffect(() => {
     return () => {
@@ -129,7 +125,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       setLoading(false);
       close();
       onSubmitForm();
-      type ==="draft" && res?.kitId  && navigate(`kit-designer/${res.kitId}`)
+      type === "draft" && res?.kitId && navigate(`kit-designer/${res.kitId}`);
       shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
     } catch (e: any) {
       const err = e as ICustomError;
@@ -192,7 +188,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         link.remove();
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
 
@@ -228,7 +224,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
                   aria-hidden={true}
                   onClick={downloadTemplate}
                 >
-               <Trans i18nKey={"here"} />
+                  <Trans i18nKey={"here"} />
                 </span>
               </Box>
             </Box>
@@ -429,7 +425,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
         {syntaxErrorObject &&
           syntaxErrorObject.map((e: any, index: number) => {
             return (
-              <Box sx={{ ml: 1 }}>
+              <Box sx={{ ml: 1 }} key={e?.line}>
                 <Alert severity="error" sx={{ my: 2 }}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography variant="subtitle2" color="error">

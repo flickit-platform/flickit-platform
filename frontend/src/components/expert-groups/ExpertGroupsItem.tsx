@@ -133,7 +133,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           >
             {members.map((user: any, index: number) => {
               return (
-                <Tooltip key={index} title={user?.displayName}>
+                <Tooltip key={user?.id} title={user?.displayName}>
                   <>
                     <Avatar
                       key={user.id}

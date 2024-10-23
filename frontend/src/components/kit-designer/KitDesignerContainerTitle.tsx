@@ -5,11 +5,10 @@ import setDocumentTitle from "@utils/setDocumentTitle";
 import { t } from "i18next";
 import { useConfigContext } from "@/providers/ConfgProvider";
 import { useParams } from "react-router-dom";
+import { IKitVersion } from "@/types";
 
-const KitDesignerTitle = () => {
+const KitDesignerTitle = ({ kitVersion }: { kitVersion: IKitVersion }) => {
   const { config } = useConfigContext();
-  const { expertGroupId } = useParams();
-
   useEffect(() => {
     setDocumentTitle(`${t("kitDesigner")}`, config.appTitle);
   }, []);
@@ -31,12 +30,12 @@ const KitDesignerTitle = () => {
               title: t("expertGroups") as string,
               to: `/user/expert-groups`,
             },
-            // {
-            //   // title: expertGroup?.title,
-            //   to: `/user/expert-groups/${expertGroupId}`,
-            // },
+            {
+              title: kitVersion?.assessmentKit?.expertGroup?.title,
+              to: `/user/expert-groups/${kitVersion?.assessmentKit?.expertGroup?.id}`,
+            },
 
-            { title: `${t("kitDesigner")}` },
+            { title: kitVersion?.assessmentKit?.title },
           ]}
           displayChip
         />

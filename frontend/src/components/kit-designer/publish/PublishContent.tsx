@@ -5,13 +5,13 @@ import Box from "@mui/material/Box";
 import PermissionControl from "../../common/PermissionControl";
 import { Trans } from "react-i18next";
 import { useServiceContext } from "@/providers/ServiceProvider";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ICustomError } from "@/utils/CustomError";
 import toastError from "@/utils/toastError";
 
 const PublishContent = () => {
   const { service } = useServiceContext();
-  const { kitVersionId = "" } = useParams();
+  const { kitVersionId = "", expertGroupId } = useParams();
   const handlePublish = async () => {
     try {
       const data = {
@@ -26,22 +26,22 @@ const PublishContent = () => {
   return (
     <PermissionControl>
       <>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           {" "}
           <Typography variant="headlineSmall" fontWeight="bold">
             <Trans i18nKey="publish" />
           </Typography>
-          <Button variant="contained" onClick={handlePublish}>
+          <Button
+            variant="contained"
+            onClick={handlePublish}
+            component={Link}
+            to={`/user/expert-groups/${expertGroupId}/assessment-kits/${kitVersionId}`}
+          >
             <Trans i18nKey="publish" />
           </Button>
         </Box>
         <Divider sx={{ my: 1 }} />
 
-        
         <Typography variant="bodyMedium">
           <Trans i18nKey="publishDescription" />
         </Typography>

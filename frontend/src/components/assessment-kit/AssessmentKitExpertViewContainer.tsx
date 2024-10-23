@@ -101,10 +101,10 @@ const AssessmentKitExpertViewContainer = () => {
                   title: t("expertGroups") as string,
                   to: `/user/expert-groups`,
                 },
-                // {
-                //   title: expertGroup?.title,
-                //   to: `/user/expert-groups/${expertGroupId}`,
-                // },
+                {
+                  title: expertGroup?.title,
+                  to: `/user/expert-groups/${expertGroupId}`,
+                },
                 {
                   title: assessmentKitTitle,
                 },
@@ -265,7 +265,7 @@ const AssessmentKitSubjects = (props: { details: any[]; update: boolean }) => {
         const isExpanded = expanded === subject.title;
         return (
           <Accordion
-            key={index}
+            key={subject?.id}
             expanded={isExpanded}
             onChange={handleChange(subject)}
             sx={{
@@ -376,7 +376,7 @@ const AssessmentKitSubjects = (props: { details: any[]; update: boolean }) => {
                     items={assessmentKitSubjectDetails.attributes}
                     renderItem={(item, index, isExpanded) => {
                       return (
-                        <React.Fragment key={index}>
+                        <React.Fragment key={item?.id}>
                           <Box
                             sx={{
                               display: "flex",
@@ -459,7 +459,7 @@ const AssessmentKitQuestionnaires = (props: {
         const isExpanded = expanded === questionnaire.title;
         return (
           <Accordion
-            key={index}
+            key={questionnaire?.id}
             expanded={isExpanded}
             onChange={handleChange(questionnaire)}
             sx={{
@@ -529,7 +529,7 @@ const AssessmentKitQuestionnaires = (props: {
                         variant="body2"
                         sx={{ ml: 2 }}
                         fontWeight="bold"
-                        key={index}
+                        key={subject}
                       >
                         {subject}
                       </Typography>
@@ -1131,7 +1131,7 @@ const SubjectQuestionList = (props: any) => {
         const isExpanded = expanded === question.title;
         return (
           <Accordion
-            key={index}
+            key={question?.id}
             expanded={isExpanded}
             onChange={handleChange(question)}
             sx={{
@@ -1359,7 +1359,7 @@ const QuestionnairesQuestionList = (props: any) => {
         const is_farsi = languageDetector(question.title);
         return (
           <Accordion
-            key={index}
+            key={question?.id}
             expanded={isExpanded}
             onChange={handleChange(question)}
             sx={{

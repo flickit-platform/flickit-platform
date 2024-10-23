@@ -97,8 +97,8 @@ const AssessmentExportContainer = () => {
   });
 
   const fetchAdviceNarration = useQuery<any>({
-    service: (args, config) =>
-      service.fetchAdviceNarration({ assessmentId }, config),
+    service: (args = { assessmentId }, config) =>
+      service.fetchAdviceNarration(args, config),
     toastError: false,
   });
 
@@ -340,11 +340,7 @@ const AssessmentExportContainer = () => {
           adviceSection,
         ]) => {
           const { items } = questionnaireData;
-          const {
-            assessment,
-            subjects,
-            assessmentPermissions: { manageable },
-          } = (data as IAssessmentResponse) || {};
+          const { assessment, subjects } = (data as IAssessmentResponse) || {};
           const { assessmentKit, maturityLevel, confidenceValue } =
             assessment || {};
           const { questionsCount, answersCount } = progress;
@@ -891,7 +887,7 @@ const AssessmentExportContainer = () => {
                                           feature: IAttribute,
                                           featureIndex: number,
                                         ) => (
-                                          <TableRow key={featureIndex}>
+                                          <TableRow key={feature?.id}>
                                             <TableCell
                                               sx={{
                                                 borderRight:
@@ -985,7 +981,7 @@ const AssessmentExportContainer = () => {
                         (level, index) => (
                           <Box
                             component="li"
-                            key={index}
+                            key={level?.id}
                             sx={{ marginBottom: 1 }}
                           >
                             <Typography
@@ -1068,7 +1064,7 @@ const AssessmentExportContainer = () => {
                         </TableHead>
                         <TableBody>
                           {items?.map((questionnaire: any, index: number) => (
-                            <TableRow key={index}>
+                            <TableRow key={questionnaire?.id}>
                               <TableCell
                                 sx={{
                                   borderRight:
@@ -1137,7 +1133,7 @@ const AssessmentExportContainer = () => {
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} lg={6} xl={6}>
-                    <Tooltip title={"copy"}>
+                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                       <IconButton
                         size="small"
                         onClick={() => handleCopyClick("globalChart")}
@@ -1165,9 +1161,6 @@ const AssessmentExportContainer = () => {
                       ) : (
                         <AssessmentSubjectRadialChart
                           data={subjects}
-                          maturityLevelsCount={
-                            assessmentKit?.maturityLevelCount ?? 5
-                          }
                           loading={false}
                         />
                       )}
@@ -1183,7 +1176,7 @@ const AssessmentExportContainer = () => {
                     flexDirection="column"
                     alignItems="flex-end"
                   >
-                    <Tooltip title={"copy"}>
+                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                       <IconButton
                         size="small"
                         onClick={() => handleCopyClick("gauge")}
@@ -1270,14 +1263,11 @@ const AssessmentExportContainer = () => {
                         ) : (
                           <AssessmentSubjectRadialChart
                             data={subject?.attributes}
-                            maturityLevelsCount={
-                              assessmentKit?.maturityLevelCount ?? 5
-                            }
                             loading={false}
                           />
                         )}
                       </Box>
-                      <Tooltip title={"copy"}>
+                      <Tooltip title={<Trans i18nKey={"copy"} />}>
                         <IconButton
                           size="small"
                           onClick={() =>
@@ -1378,7 +1368,7 @@ const AssessmentExportContainer = () => {
                                         document
                                       />
                                     </Box>
-                                    <Tooltip title={"copy"}>
+                                    <Tooltip title={<Trans i18nKey={"copy"} />}>
                                       <IconButton
                                         size="small"
                                         onClick={() =>
