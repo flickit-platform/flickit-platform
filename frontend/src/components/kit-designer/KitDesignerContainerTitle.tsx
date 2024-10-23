@@ -35,7 +35,7 @@ const KitDesignerTitle = ({ kitVersion }: { kitVersion: IKitVersion }) => {
               to: `/user/expert-groups/${kitVersion?.assessmentKit?.expertGroup?.id}`,
             },
 
-            { title: `${t("kitDesigner")}` },
+            { title: kitVersion?.assessmentKit?.title },
           ]}
           displayChip
         />

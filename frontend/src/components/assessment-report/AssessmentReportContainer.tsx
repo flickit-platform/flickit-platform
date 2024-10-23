@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import QueryBatchData from "@common/QueryBatchData";
@@ -16,15 +16,16 @@ import { AssessmentReportKit } from "./AssessmentReportKit";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ArticleRounded } from "@mui/icons-material";
+import { ArticleRounded, PictureAsPdf } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import BetaSvg from "@assets/svg/beta.svg";
 import PermissionControl from "../common/PermissionControl";
-import {theme} from "@config/theme";
+import { theme } from "@config/theme";
 
 const AssessmentReportContainer = (props: any) => {
   const { service } = useServiceContext();
   const { assessmentId = "" } = useParams();
+  const [disableHtmlDocument, setDisableHtmlDodument] = useState(false);
   const queryData = useQuery<IAssessmentReportModel>({
     service: (args, config) =>
       service.fetchAssessment({ assessmentId }, config),
@@ -59,6 +60,25 @@ const AssessmentReportContainer = (props: any) => {
       await queryData.query();
     } catch (e) {}
   };
+  const iframeUrl =
+    "https://flickit-cdn.hectora.app/static-stage/report/" +
+    assessmentId +
+    "/index.html";
+  useEffect(() => {
+    const checkIframeUrl = async () => {
+      try {
+        const response = await fetch(iframeUrl, { method: "HEAD" });
+        if (response.status === 404) {
+          setDisableHtmlDodument(true);
+        }
+      } catch (error) {
+        setDisableHtmlDodument(true);
+        console.error("Error fetching iframe URL:", error);
+      }
+    };
+
+    checkIframeUrl();
+  }, [iframeUrl]);
   useEffect(() => {
     if (queryData.errorObject?.response?.data?.code == "CALCULATE_NOT_VALID") {
       calculate();
@@ -122,6 +142,20 @@ const AssessmentReportContainer = (props: any) => {
                       <Trans i18nKey="assessmentInsights" />
                     </Typography>
                     <Box sx={{ py: "0.6rem", display: "flex" }}>
+                      <Tooltip title={<Trans i18nKey={"pdf"} />}>
+                        <Box>
+                          <IconButton
+                            data-cy="more-action-btn"
+                            disabled={disableHtmlDocument}
+                            component={exportable ? Link : "div"}
+                            to={`/${spaceId}/assessments/1/${assessmentId}/html-document/`}
+                          >
+                            <PictureAsPdf
+                              sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
+                            />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>
                       <Tooltip title={<Trans i18nKey={"assessmentDocument"} />}>
                         <Box>
                           <IconButton
@@ -272,11 +306,13 @@ const AssessmentReportContainer = (props: any) => {
                       alignItems="center"
                     >
                       <Trans i18nKey="advice" />
-                      <Box sx={{
-                        ml: theme.direction == "ltr" ? 1 : "unset",
-                        mr: theme.direction == "rtl" ? 1 : "unset",
-                        mt: 1
-                      }}>
+                      <Box
+                        sx={{
+                          ml: theme.direction == "ltr" ? 1 : "unset",
+                          mr: theme.direction == "rtl" ? 1 : "unset",
+                          mt: 1,
+                        }}
+                      >
                         <img src={BetaSvg} alt="beta" width={34} />
                       </Box>
                     </Typography>

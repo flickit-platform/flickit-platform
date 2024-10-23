@@ -15,6 +15,9 @@ const ExpertGroupConfirmInvitationScreen = lazy(
 const AssessmentSettingScreen = lazy(
   () => import("../screens/AssessmentSettingScreen"),
 );
+const AssessmentHTMLDocumentScreen = lazy(
+  () => import("../screens/HtmlDocumentScreen"),
+);
 const AssessmentDocumentScreen = lazy(
   () => import("../screens/AssessmentDocumentScreen"),
 );
@@ -55,7 +58,7 @@ const AssessmentKitPermissionsScreen = lazy(
   () => import("../screens/AssessmentKitPermissionsScreen"),
 );
 
-const KitDesignerScreen = lazy(() => import("../screens/KitDesignerScreen"))
+const KitDesignerScreen = lazy(() => import("../screens/KitDesignerScreen"));
 /**
  * How does it work?
  * We have two separate routes for users, for unauthorized users we have AuthRoutes and for authenticated users we use PrivateRoutes
@@ -110,6 +113,10 @@ const Routes = () => {
             element={<AssessmentDocumentScreen />}
           />
           <Route
+            path="/:spaceId/assessments/:page/:assessmentId/html-document/"
+            element={<AssessmentHTMLDocumentScreen />}
+          />
+          <Route
             path="/:spaceId/assessments/:page/:assessmentId/insights"
             element={<AssessmentReportScreen />}
           />
@@ -153,7 +160,10 @@ const Routes = () => {
           <Route path="/compare" element={<CompareScreen />} />
           <Route path="/compare/result" element={<CompareResultScreen />} />
 
-          <Route path="/user/:accountTab/:expertGroupId/kit-designer/:kitVersionId" element={<KitDesignerScreen />} />
+          <Route
+            path="/user/:accountTab/:expertGroupId/kit-designer/:kitVersionId"
+            element={<KitDesignerScreen />}
+          />
         </Route>
 
         {/* Any other routes results in 404 page */}
