@@ -317,6 +317,9 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
+        .top-nav-bar-ZwZd20 {
+          display: none !important
+        }
         html {
           scroll-behavior: smooth;
           font-size: ${fontSize[4]};
