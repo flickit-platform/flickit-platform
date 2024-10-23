@@ -184,7 +184,7 @@ export interface ISubjectInfo {
   total_question_number: number;
   maturityLevel?: IMaturityLevel;
 }
-export interface IMaturityLevel {
+export interface kitDesignListItems {
   id: TId;
   title: string;
   value: number;

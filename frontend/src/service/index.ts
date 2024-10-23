@@ -568,8 +568,45 @@ export const createService = (
         config,
       );
     },
+      fetchSubjectKit(
+          { kitVersionId }: { kitVersionId: TId },
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.get(
+              `/api/v1/kit-versions/${kitVersionId}/subjects/`,
+              config,
+          );
+      },
+      postSubjectKit(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/subjects/`,
+              data,
+              config,
+          );
+      },
+      deleteSubjectKit(
+          { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
+          config?: AxiosRequestConfig<any>
+      ) {
+          return axios.delete(
+              `/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+              config,
+          );
+      },
+      updateKitSubject(
+          { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
+          data: any,
+          config?: AxiosRequestConfig<any>,
+      ){
+        return axios.put(`api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+         data,
+         config,
+       )
+      },
 
-    
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
       config: AxiosRequestConfig<any> | undefined,

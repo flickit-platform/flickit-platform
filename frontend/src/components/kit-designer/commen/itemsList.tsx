@@ -10,24 +10,29 @@ import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { styles } from "@/config/styles";
-import { IMaturityLevel } from "@/types";
+import { styles } from "@styles";
+import { kitDesignListItems } from "@types";
 import { Trans } from "react-i18next";
+import {theme} from "@config/theme";
+import {Button} from "@mui/material";
+import languageDetector from "@utils/languageDetector";
 
-interface MaturityLevelListProps {
-  subjects: Array<IMaturityLevel>;
+interface ListOfItemsProps {
+  items: Array<kitDesignListItems>;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
-  onReorder: (reorderedItems: IMaturityLevel[]) => void;
+  onReorder: (reorderedItems: kitDesignListItems[]) => void;
+  deleteBtn: boolean
 }
 
-const SubjectList = ({
-  subjects,
+const ListOfItems = ({
+  items,
   onEdit,
   onDelete,
   onReorder,
-}: MaturityLevelListProps) => {
-  const [reorderedItems, setReorderedItems] = useState(subjects);
+  deleteBtn
+}: ListOfItemsProps) => {
+  const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
   const [tempValues, setTempValues] = useState({ title: "", description: "" });
 
@@ -42,7 +47,7 @@ const SubjectList = ({
     onReorder(newReorderedItems);
   };
 
-  const handleEditClick = (item: IMaturityLevel) => {
+  const handleEditClick = (item: kitDesignListItems) => {
     setEditMode(Number(item.id));
     setTempValues({ title: item.title, description: item.description });
   };
@@ -80,7 +85,7 @@ const SubjectList = ({
                     mt={1.5}
                     p={1.5}
                     sx={{
-                      backgroundColor: "gray.100",
+                      backgroundColor: editMode === item.id ? "#F3F5F6" : "#fff",
                       borderRadius: "8px",
                       border: "0.3px solid #73808c30",
                       display: "flex",
@@ -89,20 +94,21 @@ const SubjectList = ({
                     }}
                   >
                     <Box
-                      sx={{ ...styles.centerCVH, background: "#F3F5F6" }}
+                      sx={{ ...styles.centerVH, background: "#F3F5F6",width:"64px",justifyContent:"space-around" }}
                       borderRadius="0.5rem"
                       mr={2}
-                      p={0.25}
+                      px={1.5}
                     >
                       <Typography variant="semiBoldLarge">
                         {index + 1}
                       </Typography>
-                      <Divider
-                        orientation="horizontal"
-                        flexItem
-                        sx={{ mx: 1 }}
-                      />
-                      <IconButton size="small">
+
+                      <IconButton disableRipple disableFocusRipple sx={{
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                          color: 'inherit',
+                        },
+                      }} size="small">
                         <SwapVertRoundedIcon fontSize="small" />
                       </IconButton>
                     </Box>
@@ -133,23 +139,29 @@ const SubjectList = ({
                               "& .MuiFormLabel-root": {
                                 fontSize: 14,
                               },
+                              width:"60%",
+                              background:"#fff",
+                              borderRadius:"8px"
                             }}
                             name="title"
                             label={<Trans i18nKey="title" />}
                           />
                         ) : (
-                          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                          <Typography variant="h6" sx={{ flexGrow: 1,width:"80%" }}>
                             {item.title}
                           </Typography>
                         )}
 
                         {/* Icons (Edit/Delete or Check/Close) */}
                         {editMode === item.id ? (
-                          <>
+                          <Box sx={{
+                            mr: theme.direction == "rtl" ? "auto" : "unset",
+                            ml: theme.direction == "ltr" ?  "auto" : "unset"
+                          }}>
                             <IconButton
                               size="small"
                               onClick={() => handleSaveClick(item)}
-                              sx={{ ml: 1 }}
+                              sx={{ mx: 1 }}
                               color="success"
                             >
                               <CheckRoundedIcon fontSize="small" />
@@ -157,34 +169,35 @@ const SubjectList = ({
                             <IconButton
                               size="small"
                               onClick={handleCancelClick}
-                              sx={{ ml: 1 }}
+                              sx={{ mx: 1}}
                               color="secondary"
                             >
                               <CloseRoundedIcon fontSize="small" />
                             </IconButton>
-                          </>
+                          </Box>
                         ) : (
                           <>
                             <IconButton
                               size="small"
                               onClick={() => handleEditClick(item)}
-                              sx={{ ml: 1 }}
+                              sx={{ mx: 1 }}
                               color="success"
                             >
                               <EditRoundedIcon fontSize="small" />
                             </IconButton>
-                            <IconButton
-                              size="small"
-                              onClick={() => onDelete(item.id)}
-                              sx={{ ml: 1 }}
-                              color="secondary"
+                            {deleteBtn && <IconButton
+                                size="small"
+                                onClick={() => onDelete(item.id)}
+                                sx={{ mx: 1 }}
+                                color="secondary"
                             >
                               <DeleteRoundedIcon fontSize="small" />
                             </IconButton>
+                            }
                           </>
                         )}
                       </Box>
-
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent:"space-between" }}>
                       {editMode === item.id ? (
                         <TextField
                           required
@@ -215,13 +228,36 @@ const SubjectList = ({
                             "& .MuiFormLabel-root": {
                               fontSize: 14,
                             },
+                            background:"#fff",
+                            borderRadius:"8px",
+                            width:"85%",
                           }}
                         />
                       ) : (
-                        <Typography variant="body2" mt={1}>
+                        <Typography sx={{wordBreak:"break-word", textAlign:languageDetector(item.description) ? "right" : "left",width:"80%" }} variant="body2" mt={1}>
                           {item.description}
                         </Typography>
                       )}
+                        <Box>
+                        <Typography>
+                          <Trans i18nKey={"weight"} />
+                        </Typography>
+                        <IconButton
+                            color="primary"
+                            aria-label="add"
+                            size="large"
+                            style={{
+                              width:"52px",
+                              height:"52px",
+                              borderRadius: '50%',  // برای دایره‌ای کردن دکمه
+                              backgroundColor: '#1976d2',  // رنگ پس‌زمینه
+                              color: '#fff'  // رنگ آیکون
+                            }}
+                        >
+                          0
+                        </IconButton>
+                        </Box>
+                      </Box>
                     </Box>
                   </Box>
                 )}
@@ -235,4 +271,4 @@ const SubjectList = ({
   );
 };
 
-export default SubjectList;
+export default ListOfItems;

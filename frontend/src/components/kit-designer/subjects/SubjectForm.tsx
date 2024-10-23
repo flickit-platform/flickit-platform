@@ -116,7 +116,7 @@ const SubjectForm = ({
     {/* Check and Close Buttons */}
     <Box display="flex" alignItems="center">
       <Link
-        href="#maturity-header"
+        href="#subject-header"
         sx={{
           textDecoration: "none",
           opacity: 0.9,
