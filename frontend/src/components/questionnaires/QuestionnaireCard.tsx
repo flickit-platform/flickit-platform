@@ -213,7 +213,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/${nextQuestion || number_of_answers + 1}`}
           text="continue"
-          icon={<PlayArrowRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
+          icon={<PlayArrowRoundedIcon sx={{transform: is_farsi ? 'rotate(-180deg)' : "", ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}
@@ -221,7 +221,7 @@ const ActionButtons = (props: {
         <ActionButton
           to={`${id}/1`}
           text="start"
-          icon={<StartRoundedIcon sx={{ ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
+          icon={<StartRoundedIcon sx={{transform: is_farsi ? 'rotate(-180deg)' : "", ml: is_farsi ? 0 : 1, mr: is_farsi ? 1 : 0 }} fontSize="small" />}
           data-cy={`questionnaire-${title}-start-btn`}
         />
       )}

@@ -138,7 +138,6 @@ export interface IUserInfo {
   displayName: string;
   email: string;
   // current_space: ISpaceInfo | null;
-  is_expert?: boolean;
   bio?: string;
   pictureLink?: null | string;
   linkedin?: string | null;
@@ -679,4 +678,17 @@ export interface IAssessmentInsight {
   defaultInsight: insight | null;
   assessorInsight: insight | null;
   editable?: boolean;
+}
+
+export interface IKitVersion {
+  id: TId;
+  creationTime: string;
+  assessmentKit: {
+    id: TId;
+    title: string;
+    expertGroup: {
+      id: TId;
+      title: string;
+    };
+  };
 }

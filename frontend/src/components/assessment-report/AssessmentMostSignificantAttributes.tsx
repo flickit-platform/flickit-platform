@@ -61,7 +61,7 @@ export const AssessmentMostSignificantAttributes = (
           ) : (
             most_significant_items.map((item: any, index: number) => {
               return (
-                <Box sx={{ ...styles.centerV }} mb={1} key={index}>
+                <Box sx={{ ...styles.centerV }} mb={1} key={item?.id}>
                   <CircleRoundedIcon
                     fontSize="inherit"
                     sx={{ opacity: 0.5, fontSize: "0.5rem" }}

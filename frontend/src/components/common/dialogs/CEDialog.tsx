@@ -43,7 +43,7 @@ interface ICEDialogActionsProps extends PropsWithChildren<DialogActionsProps> {
   loading: boolean;
   closeDialog?: () => void;
   onClose?: () => void;
-  type: (string & {}) | TDialogContextType | undefined;
+  type: {} | TDialogContextType | undefined;
   submitButtonLabel?: string;
   submitAndViewButtonLabel?: string;
   hasViewBtn?: boolean;

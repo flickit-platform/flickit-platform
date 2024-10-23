@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -9,17 +9,32 @@ import { Trans } from "react-i18next";
 import MaturityLevelsContent from "./maturityLevels/MaturityLevelsContent";
 import SubjectsContent from "./subjects/SubjectsContent";
 import PublishContent from "./publish/PublishContent";
+import { useServiceContext } from "@/providers/ServiceProvider";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@/utils/useQuery";
+import { IKitVersion } from "@/types";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const { service } = useServiceContext();
+  const { kitVersionId = "" } = useParams();
 
   const handleTabChange = (event: any, newValue: any) => {
     setSelectedTab(newValue);
   };
 
+  const kitVersion = useQuery<IKitVersion>({
+    service: (args = { kitVersionId }, config) =>
+      service.loadKitVersion(args, config),
+  });
+
+  useEffect(() => {
+    kitVersion.query();
+  }, []);
+
   return (
     <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 12, xs: 2, sm: 3 } }}>
-      <KitDesignerTitle />
+      <KitDesignerTitle kitVersion={kitVersion.data} />
       <Grid container spacing={1} columns={12}>
         <Grid item sm={12} xs={12} mt={1}>
           <Typography color="primary" textAlign="left" variant="headlineLarge">

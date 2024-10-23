@@ -13,7 +13,6 @@ import { convertToRadialChartData } from "@/utils/convertToAssessmentChartData";
 interface AssessmentSubjectRadialChartProps {
   loading: boolean;
   data: any[];
-  maturityLevelsCount: number;
 }
 
 const style = {

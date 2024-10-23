@@ -471,6 +471,12 @@ export const createService = (
         config,
       );
     },
+    loadKitVersion(
+      { kitVersionId }: { kitVersionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(`/api/v1/kit-versions/${kitVersionId}/`, config);
+    },
 
     deleteMaturityLevel(
       {

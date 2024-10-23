@@ -221,11 +221,9 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
   }, []);
 
   const { questionnaires, questionnairesCount } = assessmentKitInfo;
-  const { status, assessment, subjects } = data || {};
-  const { assessmentKit, maturityLevel, confidenceValue } = assessment || {};
-  const { questionsCount, answersCount } = progress;
-
-  const totalProgress = ((answersCount || 0) / (questionsCount || 1)) * 100;
+  const { assessment, subjects } = data || {};
+  const { assessmentKit } = assessment || {};
+  const { questionsCount } = progress;
 
   const Header = () => (
     <View style={styles.header}>
@@ -237,34 +235,34 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
   );
 
   // Render subjects as a table
-  const renderSubjectsTable = () => {
-    if (!subjects || subjects.length === 0) return null;
+  // const renderSubjectsTable = () => {
+  //   if (!subjects || subjects.length === 0) return null;
 
-    return (
-      <View style={styles.section}>
-        <Text style={styles.title}>Qualitative Classification</Text>
-        <View style={styles.table}>
-          {/* Table Header */}
-          <View style={styles.tableRow}>
-            <Text style={styles.tableCellHeader}>Classification</Text>
-            <Text style={styles.tableCellHeader}>Score</Text>
-            <Text style={styles.tableCellHeader}>Description Level</Text>
-          </View>
+  //   return (
+  //     <View style={styles.section}>
+  //       <Text style={styles.title}>Qualitative Classification</Text>
+  //       <View style={styles.table}>
+  //         {/* Table Header */}
+  //         <View style={styles.tableRow}>
+  //           <Text style={styles.tableCellHeader}>Classification</Text>
+  //           <Text style={styles.tableCellHeader}>Score</Text>
+  //           <Text style={styles.tableCellHeader}>Description Level</Text>
+  //         </View>
 
-          {/* Table Body */}
-          {assessment?.assessmentKit?.maturityLevels.map(
-            (maturityLevel: IMaturityLevel, index: number) => (
-              <View key={index} style={styles.tableRow}>
-                <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
-                <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
-                <Text style={styles.tableCell}>{maturityLevel?.index}</Text>
-              </View>
-            ),
-          )}
-        </View>
-      </View>
-    );
-  };
+  //         {/* Table Body */}
+  //         {assessment?.assessmentKit?.maturityLevels.map(
+  //           (maturityLevel: IMaturityLevel) => (
+  //             <View key={maturityLevel?.id} style={styles.tableRow}>
+  //               <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
+  //               <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
+  //               <Text style={styles.tableCell}>{maturityLevel?.index}</Text>
+  //             </View>
+  //           ),
+  //         )}
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   return (
     <Document>
@@ -314,8 +312,8 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             {/* Table Body */}
             {assessment?.assessmentKit?.maturityLevels.map(
               (maturityLevel: IMaturityLevel, index: number) => (
-                <Fragment>
-                  <View key={index} style={styles.tableRow}>
+                <Fragment key={maturityLevel?.id}>
+                  <View key={maturityLevel?.id} style={styles.tableRow}>
                     <Text style={styles.tableCell}>{maturityLevel?.title}</Text>
                     <Text style={styles.tableCell}>{maturityLevel?.value}</Text>
                     <Text style={styles.tableCell}>
@@ -377,7 +375,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             />
           </Text>
           {subjects?.map((subject: ISubject) => (
-            <Text style={styles.displaySmall}>
+            <Text style={styles.displaySmall} key={subject?.id}>
               <Trans
                 i18nKey="assessmentFocusDescriptionSubject"
                 values={{
@@ -409,11 +407,11 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
             </View>
 
             {/* Table Body */}
-            {subjects?.map((subject: ISubject, index: number) => (
-              <>
+            {subjects?.map((subject: ISubject) => (
+              <div key={subject?.id}>
                 {subject?.attributes?.map((feature, featureIndex) => (
-                  <Fragment>
-                    <View style={styles.tableRow} key={featureIndex}>
+                  <Fragment key={feature?.id}>
+                    <View style={styles.tableRow} key={feature?.id}>
                       <Text style={styles.tableCell}>
                         <Text>{featureIndex === 0 ? subject?.title : ""}</Text>
                         <Text>
@@ -427,7 +425,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
                     </View>
                   </Fragment>
                 ))}
-              </>
+              </div>
             ))}
           </View>
         </View>
@@ -476,7 +474,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
 
             {/* Table Body */}
             {questionnaires?.map((questionnaire: ISubject, index: number) => (
-              <View style={styles.tableRow} key={index}>
+              <View style={styles.tableRow} key={questionnaire?.id}>
                 <Text style={styles.tableCell}>{index + 1}</Text>
                 <Text style={styles.tableCell}>{questionnaire?.title}</Text>
                 <Text style={styles.tableCell}>
@@ -500,7 +498,7 @@ const AssessmentReportPDF: FC<AssessmentReportPDFProps> = ({
         </Text>
       </Page>
       {subjects?.map((subject: ISubject, index: number) => (
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" style={styles.page} key={subject?.id}>
           <Header />
 
           <Text style={styles.titleLarge}>

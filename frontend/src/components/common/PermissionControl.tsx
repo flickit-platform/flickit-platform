@@ -4,7 +4,7 @@ import { ICustomError } from "@utils/CustomError";
 import { ErrorNotFoundOrAccessDenied } from "./errors/ErrorNotFoundOrAccessDenied";
 
 const PermissionControl = (props: PropsWithChildren<any>) => {
-  console.log(props);
+  // console.log(props);
   const { children, error, loading } = props;
 
   if (loading) {

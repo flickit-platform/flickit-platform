@@ -107,8 +107,7 @@ const QuestionsProgress = ({ hasNextQuestion, hasPreviousQuestion }: any) => {
 };
 
 export const QuestionProgressItem = (props: any) => {
-  const { questionsInfo, question, to } = props;
-  const { total_number_of_questions } = questionsInfo;
+  const { question, to } = props;
 
   const { questionIndex } = useParams();
   const { handleClick, ...popoverProps } = usePopover();

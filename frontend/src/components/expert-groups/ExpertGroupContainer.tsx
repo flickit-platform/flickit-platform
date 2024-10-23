@@ -932,10 +932,8 @@ const AssessmentKitsList = (props: any) => {
   const {
     hasAccess,
     dialogProps,
-    about,
     setAssessmentKitsCounts,
     is_member,
-    is_expert,
     excelToDslDialogProps,
   } = props;
   const { expertGroupId } = useParams();
@@ -1174,7 +1172,6 @@ const ExpertGroupMembersDetail = (props: any) => {
                           displayName,
                           id,
                           pictureLink,
-                          email,
                           linkedin,
                           bio,
                         } = member;
@@ -1286,7 +1283,7 @@ const ExpertGroupMembersDetail = (props: any) => {
                     </Title>
                   )}
                   <Box mt={1}>
-                    {items.map((member: any) => {
+                    {items?.map((member: any) => {
                       const { id, email, inviteExpirationDate, displayName } =
                         member;
 

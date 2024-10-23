@@ -19,6 +19,7 @@ import AIGenerated from "../common/tags/AIGenerated";
 import toastError from "@/utils/toastError";
 import { theme } from "@/config/theme";
 import formatDate from "@utils/formatDate";
+import languageDetector from "@utils/languageDetector";
 
 export const AssessmentReportNarrator = ({
   setIsWritingAdvice,
@@ -148,6 +149,7 @@ const OnHoverRichEditor = (props: any) => {
   } = props;
   const abortController = useRef(new AbortController());
   const [isHovering, setIsHovering] = useState(false);
+  const [langDir,setLangDir] = useState(languageDetector(data));
   const [show, setShow] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<any>({});
@@ -196,6 +198,8 @@ const OnHoverRichEditor = (props: any) => {
       sx={{
         display: "flex",
         alignItems: "center",
+        width:"100%",
+        direction: langDir ? "rtl" : "ltr"
       }}
     >
       {editable && show ? (
@@ -214,6 +218,7 @@ const OnHoverRichEditor = (props: any) => {
               disable_label={true}
               required={true}
               defaultValue={data || ""}
+              setLangDir={setLangDir}
             />
             <Box
               sx={{

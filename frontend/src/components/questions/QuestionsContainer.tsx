@@ -5,14 +5,13 @@ import {
   EAssessmentStatus,
   questionActions,
   useQuestionDispatch,
-  useQuestionContext,
 } from "@/providers/QuestionProvider";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import LoadingSkeletonOfQuestions from "@common/loadings/LoadingSkeletonOfQuestions";
 import QuestionsTitle from "./QuestionsTitle";
 import QueryBatchData from "@common/QueryBatchData";
-import { IQuestion, IQuestionnaireModel, IQuestionsModel, TId } from "@types";
+import { IQuestion, IQuestionnaireModel, IQuestionsModel } from "@types";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 
@@ -87,12 +86,10 @@ export const QuestionsContainerC = (
 
 export const useQuestions = () => {
   const { service } = useServiceContext();
-  const [resultId, setResultId] = useState<TId | undefined>(undefined);
   const [questions, setQuestions] = useState<IQuestion[]>([]);
   const [page, setPage] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const dispatch = useQuestionDispatch();
-  const { assessmentStatus } = useQuestionContext();
   const {
     questionnaireId = "",
     assessmentId = "",
@@ -135,7 +132,7 @@ export const useQuestions = () => {
               permissions: permissions,
             }),
           );
-          console.log("Initial questions loaded:", items);
+          // console.log("Initial questions loaded:", items);
         }
       } catch (e) {
         console.error("Failed to load initial questions", e);
