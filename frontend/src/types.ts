@@ -181,7 +181,15 @@ export interface ISubjectInfo {
   title: string;
   total_answered_question_number: number;
   total_question_number: number;
-  maturityLevel?: kitDesignListItems;
+  maturityLevel?: IMaturityLevel;
+}
+export interface IMaturityLevel {
+  id: TId;
+  title: string;
+  value: number;
+  index: number;
+  description: string;
+  weight?: number
 }
 export interface kitDesignListItems {
   id: TId;
