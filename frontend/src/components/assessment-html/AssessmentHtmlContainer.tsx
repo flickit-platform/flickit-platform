@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
-import LoadingSkeletonOfAssessmentRoles from "@common/loadings/LoadingSkeletonOfAssessmentRoles";
 import PermissionControl from "../common/PermissionControl";
-import { LoadingSkeleton } from "../common/loadings/LoadingSkeleton";
 
 const AssessmentExportContainer = () => {
   const { assessmentId = "" } = useParams();
