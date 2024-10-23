@@ -8,11 +8,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Trans } from "react-i18next";
 import { styles } from "@/config/styles";
+import Typography from "@mui/material/Typography";
+import {theme} from "@config/theme";
 
-interface MaturityLevelFormProps {
-  newMaturityLevel: {
+interface SubjectFormProps {
+    newSubject: {
     title: string;
     description: string;
+    weight: number;
     index: number;
     value: number;
   };
@@ -22,16 +25,16 @@ interface MaturityLevelFormProps {
 }
 
 const SubjectForm = ({
-  newMaturityLevel,
+  newSubject,
   handleInputChange,
   handleSave,
   handleCancel,
-}: MaturityLevelFormProps) => (
+}: SubjectFormProps) => (
   <Box
     mt={1.5}
     p={1.5}
     sx={{
-      backgroundColor: "gray.100",
+      backgroundColor: "#F3F5F6",
       borderRadius: "8px",
       border: "0.3px solid #73808c30",
       display: "flex",
@@ -50,7 +53,7 @@ const SubjectForm = ({
         id="new-maturity"
         type="number"
         name="value"
-        value={newMaturityLevel.value}
+        value={newSubject.value}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
@@ -62,6 +65,7 @@ const SubjectForm = ({
           "& .MuiInputBase-root": {
             fontSize: 14,
           },
+          background:"#fff",
         }}
       />
     </Box>
@@ -71,7 +75,7 @@ const SubjectForm = ({
         required
         label={<Trans i18nKey="title" />}
         name="title"
-        value={newMaturityLevel.title}
+        value={newSubject.title}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
@@ -85,6 +89,8 @@ const SubjectForm = ({
           "& .MuiFormLabel-root": {
             fontSize: 14,
           },
+            background:"#fff",
+            width:{xs:"100%",md:"60%"},
         }}
       />
 
@@ -92,7 +98,7 @@ const SubjectForm = ({
         label={<Trans i18nKey="description" />}
         name="description"
         required
-        value={newMaturityLevel.description}
+        value={newSubject.description}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
@@ -109,12 +115,14 @@ const SubjectForm = ({
           "& .MuiFormLabel-root": {
             fontSize: 14,
           },
+            background:"#fff",
+            width:{xs:"100%",md:"85%"},
         }}
       />
     </Box>
 
     {/* Check and Close Buttons */}
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" flexDirection={"column"} gap={"20px"}>
       <Link
         href="#subject-header"
         sx={{
@@ -123,6 +131,7 @@ const SubjectForm = ({
           fontWeight: "bold",
           display: "flex",
           alignItems: "center",
+          gap:"20px"
         }}
       >
         {" "}
@@ -133,6 +142,53 @@ const SubjectForm = ({
           <CloseIcon />
         </IconButton>
       </Link>
+        <Box sx={{
+            width:"fit-content",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"flex-end",
+            flexDirection:"column",
+            gap:"0.5rem",
+            textAlign:"center"
+        }}>
+
+        <Typography sx={{
+            ...theme.typography.labelCondensed,
+            color:"#6C8093",
+            width:"100%"
+        }}>
+            <Trans i18nKey={"weight"} />
+        </Typography>
+        <TextField
+            required
+            value={newSubject.weight}
+            onChange={handleInputChange}
+            name="weight"
+            variant="outlined"
+            fullWidth
+            size="small"
+            // label={<Trans i18nKey="weight" />}
+            margin="normal"
+            type="number"
+            inputProps={{
+                style: { textAlign: "center", width: "40px" },
+            }}
+            sx={{
+                mb: 1,
+                mt: 1,
+                fontSize: 14,
+                "& .MuiInputBase-root": {
+                    fontSize: 14,
+                    overflow: "auto",
+                },
+                "& .MuiFormLabel-root": {
+                    fontSize: 14,
+                },
+                background:"#fff",
+                borderRadius:"8px",
+            }}
+        />
+      </Box>
     </Box>
   </Box>
 );

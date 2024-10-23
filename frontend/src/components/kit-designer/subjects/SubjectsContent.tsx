@@ -6,8 +6,6 @@ import PermissionControl from "../../common/PermissionControl";
 import QueryBatchData from "../../common/QueryBatchData";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
-import { LoadingSkeleton } from "../../common/loadings/LoadingSkeleton";
-import MaturityLevelsHeader from "./SubjectsHeader";
 import MaturityLevelForm from "./SubjectForm";
 import ListOfItems from "../commen/itemsList";
 import EmptyState from "../commen/EmptyState";
@@ -17,24 +15,12 @@ import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
-import KitHeader from "@components/kit-designer/commen/KitHeader";
 import KitDHeader from "@components/kit-designer/commen/KitHeader";
+import SubjectForm from "./SubjectForm";
 
-const MaturityLevelsContent = () => {
+const SubjectsContent = () => {
   const { service } = useServiceContext();
   const {  kitVersionId = "" } = useParams();
-  // const maturityLevels = useQuery({
-  //   service: (args = { kitVersionId }, config) =>
-  //     service.getMaturityLevels(args, config),
-  // });
-  // const maturityLevelsCompetences = useQuery({
-  //   service: (args = { kitVersionId }, config) =>
-  //     service.getMaturityLevelsCompetences(args, config),
-  // });
-  // const addCompetencyToSubjectKit = useQuery({
-  //   service: (args={kitVersionId,newSubject},config) =>
-  //       service.addCompetencyToSubjectKit(args, undefined)
-  // })
 
   const fetchSubjectKit = useQuery({
     service: (args = { kitVersionId }, config) =>
@@ -59,7 +45,7 @@ const MaturityLevelsContent = () => {
   })
 
 
-  const [showNewMaturityLevelForm, setShowNewMaturityLevelForm] =
+  const [showNewSubjectForm, setShowSubjectForm] =
     useState(false);
   const [newSubject, setNewSubject] = useState({
     title: "",
@@ -92,7 +78,7 @@ const MaturityLevelsContent = () => {
 
   const handleAddNewRow = () => {
     handleCancel();
-    setShowNewMaturityLevelForm(true);
+    setShowSubjectForm(true);
   };
 
   const handleSave = async () => {
@@ -116,7 +102,7 @@ const MaturityLevelsContent = () => {
       }
 
       // Reset form and re-fetch data after saving
-      // setShowNewMaturityLevelForm(false);
+      // setShowSubjectForm(false);
       await fetchSubjectKit.query();
       // maturityLevelsCompetences.query();
 
@@ -136,13 +122,13 @@ const MaturityLevelsContent = () => {
   };
 
   const handleCancel = () => {
-    setShowNewMaturityLevelForm(false);
+    setShowSubjectForm(false);
     setNewSubject({
       title: "",
       description: "",
       index: fetchSubjectKit.data?.items.length + 1 || 1,
       value: fetchSubjectKit.data?.items.length + 1 || 1,
-      weight: 1,
+      weight: 0,
       id: null,
     });
   };
@@ -154,6 +140,7 @@ const MaturityLevelsContent = () => {
         index: subjectItem.index,
         value: subjectItem.value,
         title: subjectItem.title,
+        weight: subjectItem.weight,
         description: subjectItem.description,
       };
       await updateKitSubject.query(
@@ -162,7 +149,7 @@ const MaturityLevelsContent = () => {
         undefined,
       );
 
-      setShowNewMaturityLevelForm(false);
+      setShowSubjectForm(false);
       fetchSubjectKit.query();
       // maturityLevelsCompetences.query();
 
@@ -171,7 +158,7 @@ const MaturityLevelsContent = () => {
         description: "",
         index: fetchSubjectKit.data?.items.length + 1 || 1,
         value: fetchSubjectKit.data?.items.length + 1 || 1,
-        weight: 1,
+        weight: 0,
         id: null,
       });
     } catch (e) {
@@ -191,26 +178,25 @@ const MaturityLevelsContent = () => {
     }
   };
 
-  // const debouncedHandleReorder = debounce(async (newOrder: any[]) => {
-  //   try {
-  //     const orders = newOrder.map((item, idx) => ({
-  //       id: item.id,
-  //       index: idx + 1,
-  //     }));
-  //
-  //     await service.changeMaturityLevelsOrder({ kitVersionId }, { orders });
-  //     maturityLevelsCompetences.query();
-  //
-  //     handleCancel();
-  //   } catch (e) {
-  //     const err = e as ICustomError;
-  //     toastError(err);
-  //   }
-  // }, 2000);
+  const debouncedHandleReorder = debounce(async (newOrder: any[]) => {
+    try {
+      const orders = newOrder.map((item, idx) => ({
+        id: item.id,
+        index: idx + 1,
+      }));
 
-  // const handleReorder = (newOrder: any[]) => {
-  //   debouncedHandleReorder(newOrder);
-  // };
+      await service.changeSubjectOrder({ kitVersionId }, { orders });
+
+      handleCancel();
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  }, 2000);
+
+  const handleReorder = (newOrder: any[]) => {
+    debouncedHandleReorder(newOrder);
+  };
 
   return (
     <PermissionControl scopes={["edit-assessment-kit"]}>
@@ -243,13 +229,13 @@ const MaturityLevelsContent = () => {
                         onEdit={handleEdit}
                         onDelete={handleDelete}
                         deleteBtn={false}
-                        // onReorder={handleReorder}
+                        onReorder={handleReorder}
                       />
                     </Box>
 
-                    {showNewMaturityLevelForm && (
-                      <MaturityLevelForm
-                        newMaturityLevel={newSubject}
+                    {showNewSubjectForm && (
+                      <SubjectForm
+                        newSubject={newSubject}
                         handleInputChange={handleInputChange}
                         handleSave={handleSave}
                         handleCancel={handleCancel}
@@ -258,9 +244,9 @@ const MaturityLevelsContent = () => {
                   </>
                 ) : (
                   <>
-                    {showNewMaturityLevelForm ? (
-                      <MaturityLevelForm
-                        newMaturityLevel={newSubject}
+                    {showNewSubjectForm ? (
+                      <SubjectForm
+                        newSubject={newSubject}
                         handleInputChange={handleInputChange}
                         handleSave={handleSave}
                         handleCancel={handleCancel}
@@ -284,4 +270,4 @@ const MaturityLevelsContent = () => {
   );
 };
 
-export default MaturityLevelsContent;
+export default SubjectsContent;

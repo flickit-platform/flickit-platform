@@ -190,6 +190,7 @@ export interface kitDesignListItems {
   value: number;
   index: number;
   description: string;
+  weight: number
 }
 
 export interface IImage {

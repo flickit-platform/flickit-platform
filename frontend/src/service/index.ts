@@ -587,6 +587,17 @@ export const createService = (
               config,
           );
       },
+      changeSubjectOrder(
+          { kitVersionId }: { kitVersionId: TId },
+          data: any,
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.put(
+              `/api/v1/kit-versions/${kitVersionId}/subjects-change-order/`,
+              data,
+              config,
+          );
+      },
       deleteSubjectKit(
           { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
           config?: AxiosRequestConfig<any>
