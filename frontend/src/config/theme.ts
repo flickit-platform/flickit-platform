@@ -272,6 +272,13 @@ export const theme = createTheme({
       lineHeight: "1.125rem",
       letterSpacing: "0.1px",
     },
+    labelCondensed: {
+      fontFamily: is_farsi ? farsiFontFamily : secondaryFontFamily,
+      fontWeight: 500,
+      fontSize: "0.75rem",
+      lineHeight: "0.75rem",
+      letterSpacing: "0.5px",
+    },
     semiBoldLarge: {
       fontFamily: is_farsi ? farsiFontFamily : primaryFontFamily,
       fontWeight: "600",

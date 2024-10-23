@@ -238,24 +238,35 @@ const ListOfItems = ({
                           {item.description}
                         </Typography>
                       )}
-                        <Box>
-                        <Typography>
-                          <Trans i18nKey={"weight"} />
-                        </Typography>
-                        <IconButton
-                            color="primary"
-                            aria-label="add"
-                            size="large"
-                            style={{
-                              width:"52px",
-                              height:"52px",
-                              borderRadius: '50%',  // برای دایره‌ای کردن دکمه
-                              backgroundColor: '#1976d2',  // رنگ پس‌زمینه
-                              color: '#fff'  // رنگ آیکون
-                            }}
-                        >
-                          0
-                        </IconButton>
+                        <Box sx={{
+                          width:"fit-content",
+                          display:"flex",
+                          justifyContent:"center",
+                          alignItems:"flex-end",
+                          flexDirection:"column",
+                          gap:"0.5rem",
+                          textAlign:"center"
+                        }}>
+                            <Typography sx={{
+                              ...theme.typography.labelCondensed,
+                              color:"#6C8093",
+                              width:"100%"
+                            }}>
+                              <Trans i18nKey={"weight"} />
+                            </Typography>
+                            <Button
+                                aria-label="weight"
+                                style={{
+                                  width:"3.75rem",
+                                  height:"3.75rem",
+                                  borderRadius: '50%',  // برای دایره‌ای کردن دکمه
+                                  backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
+                                  color: '#2B333B',
+                                display:"inline-block"
+                                }}
+                            >
+                              0
+                            </Button>
                         </Box>
                       </Box>
                     </Box>
