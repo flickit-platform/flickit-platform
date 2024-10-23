@@ -93,9 +93,7 @@ const SubjectsContent = () => {
       };
       if (newSubject.id) {
         await service.updateKitSubject(
-          { kitVersionId, subjectId: newSubject.id },
-          data,
-          undefined,
+            { kitVersionId, subjectId: newSubject.id, data },
         );
       } else {
         await postSubjectKit.query({kitVersionId, data})
