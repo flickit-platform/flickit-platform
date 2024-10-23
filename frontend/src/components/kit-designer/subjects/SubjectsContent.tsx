@@ -144,9 +144,7 @@ const SubjectsContent = () => {
         description: subjectItem.description,
       };
       await updateKitSubject.query(
-        { kitVersionId, subjectId: subjectItem.id },
-        data,
-        undefined,
+        { kitVersionId, subjectId: subjectItem.id, data },
       );
 
       setShowSubjectForm(false);

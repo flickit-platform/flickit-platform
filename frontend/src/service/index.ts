@@ -614,8 +614,7 @@ export const createService = (
           );
       },
       updateKitSubject(
-          { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
-          data: any,
+          { kitVersionId, subjectId, data }: { kitVersionId: TId, subjectId : TId, data: any, },
           config?: AxiosRequestConfig<any>,
       ){
         return axios.put(`api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,

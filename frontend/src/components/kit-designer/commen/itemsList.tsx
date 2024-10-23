@@ -52,7 +52,7 @@ const ListOfItems = ({
     setTempValues({ title: item.title, description: item.description,weight: item.weight });
   };
 
-  const handleSaveClick = (item: IMaturityLevel) => {
+  const handleSaveClick = (item: kitDesignListItems) => {
     onEdit({
       ...item,
       title: tempValues.title,

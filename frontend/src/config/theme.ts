@@ -36,6 +36,7 @@ declare module "@mui/material/styles" {
     labelSmall: React.CSSProperties;
     labelMedium: React.CSSProperties;
     labelLarge: React.CSSProperties;
+    labelCondensed: React.CSSProperties;
     subSmall: React.CSSProperties;
     subMedium: React.CSSProperties;
     subLarge: React.CSSProperties;
@@ -60,6 +61,7 @@ declare module "@mui/material/styles" {
     labelSmall?: React.CSSProperties;
     labelMedium?: React.CSSProperties;
     labelLarge?: React.CSSProperties;
+    labelCondensed?: React.CSSProperties;
     subSmall?: React.CSSProperties;
     subMedium?: React.CSSProperties;
     subLarge?: React.CSSProperties;
@@ -92,6 +94,7 @@ declare module "@mui/material/Typography" {
     labelSmall?: true;
     labelMedium?: true;
     labelLarge?: true;
+    labelCondensed?: true;
     subSmall?: true;
     subMedium?: true;
     subLarge?: true;
