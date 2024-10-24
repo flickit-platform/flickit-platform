@@ -41,6 +41,9 @@ const AssessmentExportTitle = (props: IAssessmentExportTitle) => {
               title: `${assessment?.title} ${t("insights")}`,
               to: `/${spaceId}/assessments/${page}/${assessment.id}/insights`,
             },
+            {
+              title: t("assessmentDocument") as string,
+            },
           ]}
           displayChip
         />

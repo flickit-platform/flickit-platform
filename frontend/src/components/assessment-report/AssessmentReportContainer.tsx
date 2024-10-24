@@ -16,7 +16,7 @@ import { AssessmentReportKit } from "./AssessmentReportKit";
 import { Trans } from "react-i18next";
 import { styles } from "@styles";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ArticleRounded, PictureAsPdf } from "@mui/icons-material";
+import { ArticleRounded, Assessment } from "@mui/icons-material";
 import { AssessmentInsight } from "./AssessmentInsight";
 import BetaSvg from "@assets/svg/beta.svg";
 import PermissionControl from "../common/PermissionControl";
@@ -142,7 +142,7 @@ const AssessmentReportContainer = (props: any) => {
                       <Trans i18nKey="assessmentInsights" />
                     </Typography>
                     <Box sx={{ py: "0.6rem", display: "flex" }}>
-                      <Tooltip title={<Trans i18nKey={"pdf"} />}>
+                      <Tooltip title={<Trans i18nKey={"graphicChart"} />}>
                         <Box>
                           <IconButton
                             data-cy="more-action-btn"
@@ -150,7 +150,7 @@ const AssessmentReportContainer = (props: any) => {
                             component={exportable ? Link : "div"}
                             to={`/${spaceId}/assessments/1/${assessmentId}/html-document/`}
                           >
-                            <PictureAsPdf
+                            <Assessment
                               sx={{ fontSize: "1.5rem", margin: "0.2rem" }}
                             />
                           </IconButton>
