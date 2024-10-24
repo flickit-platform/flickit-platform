@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -33,7 +33,6 @@ const SpaceContainer = () => {
 
   const pageNumber = Number(page);
   const [pageCount,setCountPage] = useState<any>()
-  const controlReq = useRef(false)
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number,
@@ -45,29 +44,19 @@ const SpaceContainer = () => {
     service: (args = { size: PAGESIZE, page: pageNumber }, config) =>
       service.fetchSpaces(args, config),
       toastError: true,
-      runOnMount:false
   });
 
   useEffect(() => {
-    (async ()=>{
-      if(isNaN(pageNumber)){
-        return navigate(`*`);
-      }
-      if(!pageCount){
-        const {total,size} = await spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
-        setCountPage(Math.ceil(total / size ))
-        controlReq.current = true
-      }else{
-        if(!controlReq.current){
-          await spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
-        }
-        controlReq.current = false
-      }
-      if(pageCount < pageNumber){
-        await spacesQueryData.query({ size: PAGESIZE, page: pageCount })
+    if(isNaN(pageNumber)){
+      return navigate(`*`);
+    }
+    if(pageCount < pageNumber){
+        spacesQueryData.query({ size: PAGESIZE, page: pageCount })
         navigate(`/spaces/${pageCount}`);
-      }
-    })()
+    } else {
+       spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
+    }
+
   }, [pageNumber,pageCount]);
 
 
@@ -166,41 +155,43 @@ const SpaceContainer = () => {
           </Box>
         </Box>
       )}
-      {!isEmpty && <QueryData
-          {...spacesQueryData}
-          renderLoading={() => (
-              <Box mt={5}>
-                {[1, 2, 3, 4, 5].map((item) => {
-                  return (
-                      <Skeleton
-                          key={item}
-                          variant="rectangular"
-                          sx={{ borderRadius: 2, height: "60px", mb: 1 }}
-                      />
-                  );
-                })}
-              </Box>
-          )}
-          emptyDataComponent={
-            <ErrorEmptyData
-                emptyMessage={<Trans i18nKey="nothingToSeeHere" />}
-                suggests={
-                  <Typography variant="subtitle1" textAlign="center">
-                    <Trans i18nKey="tryCreatingNewSpace" />
-                  </Typography>
-                }
-            />
-          }
-          render={(data) => {
-            return (
-                <SpacesList
-                    dialogProps={dialogProps}
-                    data={data}
-                    fetchSpaces={spacesQueryData.query}
+      <QueryData
+        {...spacesQueryData}
+        renderLoading={() => (
+          <Box mt={5}>
+            {[1, 2, 3, 4, 5].map((item) => {
+              return (
+                <Skeleton
+                  key={item}
+                  variant="rectangular"
+                  sx={{ borderRadius: 2, height: "60px", mb: 1 }}
                 />
-            );
-          }}
-      />}
+              );
+            })}
+          </Box>
+        )}
+        emptyDataComponent={
+          <ErrorEmptyData
+            emptyMessage={<Trans i18nKey="nothingToSeeHere" />}
+            suggests={
+              <Typography variant="subtitle1" textAlign="center">
+                <Trans i18nKey="tryCreatingNewSpace" />
+              </Typography>
+            }
+          />
+        }
+        render={(data) => {
+          const { total,size } = data
+          setCountPage(Math.ceil(total / size ))
+          return (
+            <SpacesList
+              dialogProps={dialogProps}
+              data={data}
+              fetchSpaces={spacesQueryData.query}
+            />
+          );
+        }}
+      />
       {!isEmpty && (
         <Stack
           spacing={2}
