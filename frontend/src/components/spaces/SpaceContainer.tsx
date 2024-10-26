@@ -30,7 +30,7 @@ const SpaceContainer = () => {
   const {page } = useParams();
   const pageNumber = Number(page);
   const { fetchSpace, ...rest } = useFetchSpace();
-  const { data, error, errorObject, size, total, loading } = rest;
+  const { data, size, total } = rest;
 
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
@@ -211,7 +211,6 @@ const useFetchSpace = () => {
   const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
       undefined,
   );
-  const navigate = useNavigate();
   const {page } = useParams();
   const { service } = useServiceContext();
   const abortController = useRef(new AbortController());
