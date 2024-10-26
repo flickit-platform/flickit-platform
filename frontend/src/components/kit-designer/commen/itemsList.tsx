@@ -102,7 +102,7 @@ const ListOfItems = ({
                     }}
                   >
                     <Box
-                      sx={{ ...styles.centerVH, background: "#F3F5F6",width:"64px",justifyContent:"space-around" }}
+                      sx={{ ...styles.centerVH, background: "#F3F5F6",width: {xs:"50px", md:"64px"},justifyContent:"space-around" }}
                       borderRadius="0.5rem"
                       mr={2}
                       px={1.5}
@@ -121,7 +121,7 @@ const ListOfItems = ({
                       </IconButton>
                     </Box>
 
-                    <Box sx={{ flexGrow: 1 }}>
+                    <Box sx={{ flexGrow: 1, display: "flex", flexDirection:"column", gap: "5px" }}>
                       {/* Title and icons in the same row */}
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         {editMode === item.id ? (
@@ -284,7 +284,7 @@ const ListOfItems = ({
                                           }}
                                       />
                                   ) : (
-                                  <Button
+                                  <Box
                                       aria-label="weight"
                                       style={{
                                         width:"3.75rem",
@@ -292,11 +292,13 @@ const ListOfItems = ({
                                         borderRadius: '50%',  // برای دایره‌ای کردن دکمه
                                         backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
                                         color: '#2B333B',
-                                        display:"inline-block"
+                                        display:"flex",
+                                        alignItems:" center",
+                                        justifyContent:"center"
                                       }}
                                   >
                                     {item.weight}
-                                  </Button>
+                                  </Box>
                                   )}
                                 </Box>
                       </Box>
