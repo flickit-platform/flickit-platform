@@ -26,8 +26,8 @@ import { secondaryFontFamily, theme } from "@/config/theme";
 
 interface ISpaceListProps {
   dialogProps: TDialogProps;
-  data: ISpacesModel;
-  fetchSpaces: TQueryFunction<ISpacesModel>;
+  data: any[];
+  fetchSpaces: any;
 }
 
 const SpacesList = (props: ISpaceListProps) => {
@@ -53,12 +53,13 @@ const SpacesList = (props: ISpaceListProps) => {
   //   };
   // }, []);
 
-  const { items = [] } = data || {};
+  // const { items = [] } = data || {};
 
   return (
     <Box sx={{ overflowX: "hidden", py: 1 }}>
       <Box sx={{ minWidth: { xs: "320px", sm: "440px" } }}>
-        {items.map((item: any) => {
+        {data.map((item: any) => {
+          // console.log(items,"test items")
           return (
             <SpaceCard
               key={item?.id}
