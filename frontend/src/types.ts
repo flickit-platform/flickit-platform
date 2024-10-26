@@ -191,7 +191,7 @@ export interface IMaturityLevel {
   description: string;
   weight?: number
 }
-export interface kitDesignListItems {
+export interface KitDesignListItems {
   id: TId;
   title: string;
   value: number;

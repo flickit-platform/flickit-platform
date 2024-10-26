@@ -6,7 +6,6 @@ import PermissionControl from "../../common/PermissionControl";
 import QueryBatchData from "../../common/QueryBatchData";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
-import MaturityLevelForm from "./SubjectForm";
 import ListOfItems from "../commen/itemsList";
 import EmptyState from "../commen/EmptyState";
 import { Trans } from "react-i18next";
@@ -23,8 +22,8 @@ const SubjectsContent = () => {
   const {  kitVersionId = "" } = useParams();
 
   const fetchSubjectKit = useQuery({
-    service: (args = { kitVersionId }, config) =>
-      service.fetchSubjectKit(args, config)
+    service: (args, config) =>
+      service.fetchSubjectKit(args = { kitVersionId }, config)
   });
   const postSubjectKit = useQuery({
     service: (args , config) =>
@@ -45,7 +44,7 @@ const SubjectsContent = () => {
   })
 
 
-  const [showNewSubjectForm, setShowSubjectForm] =
+  const [showNewSubjectForm, setShowNewSubjectForm] =
     useState(false);
   const [newSubject, setNewSubject] = useState({
     title: "",
@@ -78,7 +77,7 @@ const SubjectsContent = () => {
 
   const handleAddNewRow = () => {
     handleCancel();
-    setShowSubjectForm(true);
+    setShowNewSubjectForm(true);
   };
 
   const handleSave = async () => {
@@ -120,7 +119,7 @@ const SubjectsContent = () => {
   };
 
   const handleCancel = () => {
-    setShowSubjectForm(false);
+    setShowNewSubjectForm(false);
     setNewSubject({
       title: "",
       description: "",
@@ -145,7 +144,7 @@ const SubjectsContent = () => {
         { kitVersionId, subjectId: subjectItem.id, data },
       );
 
-      setShowSubjectForm(false);
+      setShowNewSubjectForm(false);
       fetchSubjectKit.query();
       // maturityLevelsCompetences.query();
 
@@ -218,7 +217,6 @@ const SubjectsContent = () => {
             return (
               <>
                 {subjectData?.items?.length > 0 ? (
-                  <>
                     <Box maxHeight={500} overflow="auto">
                       <ListOfItems
                         items={subjectData?.items}
@@ -228,34 +226,21 @@ const SubjectsContent = () => {
                         onReorder={handleReorder}
                       />
                     </Box>
-
-                    {showNewSubjectForm && (
-                      <SubjectForm
-                        newSubject={newSubject}
-                        handleInputChange={handleInputChange}
-                        handleSave={handleSave}
-                        handleCancel={handleCancel}
-                      />
-                    )}
-                  </>
                 ) : (
-                  <>
-                    {showNewSubjectForm ? (
-                      <SubjectForm
-                        newSubject={newSubject}
-                        handleInputChange={handleInputChange}
-                        handleSave={handleSave}
-                        handleCancel={handleCancel}
-                      />
-                    ) : (
                       <EmptyState
                         btnTitle={"newSubject"}
                         title={"subjectsListEmptyState"}
                         SubTitle={"subjectEmptyStateDatailed"}
                         onAddNewRow={handleAddNewRow}
                       />
-                    )}
-                  </>
+                )}
+                {showNewSubjectForm && (
+                    <SubjectForm
+                        newSubject={newSubject}
+                        handleInputChange={handleInputChange}
+                        handleSave={handleSave}
+                        handleCancel={handleCancel}
+                    />
                 )}
               </>
             );

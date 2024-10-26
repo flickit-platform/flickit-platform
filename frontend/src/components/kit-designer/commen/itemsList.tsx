@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
@@ -11,17 +10,17 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { styles } from "@styles";
-import { kitDesignListItems } from "@types";
+import { KitDesignListItems } from "@types";
 import { Trans } from "react-i18next";
 import {theme} from "@config/theme";
 import {Button} from "@mui/material";
 import languageDetector from "@utils/languageDetector";
 
 interface ListOfItemsProps {
-  items: Array<kitDesignListItems>;
+  items: Array<KitDesignListItems>;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
-  onReorder: (reorderedItems: kitDesignListItems[]) => void;
+  onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean
 }
 
@@ -47,12 +46,12 @@ const ListOfItems = ({
     onReorder(newReorderedItems);
   };
 
-  const handleEditClick = (item: kitDesignListItems) => {
+  const handleEditClick = (item: KitDesignListItems) => {
     setEditMode(Number(item.id));
     setTempValues({ title: item.title, description: item.description,weight: item.weight });
   };
 
-  const handleSaveClick = (item: kitDesignListItems) => {
+  const handleSaveClick = (item: KitDesignListItems) => {
     onEdit({
       ...item,
       title: tempValues.title,
@@ -66,6 +65,14 @@ const ListOfItems = ({
     setEditMode(null);
     setTempValues({ title: "", description: "",weight: 0 });
   };
+
+  const handelChange = (e: any) =>{
+    const {name, value} = e.target
+    setTempValues({
+      ...tempValues,
+      [name]: value,
+    })
+  }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -121,12 +128,7 @@ const ListOfItems = ({
                           <TextField
                             required
                             value={tempValues.title}
-                            onChange={(e) =>
-                              setTempValues({
-                                ...tempValues,
-                                title: e.target.value,
-                              })
-                            }
+                            onChange={ (e) => handelChange(e) }
                             variant="outlined"
                             fullWidth
                             size="small"
@@ -203,12 +205,7 @@ const ListOfItems = ({
                         <TextField
                           required
                           value={tempValues.description}
-                          onChange={(e) =>
-                            setTempValues({
-                              ...tempValues,
-                              description: e.target.value,
-                            })
-                          }
+                          onChange={(e) => handelChange(e)}
                           name="description"
                           variant="outlined"
                           fullWidth
@@ -260,14 +257,7 @@ const ListOfItems = ({
                                       <TextField
                                           required
                                           value={tempValues.weight}
-                                          onChange={(e) =>{
-                                            const inputValue = e.target.value;
-                                              setTempValues({
-                                                ...tempValues,
-                                                weight: Number(inputValue),
-                                              })
-                                            }
-                                        }
+                                          onChange={(e) =>handelChange(e) }
                                           name="weight"
                                           variant="outlined"
                                           fullWidth
