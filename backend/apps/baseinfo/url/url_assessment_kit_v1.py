@@ -17,5 +17,6 @@ urlpatterns = [
          user_access_views.DeleteUserAccessToAssessmentKitApi.as_view()),
     path("<str:assessment_kit_id>/min-info/", user_access_views.LoadAssessmentKitMinimalInfoApi.as_view()),
     path("<str:assessment_kit_id>/dsl-download-link/", assessmentkitviews.LoadAssessmentKitFileApi.as_view()),
+    path("<str:assessment_kit_id>/clone/", assessment_kit_views.CloneAssessmentKitApi.as_view()),
 
 ]

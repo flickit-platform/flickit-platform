@@ -114,3 +114,10 @@ def create_assessment_kit(request):
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def clone_assessment_kit(request, assessment_kit_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/assessment-kits/{assessment_kit_id}/clone',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
