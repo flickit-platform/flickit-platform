@@ -56,12 +56,14 @@ const AssessmentExportContainer = () => {
               >
                 <AssessmentHtmlTitle pathInfo={pathInfo} />
               </Box>
-              <iframe
-                src={iframeUrl}
-                width="100%"
-                height="100vh"
-                style={{ border: "none" }}
-              />
+              <Box height="calc(100vh - 150px)">
+                <iframe
+                  src={iframeUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: "none" }}
+                />
+              </Box>
             </>
           );
         }}
