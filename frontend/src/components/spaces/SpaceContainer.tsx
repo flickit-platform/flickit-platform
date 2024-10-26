@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import { SpaceLayout } from "./SpaceLayout";
 import Box from "@mui/material/Box";
 import { Trans } from "react-i18next";
@@ -9,12 +9,10 @@ import useDialog from "@utils/useDialog";
 import CreateSpaceDialog from "./CreateSpaceDialog";
 import { SpacesList } from "./SpaceList";
 import { useServiceContext } from "@providers/ServiceProvider";
-import { useQuery } from "@utils/useQuery";
 import Skeleton from "@mui/material/Skeleton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ToolbarCreateItemBtn } from "@common/buttons/ToolbarCreateItemBtn";
-import { ISpacesModel } from "@types";
 import CreateNewFolderRoundedIcon from "@mui/icons-material/CreateNewFolderRounded";
 import SpaceEmptyStateSVG from "@assets/svg/spaceEmptyState.svg";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -23,44 +21,32 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { useNavigate, useParams } from "react-router-dom";
 import { theme } from "@/config/theme";
+import {ICustomError} from "@utils/CustomError";
+import toastError from "@utils/toastError";
 
 const SpaceContainer = () => {
   const dialogProps = useDialog();
-  const { service } = useServiceContext();
   const navigate = useNavigate();
-  const { page } = useParams();
-  const PAGESIZE: number = 10;
-
+  const {page } = useParams();
   const pageNumber = Number(page);
-  const [pageCount,setCountPage] = useState<any>()
+  const { fetchSpace, ...rest } = useFetchSpace();
+  const { data, size, total } = rest;
+
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
-    navigate(`/spaces/${value}`);
+    if (Math.ceil(total / size) > Number(page) || Math.ceil(total / size) == Number(page)) {
+      navigate(`/spaces/${value}`);
+    }
   };
 
-  const spacesQueryData = useQuery<ISpacesModel>({
-    service: (args = { size: PAGESIZE, page: pageNumber }, config) =>
-      service.fetchSpaces(args, config),
-      toastError: true,
-  });
+  const pageCount = size === 0 ? 1 : Math.ceil(total / size);
+  if (Math.ceil(total / size) < Number(page) && pageCount) {
+    navigate(`/spaces/${pageCount}`);
+  }
 
-  useEffect(() => {
-    if(isNaN(pageNumber)){
-      return navigate(`*`);
-    }
-    if(pageCount < pageNumber){
-        spacesQueryData.query({ size: PAGESIZE, page: pageCount })
-        navigate(`/spaces/${pageCount}`);
-    } else {
-       spacesQueryData.query({ size: PAGESIZE, page: pageNumber })
-    }
-
-  }, [pageNumber,pageCount]);
-
-
-  const isEmpty = spacesQueryData?.data?.items?.length === 0;
+  const isEmpty = data?.items?.length === 0;
 
   return (
     <SpaceLayout
@@ -156,7 +142,7 @@ const SpaceContainer = () => {
         </Box>
       )}
       <QueryData
-        {...spacesQueryData}
+          {...rest}
         renderLoading={() => (
           <Box mt={5}>
             {[1, 2, 3, 4, 5].map((item) => {
@@ -181,13 +167,11 @@ const SpaceContainer = () => {
           />
         }
         render={(data) => {
-          const { total,size } = data
-          setCountPage(Math.ceil(total / size ))
           return (
             <SpacesList
               dialogProps={dialogProps}
               data={data}
-              fetchSpaces={spacesQueryData.query}
+              fetchSpaces={fetchSpace}
             />
           );
         }}
@@ -213,10 +197,71 @@ const SpaceContainer = () => {
       )}
       <CreateSpaceDialog
         {...dialogProps}
-        onSubmitForm={spacesQueryData.query}
+        onSubmitForm={fetchSpace}
       />
     </SpaceLayout>
   );
+};
+
+
+const useFetchSpace = () => {
+  const [data, setData] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorObject, setErrorObject] = useState<undefined | ICustomError>(
+      undefined,
+  );
+  const {page } = useParams();
+  const { service } = useServiceContext();
+  const abortController = useRef(new AbortController());
+  const pageNumber = Number(page);
+  const PAGESIZE: number = 10;
+
+  useEffect(() => {
+    fetchSpace();
+  }, [pageNumber]);
+
+  const fetchSpace = async () => {
+    setLoading(true);
+    setErrorObject(undefined);
+    try {
+      const { data: res } = await service.fetchSpaces(
+          { size: PAGESIZE, page: pageNumber },
+          { signal: abortController.current.signal },
+      );
+      if (res) {
+        setData(res);
+        setError(false);
+      } else {
+        setData({});
+        setError(true);
+      }
+
+      setLoading(false);
+    } catch (e) {
+      // if (isNaN(page as any)) {
+      //   return navigate(`*`);
+      // }
+      const err = e as ICustomError;
+      toastError(err, { filterByStatus: [404] });
+      setLoading(false);
+      setError(true);
+      setErrorObject(err);
+    }
+  };
+
+  return {
+    data: data.items || [],
+    page: data.page || 0,
+    size: data.size || 0,
+    total: data.total || 0,
+    requested_space: data.requested_space,
+    loading,
+    loaded: !!data,
+    error,
+    errorObject,
+    fetchSpace
+  };
 };
 
 export default SpaceContainer;
