@@ -22,8 +22,8 @@ const SubjectsContent = () => {
   const {  kitVersionId = "" } = useParams();
 
   const fetchSubjectKit = useQuery({
-    service: (args, config) =>
-      service.fetchSubjectKit(args = { kitVersionId }, config)
+    service: (args = { kitVersionId }, config) =>
+      service.fetchSubjectKit(args , config)
   });
   const postSubjectKit = useQuery({
     service: (args , config) =>

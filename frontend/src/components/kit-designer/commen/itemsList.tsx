@@ -13,7 +13,6 @@ import { styles } from "@styles";
 import { KitDesignListItems } from "@types";
 import { Trans } from "react-i18next";
 import {theme} from "@config/theme";
-import {Button} from "@mui/material";
 import languageDetector from "@utils/languageDetector";
 
 interface ListOfItemsProps {
