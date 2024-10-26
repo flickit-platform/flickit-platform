@@ -58,9 +58,8 @@ const AssessmentExportContainer = () => {
               </Box>
               <iframe
                 src={iframeUrl}
-                title="Report Iframe"
                 width="100%"
-                height="650px"
+                height="100vh"
                 style={{ border: "none" }}
               />
             </>
