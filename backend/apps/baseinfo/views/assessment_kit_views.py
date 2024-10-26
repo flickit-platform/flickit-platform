@@ -111,7 +111,7 @@ class AssessmentKitsApi(APIView):
 
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={200: ""})
-    def post(self,request):
+    def post(self, request):
         result = assessment_kit_service.create_assessment_kit(request)
         return Response(data=result["body"], status=result["status_code"])
 
@@ -128,4 +128,12 @@ class AssessmentKitsSearchApi(APIView):
     @swagger_auto_schema(manual_parameters=[query_param, size_param, page_param])
     def get(self, request):
         result = assessment_kit_service.assessment_kit_search(request)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class CloneAssessmentKitApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, assessment_kit_id):
+        result = assessment_kit_service.clone_assessment_kit(request, assessment_kit_id)
         return Response(data=result["body"], status=result["status_code"])
