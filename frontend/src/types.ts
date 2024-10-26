@@ -189,6 +189,15 @@ export interface IMaturityLevel {
   value: number;
   index: number;
   description: string;
+  weight?: number
+}
+export interface KitDesignListItems {
+  id: TId;
+  title: string;
+  value: number;
+  index: number;
+  description: string;
+  weight: number
 }
 
 export interface IImage {

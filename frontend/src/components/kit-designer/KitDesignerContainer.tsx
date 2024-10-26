@@ -7,6 +7,7 @@ import Tab from "@mui/material/Tab";
 import KitDesignerTitle from "./KitDesignerContainerTitle";
 import { Trans } from "react-i18next";
 import MaturityLevelsContent from "./maturityLevels/MaturityLevelsContent";
+import SubjectsContent from "./subjects/SubjectsContent";
 import PublishContent from "./publish/PublishContent";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useParams } from "react-router-dom";
@@ -91,7 +92,6 @@ const KitDesignerContainer = () => {
                 }
               />
               <Tab
-                disabled
                 sx={{
                   alignItems: "flex-start",
                   textTransform: "none",
@@ -125,6 +125,18 @@ const KitDesignerContainer = () => {
                     <Trans i18nKey="questionnaires" />
                   </Typography>
                 }
+              />{" "}
+              <Tab
+                disabled
+                sx={{
+                  alignItems: "flex-start",
+                  textTransform: "none",
+                }}
+                label={
+                  <Typography variant="semiBoldLarge">
+                    <Trans i18nKey="questionnairesAndImpacts" />
+                  </Typography>
+                }
               />
               <Tab
                 sx={{
@@ -147,17 +159,23 @@ const KitDesignerContainer = () => {
             sx={{ height: "100%", padding: 3, background: "white" }}
           >
             {selectedTab === 0 && <MaturityLevelsContent />}
-            {selectedTab === 1 && (
-              <Typography>
-                <Trans i18nKey="subjectsContent" />
-              </Typography>
-            )}
+            {selectedTab === 1 && <SubjectsContent/>}
             {selectedTab === 2 && (
               <Typography>
                 <Trans i18nKey="attributesContent" />
               </Typography>
             )}
             {selectedTab === 3 && (
+              <Typography>
+                <Trans i18nKey="questionnairesContent" />
+              </Typography>
+            )}{" "}
+            {selectedTab === 4 && (
+              <Typography>
+                <Trans i18nKey="questionnairesContent" />
+              </Typography>
+            )}{" "}
+            {selectedTab === 5 && (
               <Typography>
                 <Trans i18nKey="questionnairesContent" />
               </Typography>
