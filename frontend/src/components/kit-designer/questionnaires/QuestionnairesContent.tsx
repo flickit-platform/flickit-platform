@@ -21,32 +21,32 @@ const QuestionnairesContent = () => {
   const { service } = useServiceContext();
   const {  kitVersionId = "" } = useParams();
 
-  const fetchSubjectKit = useQuery({
+  const fetchQuestionnairesKit = useQuery({
     service: (args = { kitVersionId }, config) =>
-      service.fetchSubjectKit(args , config)
+      service.fetchQuestionnairesKit(args , config)
   });
-  const postSubjectKit = useQuery({
+  const postQuestionnairesKit = useQuery({
     service: (args , config) =>
-      service.postSubjectKit(args, config),
+      service.postQuestionnairesKit(args, config),
       runOnMount: false,
   });
 
-  const deleteSubjectKit = useQuery({
+  const deleteQuestionnairesKit = useQuery({
     service: (args , config) =>
-        service.deleteSubjectKit(args, config),
+    service.deleteQuestionnairesKit(args, config),
     runOnMount: false,
   });
 
-  const updateKitSubject = useQuery({
+  const updateKitQuestionnaires = useQuery({
     service: (args,config) =>
-        service.updateKitSubject(args,config),
+        service.updateKitQuestionnaires(args,config),
     runOnMount: false,
   })
 
 
-  const [showNewSubjectForm, setShowNewSubjectForm] =
+  const [showNewQuestionnairesForm, setShowNewQuestionnairesForm] =
     useState(false);
-  const [newSubject, setNewSubject] = useState({
+  const [newQuestionnaires, setNewQuestionnaires] = useState({
     title: "",
     description: "",
     index: 1,
@@ -56,20 +56,20 @@ const QuestionnairesContent = () => {
   });
 
   useEffect(() => {
-    if (fetchSubjectKit.data?.items?.length) {
-      setNewSubject((prev) => ({
+    if (fetchQuestionnairesKit.data?.items?.length) {
+      setNewQuestionnaires((prev) => ({
         ...prev,
-        index: fetchSubjectKit.data.items.length + 1,
-        value: fetchSubjectKit.data.items.length + 1,
+        index: fetchQuestionnairesKit.data.items.length + 1,
+        value: fetchQuestionnairesKit.data.items.length + 1,
         weight: 1,
         id: null,
       }));
     }
-  }, [fetchSubjectKit.data]);
+  }, [fetchQuestionnairesKit.data]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const parsedValue = name === "value" ? parseInt(value) || 1 : value;
-    setNewSubject((prev) => ({
+    setNewQuestionnaires((prev) => ({
       ...prev,
       [name]: parsedValue,
     }));
@@ -77,38 +77,38 @@ const QuestionnairesContent = () => {
 
   const handleAddNewRow = () => {
     handleCancel();
-    setShowNewSubjectForm(true);
+    setShowNewQuestionnairesForm(true);
   };
 
   const handleSave = async () => {
     try {
       const data = {
         kitVersionId,
-        index: newSubject.index,
-        value: newSubject.value,
-        title: newSubject.title,
-        weight: newSubject.weight,
-        description: newSubject.description,
+        index: newQuestionnaires.index,
+        value: newQuestionnaires.value,
+        title: newQuestionnaires.title,
+        weight: newQuestionnaires.weight,
+        description: newQuestionnaires.description,
       };
-      if (newSubject.id) {
-        await service.updateKitSubject(
-            { kitVersionId, subjectId: newSubject.id, data },
+      if (newQuestionnaires.id) {
+        await service.updateKitQuestionnaires(
+            { kitVersionId, questionnaireId: newQuestionnaires.id, data },
         );
       } else {
-        await postSubjectKit.query({kitVersionId, data})
+        await postQuestionnairesKit.query({kitVersionId, data})
       }
 
       // Reset form and re-fetch data after saving
-      // setShowSubjectForm(false);
-      await fetchSubjectKit.query();
+      // setShowQuestionnairesForm(false);
+      await fetchQuestionnairesKit.query();
       // maturityLevelsCompetences.query();
 
       // Reset the form values
-      setNewSubject({
+      setNewQuestionnaires({
         title: "",
         description: "",
-        index: fetchSubjectKit.data?.items.length + 1 || 1,
-        value: fetchSubjectKit.data?.items.length + 1 || 1,
+        index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+        value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
         weight: 1,
         id: null,
       });
@@ -119,40 +119,40 @@ const QuestionnairesContent = () => {
   };
 
   const handleCancel = () => {
-    setShowNewSubjectForm(false);
-    setNewSubject({
+    setShowNewQuestionnairesForm(false);
+    setNewQuestionnaires({
       title: "",
       description: "",
-      index: fetchSubjectKit.data?.items.length + 1 || 1,
-      value: fetchSubjectKit.data?.items.length + 1 || 1,
+      index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+      value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
       weight: 0,
       id: null,
     });
   };
 
-  const handleEdit = async (subjectItem: any) => {
+  const handleEdit = async (QuestionnairesItem: any) => {
     try {
       const data = {
         kitVersionId,
-        index: subjectItem.index,
-        value: subjectItem.value,
-        title: subjectItem.title,
-        weight: subjectItem.weight,
-        description: subjectItem.description,
+        index: QuestionnairesItem.index,
+        value: QuestionnairesItem.value,
+        title: QuestionnairesItem.title,
+        weight: QuestionnairesItem.weight,
+        description: QuestionnairesItem.description,
       };
-      await updateKitSubject.query(
-        { kitVersionId, subjectId: subjectItem.id, data },
+      await updateKitQuestionnaires.query(
+        { kitVersionId, questionnaireId: QuestionnairesItem.id, data },
       );
 
-      setShowNewSubjectForm(false);
-      fetchSubjectKit.query();
+      setShowNewQuestionnairesForm(false);
+      fetchQuestionnairesKit.query();
       // maturityLevelsCompetences.query();
 
-      setNewSubject({
+      setNewQuestionnaires({
         title: "",
         description: "",
-        index: fetchSubjectKit.data?.items.length + 1 || 1,
-        value: fetchSubjectKit.data?.items.length + 1 || 1,
+        index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+        value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
         weight: 0,
         id: null,
       });
@@ -162,10 +162,10 @@ const QuestionnairesContent = () => {
     }
   };
 
-  const handleDelete = async (subjectId: number) => {
+  const handleDelete = async (questionnaireId: number) => {
     try {
-      await deleteSubjectKit.query({ kitVersionId, subjectId });
-      await fetchSubjectKit.query();
+      await deleteQuestionnairesKit.query({ kitVersionId, questionnaireId });
+      await fetchQuestionnairesKit.query();
       handleCancel();
     } catch (e) {
       const err = e as ICustomError;
@@ -180,7 +180,7 @@ const QuestionnairesContent = () => {
         index: idx + 1,
       }));
 
-      await service.changeSubjectOrder({ kitVersionId }, { orders });
+      await service.changeQuestionnairesOrder({ kitVersionId }, { orders });
 
       handleCancel();
     } catch (e) {
@@ -198,12 +198,12 @@ const QuestionnairesContent = () => {
       <Box width="100%">
         <KitDHeader
             onAddNewRow={handleAddNewRow}
-            hasBtn={fetchSubjectKit.loaded && fetchSubjectKit.data.items.length !== 0}
+            hasBtn={fetchQuestionnairesKit.loaded && fetchQuestionnairesKit.data.items.length !== 0}
             mainTitle={"questionnaires"}
             description={"questionnairesKitDesignerDescription"}
             subTitle={"questionnairesList"}
             />
-        {fetchSubjectKit.loaded && fetchSubjectKit.data.items.length !== 0 ? (
+        {fetchQuestionnairesKit.loaded && fetchQuestionnairesKit.data.items.length !== 0 ? (
           <Typography variant="bodyMedium" mt={1}>
             <Trans i18nKey="changeOrderHelper" />
           </Typography>
@@ -211,15 +211,15 @@ const QuestionnairesContent = () => {
         <Divider sx={{ my: 1 }} />
 
         <QueryBatchData
-          queryBatchData={[fetchSubjectKit]}
+          queryBatchData={[fetchQuestionnairesKit]}
           renderLoading={() => <LoadingSkeletonKitCard />}
-          render={([subjectData]) => {
+          render={([QuestionnairesData]) => {
             return (
               <>
-                {subjectData?.items?.length > 0 ? (
+                {QuestionnairesData?.items?.length > 0 ? (
                     <Box maxHeight={500} overflow="auto">
                       <ListOfItems
-                        items={subjectData?.items}
+                        items={QuestionnairesData?.items}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
                         deleteBtn={false}
@@ -234,9 +234,9 @@ const QuestionnairesContent = () => {
                         onAddNewRow={handleAddNewRow}
                       />
                 )}
-                {showNewSubjectForm && (
+                {showNewQuestionnairesForm && (
                     <QuestionnairesForm
-                        newSubject={newSubject}
+                        newItem={newQuestionnaires}
                         handleInputChange={handleInputChange}
                         handleSave={handleSave}
                         handleCancel={handleCancel}

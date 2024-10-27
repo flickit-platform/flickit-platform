@@ -23,7 +23,7 @@ interface SubjectFormProps {
 }
 
 const QuestionnairesForm = ({
-  newSubject,
+  newItem,
   handleInputChange,
   handleSave,
   handleCancel,
@@ -51,7 +51,7 @@ const QuestionnairesForm = ({
         id="new-maturity"
         type="number"
         name="value"
-        value={newSubject.value}
+        value={newItem.value}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
@@ -73,7 +73,7 @@ const QuestionnairesForm = ({
         required
         label={<Trans i18nKey="title" />}
         name="title"
-        value={newSubject.title}
+        value={newItem.title}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
@@ -96,7 +96,7 @@ const QuestionnairesForm = ({
         label={<Trans i18nKey="description" />}
         name="description"
         required
-        value={newSubject.description}
+        value={newItem.description}
         onChange={handleInputChange}
         fullWidth
         margin="normal"
@@ -159,7 +159,7 @@ const QuestionnairesForm = ({
         </Typography>
         <TextField
             required
-            value={newSubject.weight}
+            value={newItem.weight}
             onChange={handleInputChange}
             name="weight"
             variant="outlined"
