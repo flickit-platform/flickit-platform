@@ -79,3 +79,13 @@ class AssessmentInvitesApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AssessmentMigrateKitVersionApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, assessment_id):
+        result = assessment_services.assessment_migrate_kit_version(request, assessment_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
