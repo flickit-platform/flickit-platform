@@ -187,3 +187,13 @@ class AttributesApi(APIView):
     def get(self, request, kit_version_id):
         result = kit_versions_services.get_attributes_list(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionnairesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={201: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_questionnaire(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
