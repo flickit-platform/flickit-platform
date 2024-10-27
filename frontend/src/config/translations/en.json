@@ -677,7 +677,7 @@
   "YourStatusIs": "Your {{title}} status is",
   "youSelected": "You've selected",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
-  "subjectEmptyStateDetailed": "No subjects in the kit so far? Create your first subject just by one click!"
+  "subjectEmptyStateDetailed": "No subjects in the kit so far? Create your first subject just by one click!",
   "questionnairesKitDesignerDescription": "Questionnaires provide a structure for organizing and categorizing various questions. By dividing an assessment into different questionnaires, evaluators who intend to use your kit can navigate and utilize your assessment more easily. Questions can be categorized in various ways, but the most common method is by topic. In this way, questions that are most similar in terms of the topic are grouped into one questionnaire. It is recommended that each questionnaire contains a maximum of 15 questions and a minimum of 3 questions.",
   "questionnairesList": "questionnaires",
   "newQuestionnaire": "New Questionnaire",
