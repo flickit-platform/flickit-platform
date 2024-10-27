@@ -198,7 +198,6 @@ class QuestionnairesApi(APIView):
         result = kit_versions_services.create_questionnaire(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
 
-
     size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
                                    type=openapi.TYPE_INTEGER)
     page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
@@ -217,6 +216,12 @@ class QuestionnaireApi(APIView):
         type=openapi.TYPE_OBJECT), responses={200: ""})
     def put(self, request, kit_version_id, questionnaire_id):
         result = kit_versions_services.update_questionnaire(request, kit_version_id, questionnaire_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, questionnaire_id):
+        result = kit_versions_services.delete_questionnaire(request, kit_version_id, questionnaire_id)
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
