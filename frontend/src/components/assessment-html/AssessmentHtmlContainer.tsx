@@ -15,7 +15,7 @@ const AssessmentExportContainer = () => {
   const { service } = useServiceContext();
 
   const iframeUrl =
-    "https://flickit-cdn.hectora.app/static-stage/report/" +
+    "https://app.flickit.org/static-stage/report/" +
     assessmentId +
     "/index.html";
 
