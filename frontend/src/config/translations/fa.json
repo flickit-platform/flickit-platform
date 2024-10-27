@@ -647,5 +647,7 @@
     "yourConfidence": "سطح اطمینان شما",
     "YourStatusIs": "وضعیت {{title}} شما",
     "youSelected": "شما انتخاب کردید ",
-    "youveGotSyntaxErrorsInYourDslFile": "خطاهای نحوی در فایل DSL خود دارید"
+    "youveGotSyntaxErrorsInYourDslFile": "خطاهای نحوی در فایل DSL خود دارید",
+    "subjectEmptyStateDetailed": "تاکنون هیچ موضوعی در کیت ثبت نشده‌است ؟ اولین موضوع خود را فقط با یک کلیک ایجاد کنید!"
+
 }

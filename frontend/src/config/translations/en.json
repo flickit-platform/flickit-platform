@@ -676,5 +676,6 @@
   "yourConfidence": "Selected confidence",
   "YourStatusIs": "Your {{title}} status is",
   "youSelected": "You've selected",
-  "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file"
+  "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
+  "subjectEmptyStateDetailed": "No subjects in the kit so far? Create your first subject just by one click!"
 }
