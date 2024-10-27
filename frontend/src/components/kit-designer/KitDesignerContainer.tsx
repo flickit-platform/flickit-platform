@@ -175,12 +175,12 @@ const KitDesignerContainer = () => {
                 <Trans i18nKey="questionnairesContent" />
               </Typography>
             )}{" "}
-            {selectedTab === 5 && (
-              <Typography>
-                <Trans i18nKey="questionnairesContent" />
-              </Typography>
-            )}
-            {selectedTab === 4 && <PublishContent />}
+            {/*{selectedTab === 5 && (*/}
+            {/*  <Typography>*/}
+            {/*    <Trans i18nKey="questionnairesContent" />*/}
+            {/*  </Typography>*/}
+            {/*)}*/}
+            {selectedTab === 5 && <PublishContent />}
           </Grid>
         </Grid>
       </Grid>
