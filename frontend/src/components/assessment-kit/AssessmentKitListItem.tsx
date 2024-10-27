@@ -13,10 +13,11 @@ import useMenu from "@utils/useMenu";
 import { useQuery } from "@utils/useQuery";
 import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatDate from "@utils/formatDate";
 import { theme } from "@/config/theme";
 import { Tooltip } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 interface IAssessmentKitListItemProps {
   data: {
     id: TId;
@@ -34,10 +35,22 @@ interface IAssessmentKitListItemProps {
 }
 
 const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
+  const navigate = useNavigate();
+  const { service } = useServiceContext();
+  const cloneAssessmentKit = useQuery({
+    service: (args, config) => service.cloneAssessmentKit(args, config),
+    runOnMount: false,
+  });
   const { data, fetchAssessmentKits, hasAccess, link, is_member, is_active } =
     props;
   const { id, title, lastModificationTime, isPrivate, draftVersionId } =
     data || {};
+  const draftClicked = () => {
+    !draftVersionId && cloneAssessmentKit.query({ assessmentKitId: id }).then((res: any) => {
+      navigate(`kit-designer/${res?.kitVersionId}`)
+    })
+    draftVersionId && navigate(`kit-designer/${draftVersionId}`)
+  }
   return (
     <Box
       sx={{
@@ -112,15 +125,18 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             title={!draftVersionId && <Trans i18nKey="noDraftVersion" />}
           >
             <div>
-              <Button
+              {hasAccess && <LoadingButton
                 variant="outlined"
                 size="small"
-                disabled={!draftVersionId}
-                component={Link }
-                to={`kit-designer/${draftVersionId}`}
+                // disabled={!draftVersionId}
+                // component={!draftVersionId ? Link : "div"}
+                // to={!draftVersionId ? `kit-designer/${draftVersionId}` : ''}
+                onClick={draftClicked}
+                loading={cloneAssessmentKit.loading}
               >
-                <Trans i18nKey="draft" />
-              </Button>
+                <Trans i18nKey={!draftVersionId ? "newDraft" : "draft"} />
+              </LoadingButton>
+              }
             </div>
           </Tooltip>
           <Actions

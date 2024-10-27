@@ -562,7 +562,6 @@ export const createService = (
         config,
       );
     },
-
     activateKit(
       { kitVersionId }: { kitVersionId: TId },
       data: any,
@@ -1009,6 +1008,15 @@ export const createService = (
       return axios.post(
         `/baseinfo/assessmentkits/update/${assessmentKitId}/`,
         data,
+        config,
+      );
+    },
+    cloneAssessmentKit(
+      { assessmentKitId }: { assessmentKitId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/assessment-kits/${assessmentKitId}/clone/`,
         config,
       );
     },
