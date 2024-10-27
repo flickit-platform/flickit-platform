@@ -18,5 +18,7 @@ urlpatterns = [
     path("<str:kit_version_id>/level-competences/<str:level_competence_id>/",
          kit_versions_views.LevelCompetenceApi.as_view()),
     path("<str:kit_version_id>/attributes/", kit_versions_views.AttributesApi.as_view()),
-    path("<str:kit_version_id>/questionnaires/", kit_versions_views.QuestionnairesApi.as_view())
+    path("<str:kit_version_id>/questionnaires/", kit_versions_views.QuestionnairesApi.as_view()),
+    path("<str:kit_version_id>/questionnaires/<str:questionnaire_id>/"
+         , kit_versions_views.QuestionnaireApi.as_view())
 ]
