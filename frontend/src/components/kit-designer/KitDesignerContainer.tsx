@@ -13,6 +13,7 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@/utils/useQuery";
 import { IKitVersion } from "@/types";
+import QuestionnairesContent from "@components/kit-designer/questionnaires/QuestionnairesContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -115,7 +116,6 @@ const KitDesignerContainer = () => {
                 }
               />
               <Tab
-                disabled
                 sx={{
                   alignItems: "flex-start",
                   textTransform: "none",
@@ -165,11 +165,7 @@ const KitDesignerContainer = () => {
                 <Trans i18nKey="attributesContent" />
               </Typography>
             )}
-            {selectedTab === 3 && (
-              <Typography>
-                <Trans i18nKey="questionnairesContent" />
-              </Typography>
-            )}{" "}
+            {selectedTab === 3 && <QuestionnairesContent />}
             {selectedTab === 4 && (
               <Typography>
                 <Trans i18nKey="questionnairesContent" />
