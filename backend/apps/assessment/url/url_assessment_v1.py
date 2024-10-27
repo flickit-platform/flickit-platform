@@ -35,5 +35,6 @@ urlpatterns = [
     path("<uuid:assessment_id>/insight/subjects/<int:subject_id>/",
          assessment_insight_views.AssessmentSubjectInsightApi.as_view()),
     path("<uuid:assessment_id>/analysis-input/", assessment_analysis_views.UploadAnalysisFileApi.as_view()),
+    path("<uuid:assessment_id>/migrate-kit-version/", assessment_views.AssessmentMigrateKitVersionApi.as_view()),
 
 ]
