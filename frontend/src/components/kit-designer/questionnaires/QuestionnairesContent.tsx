@@ -200,8 +200,8 @@ const QuestionnairesContent = () => {
             onAddNewRow={handleAddNewRow}
             hasBtn={fetchSubjectKit.loaded && fetchSubjectKit.data.items.length !== 0}
             mainTitle={"questionnaires"}
-            description={"subjectsKitDesignerDescription"}
-            subTitle={"subjectsList"}
+            description={"questionnairesKitDesignerDescription"}
+            subTitle={"questionnairesList"}
             />
         {fetchSubjectKit.loaded && fetchSubjectKit.data.items.length !== 0 ? (
           <Typography variant="bodyMedium" mt={1}>
@@ -228,9 +228,9 @@ const QuestionnairesContent = () => {
                     </Box>
                 ) : (
                       <EmptyState
-                        btnTitle={"newSubject"}
-                        title={"subjectsListEmptyState"}
-                        SubTitle={"subjectEmptyStateDatailed"}
+                        btnTitle={"newQuestionnaire"}
+                        title={"questionnairesListEmptyState"}
+                        SubTitle={"questionnairesEmptyStateDetailed"}
                         onAddNewRow={handleAddNewRow}
                       />
                 )}
