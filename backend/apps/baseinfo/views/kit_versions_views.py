@@ -197,3 +197,14 @@ class QuestionnairesApi(APIView):
     def post(self, request, kit_version_id):
         result = kit_versions_services.create_questionnaire(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.get_questionnaires_list(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
