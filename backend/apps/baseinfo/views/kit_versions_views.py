@@ -189,6 +189,18 @@ class AttributesApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class AttributeApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, attribute_id):
+        result = kit_versions_services.update_questionnaire(request, kit_version_id, attribute_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class QuestionnairesApi(APIView):
     permission_classes = [IsAuthenticated]
 
