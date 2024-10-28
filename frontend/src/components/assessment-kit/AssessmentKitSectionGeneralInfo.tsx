@@ -93,31 +93,47 @@ const AssessmentKitSectionGeneralInfo = (
     }
   };
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={12} md={7}>
-        <QueryBatchData
-          queryBatchData={[fetchAssessmentKitInfoQuery]}
-          loadingComponent={
-            <LoadingSkeleton
-              width="100%"
-              height="360px"
-              sx={{ mt: 1, borderRadius: 2 }}
-            />
-          }
-          render={([info]) => {
-            const {
-              title,
-              summary,
-              published,
-              isPrivate,
-              about,
-              tags,
-              editable,
-              hasActiveVersion,
-            } = info as AssessmentKitInfoType;
-            setAssessmentKitTitle(title);
-            setHasActiveVersion(hasActiveVersion);
-            return (
+    <QueryBatchData
+      queryBatchData={[
+        fetchAssessmentKitInfoQuery,
+        fetchAssessmentKitStatsQuery,
+      ]}
+      loadingComponent={
+        <LoadingSkeleton
+          width="100%"
+          height="360px"
+          sx={{ mt: 1, borderRadius: 2 }}
+        />
+      }
+      render={([info, stats]) => {
+        const {
+          title,
+          summary,
+          published,
+          isPrivate,
+          about,
+          tags,
+          editable,
+          hasActiveVersion,
+        } = info as AssessmentKitInfoType;
+        const {
+          creationTime,
+          lastModificationTime,
+          questionnairesCount,
+          attributesCount,
+          questionsCount,
+          maturityLevelsCount,
+          likes,
+          assessmentCounts,
+          subjects,
+          expertGroup,
+        } = stats as AssessmentKitStatsType;
+        setAssessmentKitTitle(title);
+        setHasActiveVersion(hasActiveVersion);
+        setExpertGroup(expertGroup)
+        return (
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={7}>
               <Box
                 sx={{
                   mt: 1,
@@ -338,35 +354,8 @@ const AssessmentKitSectionGeneralInfo = (
                   editable={editable}
                 />
               </Box>
-            );
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} md={5}>
-        <QueryBatchData
-          queryBatchData={[fetchAssessmentKitStatsQuery]}
-          loadingComponent={
-            <LoadingSkeleton
-              width="100%"
-              height="360px"
-              sx={{ mt: 1, borderRadius: 2 }}
-            />
-          }
-          render={([stats]) => {
-            const {
-              creationTime,
-              lastModificationTime,
-              questionnairesCount,
-              attributesCount,
-              questionsCount,
-              maturityLevelsCount,
-              likes,
-              assessmentCounts,
-              subjects,
-              expertGroup,
-            } = stats as AssessmentKitStatsType;
-            setExpertGroup(expertGroup);
-            return (
+            </Grid>
+            <Grid item xs={12} md={5}>
               <Box
                 sx={{
                   mt: 1,
@@ -466,11 +455,11 @@ const AssessmentKitSectionGeneralInfo = (
                   </Box>
                 </Box>
               </Box>
-            );
-          }}
-        />
-      </Grid>
-    </Grid>
+            </Grid>
+          </Grid>
+        );
+      }}
+    />
   );
 };
 

@@ -187,3 +187,83 @@ class AttributesApi(APIView):
     def get(self, request, kit_version_id):
         result = kit_versions_services.get_attributes_list(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AttributeApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, attribute_id):
+        result = kit_versions_services.update_attribute(request, kit_version_id, attribute_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, attribute_id):
+        result = kit_versions_services.delete_attribute(request, kit_version_id, attribute_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class AttributeChangeOrderApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id):
+        result = kit_versions_services.change_attribute_order(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionnairesApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={201: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_questionnaire(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.get_questionnaires_list(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionnaireApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, questionnaire_id):
+        result = kit_versions_services.update_questionnaire(request, kit_version_id, questionnaire_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, questionnaire_id):
+        result = kit_versions_services.delete_questionnaire(request, kit_version_id, questionnaire_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionnaireChangeOrderApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id):
+        result = kit_versions_services.change_questionnaire_order(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
