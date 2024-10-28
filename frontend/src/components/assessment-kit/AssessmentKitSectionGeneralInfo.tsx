@@ -130,6 +130,7 @@ const AssessmentKitSectionGeneralInfo = (
         } = stats as AssessmentKitStatsType;
         setAssessmentKitTitle(title);
         setHasActiveVersion(hasActiveVersion);
+        setExpertGroup(expertGroup)
         return (
           <Grid container spacing={4}>
             <Grid item xs={12} md={7}>
