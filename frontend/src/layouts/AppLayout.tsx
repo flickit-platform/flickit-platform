@@ -14,12 +14,10 @@ const AppLayout = (props: PropsWithChildren<{}>) => {
           p: !location.pathname.endsWith("/html-document/")
             ? { xs: 1, sm: 1, md: 4 }
             : "0",
-          pt: !location.pathname.endsWith("/html-document/")
-            ? {
-                xs: "84px !important",
-                minHeight: "100%",
-              }
-            : 0,
+          pt: {
+            xs: "84px !important",
+            minHeight: "100%",
+          },
         }}
         m="auto"
       >

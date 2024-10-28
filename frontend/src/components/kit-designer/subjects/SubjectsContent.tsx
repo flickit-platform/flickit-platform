@@ -230,7 +230,7 @@ const SubjectsContent = () => {
                       <EmptyState
                         btnTitle={"newSubject"}
                         title={"subjectsListEmptyState"}
-                        SubTitle={"subjectEmptyStateDatailed"}
+                        SubTitle={"subjectEmptyStateDetailed"}
                         onAddNewRow={handleAddNewRow}
                       />
                 )}
