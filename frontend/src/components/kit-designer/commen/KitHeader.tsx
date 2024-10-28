@@ -10,6 +10,7 @@ interface KItDHeaderProps {
     description: string,
     subTitle: string,
     hasBtn: boolean,
+    btnTitle?: string
 }
 
 const KitDHeader = ({
@@ -17,6 +18,7 @@ const KitDHeader = ({
                             description,
                             subTitle,
                             hasBtn,
+                            btnTitle,
                             onAddNewRow,
                         }: KItDHeaderProps) => (
     <>
@@ -50,7 +52,7 @@ const KitDHeader = ({
                     }}
                 >
                     <Button variant="contained" onClick={onAddNewRow}>
-                        <Trans i18nKey="newSubject" />
+                        <Trans i18nKey={btnTitle} />
                     </Button>
                 </Link>
             ) : null}

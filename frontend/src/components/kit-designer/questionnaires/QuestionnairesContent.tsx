@@ -199,6 +199,7 @@ const QuestionnairesContent = () => {
         <KitDHeader
             onAddNewRow={handleAddNewRow}
             hasBtn={fetchQuestionnairesKit.loaded && fetchQuestionnairesKit.data.items.length !== 0}
+            btnTitle={"newQuestionnaire"}
             mainTitle={"questionnaires"}
             description={"questionnairesKitDesignerDescription"}
             subTitle={"questionnairesList"}

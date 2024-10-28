@@ -9,7 +9,7 @@ import { styles } from "@/config/styles";
 import Typography from "@mui/material/Typography";
 import {theme} from "@config/theme";
 
-interface SubjectFormProps {
+interface QuestionnairesFormProps {
     newSubject: {
     title: string;
     description: string;
@@ -27,7 +27,7 @@ const QuestionnairesForm = ({
   handleInputChange,
   handleSave,
   handleCancel,
-}: SubjectFormProps) => (
+}: QuestionnairesFormProps) => (
   <Box
     mt={1.5}
     p={1.5}
@@ -140,53 +140,53 @@ const QuestionnairesForm = ({
           <CloseIcon />
         </IconButton>
       </Link>
-        <Box sx={{
-            width:"fit-content",
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"flex-end",
-            flexDirection:"column",
-            gap:"0.5rem",
-            textAlign:"center"
-        }}>
+      {/*  <Box sx={{*/}
+      {/*      width:"fit-content",*/}
+      {/*      display:"flex",*/}
+      {/*      justifyContent:"center",*/}
+      {/*      alignItems:"flex-end",*/}
+      {/*      flexDirection:"column",*/}
+      {/*      gap:"0.5rem",*/}
+      {/*      textAlign:"center"*/}
+      {/*  }}>*/}
 
-        <Typography sx={{
-            ...theme.typography.labelCondensed,
-            color:"#6C8093",
-            width:"100%"
-        }}>
-            <Trans i18nKey={"weight"} />
-        </Typography>
-        <TextField
-            required
-            value={newItem.weight}
-            onChange={handleInputChange}
-            name="weight"
-            variant="outlined"
-            fullWidth
-            size="small"
-            // label={<Trans i18nKey="weight" />}
-            margin="normal"
-            type="number"
-            inputProps={{
-                style: { textAlign: "center", width: "40px" },
-            }}
-            sx={{
-                mb: 1,
-                mt: 1,
-                fontSize: 14,
-                "& .MuiInputBase-root": {
-                    fontSize: 14,
-                    overflow: "auto",
-                },
-                "& .MuiFormLabel-root": {
-                    fontSize: 14,
-                },
-                background:"#fff",
-                borderRadius:"8px",
-            }}
-        />
-      </Box>
+      {/*  <Typography sx={{*/}
+      {/*      ...theme.typography.labelCondensed,*/}
+      {/*      color:"#6C8093",*/}
+      {/*      width:"100%"*/}
+      {/*  }}>*/}
+      {/*      <Trans i18nKey={"weight"} />*/}
+      {/*  </Typography>*/}
+      {/*  <TextField*/}
+      {/*      required*/}
+      {/*      value={newItem.weight}*/}
+      {/*      onChange={handleInputChange}*/}
+      {/*      name="weight"*/}
+      {/*      variant="outlined"*/}
+      {/*      fullWidth*/}
+      {/*      size="small"*/}
+      {/*      // label={<Trans i18nKey="weight" />}*/}
+      {/*      margin="normal"*/}
+      {/*      type="number"*/}
+      {/*      inputProps={{*/}
+      {/*          style: { textAlign: "center", width: "40px" },*/}
+      {/*      }}*/}
+      {/*      sx={{*/}
+      {/*          mb: 1,*/}
+      {/*          mt: 1,*/}
+      {/*          fontSize: 14,*/}
+      {/*          "& .MuiInputBase-root": {*/}
+      {/*              fontSize: 14,*/}
+      {/*              overflow: "auto",*/}
+      {/*          },*/}
+      {/*          "& .MuiFormLabel-root": {*/}
+      {/*              fontSize: 14,*/}
+      {/*          },*/}
+      {/*          background:"#fff",*/}
+      {/*          borderRadius:"8px",*/}
+      {/*      }}*/}
+      {/*  />*/}
+      {/*</Box>*/}
     </Box>
   </Box>
 );

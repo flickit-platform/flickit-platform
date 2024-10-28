@@ -200,6 +200,7 @@ const SubjectsContent = () => {
             onAddNewRow={handleAddNewRow}
             hasBtn={fetchSubjectKit.loaded && fetchSubjectKit.data.items.length !== 0}
             mainTitle={"subjects"}
+            btnTitle={"newSubject"}
             description={"subjectsKitDesignerDescription"}
             subTitle={"subjectsList"}
             />
