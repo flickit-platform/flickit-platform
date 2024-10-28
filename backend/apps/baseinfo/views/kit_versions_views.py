@@ -207,6 +207,18 @@ class AttributeApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class AttributeChangeOrderApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id):
+        result = kit_versions_services.change_attribute_order(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class QuestionnairesApi(APIView):
     permission_classes = [IsAuthenticated]
 
