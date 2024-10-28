@@ -125,8 +125,8 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
       setLoading(false);
       close();
       onSubmitForm();
-      type === "draft" && res?.kitId && navigate(`kit-designer/${res.kitId}`);
-      shouldView && res?.id && navigate(`assessment-kits/${res.id}`);
+      shouldView && res?.kitId && navigate(`assessment-kits/${res.kitId}`);
+
     } catch (e: any) {
       const err = e as ICustomError;
       toastError(err);
