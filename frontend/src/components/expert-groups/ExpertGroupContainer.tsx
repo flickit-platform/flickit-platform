@@ -1023,7 +1023,7 @@ const AssessmentKitsList = (props: any) => {
                     <Trans i18nKey="viaKitDesigner" />
                   </MenuItem>
                 </Menu>
-                <AssessmentKitCEFromDialog {...dialogProps} />
+                <AssessmentKitCEFromDialog {...dialogProps}  onSubmitForm={assessmentKitQuery.query}/>
                 <AssessmentKitCEFromDialog
                   {...kitDesignerDialogProps}
                   onSubmitForm={assessmentKitQuery.query}
