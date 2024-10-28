@@ -195,7 +195,13 @@ class AttributeApi(APIView):
     @swagger_auto_schema(request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT), responses={200: ""})
     def put(self, request, kit_version_id, attribute_id):
-        result = kit_versions_services.update_questionnaire(request, kit_version_id, attribute_id)
+        result = kit_versions_services.update_attribute(request, kit_version_id, attribute_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, attribute_id):
+        result = kit_versions_services.delete_attribute(request, kit_version_id, attribute_id)
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
