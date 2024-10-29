@@ -53,6 +53,7 @@ const MaturityLevelForm = ({
         variant="outlined"
         size="small"
         inputProps={{
+          "data-testid": "maturity-level-value",
           style: { textAlign: "center", width: "40px" },
         }}
         sx={{
@@ -73,6 +74,9 @@ const MaturityLevelForm = ({
         onChange={handleInputChange}
         fullWidth
         margin="normal"
+        inputProps={{
+          "data-testid": "maturity-level-title",
+        }}
         sx={{
           mt: 0,
           fontSize: 14,
@@ -88,6 +92,9 @@ const MaturityLevelForm = ({
 
       <TextField
         label={<Trans i18nKey="description" />}
+        inputProps={{
+          "data-testid": "maturity-level-description",
+        }}
         name="description"
         required
         value={newMaturityLevel.description}
@@ -124,10 +131,10 @@ const MaturityLevelForm = ({
         }}
       >
         {" "}
-        <IconButton size="small" color="primary" onClick={handleSave}>
+        <IconButton size="small" color="primary" onClick={handleSave} data-testid="maturity-level-check-icon">
           <CheckIcon />
         </IconButton>
-        <IconButton size="small" color="secondary" onClick={handleCancel}>
+        <IconButton size="small" color="secondary" onClick={handleCancel} data-testid="maturity-level-close-icon">
           <CloseIcon />
         </IconButton>
       </Link>
