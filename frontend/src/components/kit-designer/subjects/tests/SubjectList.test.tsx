@@ -24,7 +24,7 @@ const mockQSubject = [
 const mockOnEdit = vi.fn();
 const mockOnDelete = vi.fn();
 const mockOnReorder = vi.fn();
-const mockName = "questionnaires";
+const mockName = "subject";
 const deleteBtn = true;
 
 describe("subjectList", ()=>{

@@ -20,7 +20,8 @@ interface ListOfItemsProps {
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
-  deleteBtn: boolean
+  deleteBtn: boolean,
+  name: string
 }
 
 const ListOfItems = ({
@@ -28,7 +29,8 @@ const ListOfItems = ({
   onEdit,
   onDelete,
   onReorder,
-  deleteBtn
+  deleteBtn,
+  name
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);

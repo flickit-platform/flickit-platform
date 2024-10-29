@@ -224,6 +224,7 @@ const SubjectsContent = () => {
                         onDelete={handleDelete}
                         deleteBtn={false}
                         onReorder={handleReorder}
+                        name={"subject"}
                       />
                     </Box>
                 ) : (
