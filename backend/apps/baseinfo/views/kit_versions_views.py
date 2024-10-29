@@ -289,3 +289,9 @@ class QuestionApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, questionnaire_id):
+        result = kit_versions_services.delete_question(request, kit_version_id, questionnaire_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
