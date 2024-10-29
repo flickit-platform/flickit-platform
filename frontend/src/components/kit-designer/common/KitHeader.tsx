@@ -13,12 +13,12 @@ interface KItDHeaderProps {
 }
 
 const KitDHeader = ({
-                            mainTitle,
-                            description,
-                            subTitle,
-                            hasBtn,
-                            onAddNewRow,
-                        }: KItDHeaderProps) => (
+    mainTitle,
+    description,
+    subTitle,
+    hasBtn,
+    onAddNewRow,
+}: KItDHeaderProps) => (
     <>
         <div id="maturity-header">
             <Typography variant="headlineSmall" fontWeight="bold">
@@ -26,7 +26,7 @@ const KitDHeader = ({
             </Typography>
             <br />
             <Typography variant="bodyMedium">
-                <Trans i18nKey={`${description}`}  />
+                <Trans i18nKey={`${description}`} />
             </Typography>
         </div>
         <Box

@@ -13,6 +13,7 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@/utils/useQuery";
 import { IKitVersion } from "@/types";
+import AttributesContent from "./attributes/AttributeContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -103,7 +104,6 @@ const KitDesignerContainer = () => {
                 }
               />
               <Tab
-                disabled
                 sx={{
                   alignItems: "flex-start",
                   textTransform: "none",
@@ -160,11 +160,7 @@ const KitDesignerContainer = () => {
           >
             {selectedTab === 0 && <MaturityLevelsContent />}
             {selectedTab === 1 && <SubjectsContent/>}
-            {selectedTab === 2 && (
-              <Typography>
-                <Trans i18nKey="attributesContent" />
-              </Typography>
-            )}
+            {selectedTab === 2 && <AttributesContent />}
             {selectedTab === 3 && (
               <Typography>
                 <Trans i18nKey="questionnairesContent" />
@@ -172,7 +168,7 @@ const KitDesignerContainer = () => {
             )}{" "}
             {selectedTab === 4 && (
               <Typography>
-                <Trans i18nKey="questionnairesContent" />
+                <Trans i18nKey="attributes" />
               </Typography>
             )}{" "}
             {/*{selectedTab === 5 && (*/}
