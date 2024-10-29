@@ -25,7 +25,7 @@ const mockOnEdit = vi.fn();
 const mockOnDelete = vi.fn();
 const mockOnReorder = vi.fn();
 const mockName = "questionnaires";
-const deleteBtn = false;
+const deleteBtn = true;
 
 describe("questionnairesList", ()=>{
     beforeEach(()=>{
