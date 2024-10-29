@@ -6,8 +6,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Trans } from "react-i18next";
 import { styles } from "@/config/styles";
-import Typography from "@mui/material/Typography";
-import {theme} from "@config/theme";
 
 interface QuestionnairesFormProps {
     newItem: {
