@@ -21,6 +21,7 @@ interface ListOfItemsProps {
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean
+  name: string
 }
 
 const ListOfItems = ({
@@ -28,11 +29,12 @@ const ListOfItems = ({
   onEdit,
   onDelete,
   onReorder,
-  deleteBtn
+  deleteBtn,
+  name
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
-  const [tempValues, setTempValues] = useState({ title: "", description: "", weight: 0 });
+  const [tempValues, setTempValues] = useState({ title: "", description: "", weight: 0,question: 0 });
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -44,10 +46,9 @@ const ListOfItems = ({
     setReorderedItems(newReorderedItems);
     onReorder(newReorderedItems);
   };
-
   const handleEditClick = (item: KitDesignListItems) => {
     setEditMode(Number(item.id));
-    setTempValues({ title: item.title, description: item.description,weight: item.weight });
+    setTempValues({ title: item.title, description: item.description,weight: item.weight,question: item.questionsCount });
   };
 
   const handleSaveClick = (item: KitDesignListItems) => {
@@ -55,14 +56,14 @@ const ListOfItems = ({
       ...item,
       title: tempValues.title,
       description: tempValues.description,
-      weight: tempValues.weight,
+      weight: tempValues?.weight,
     });
     setEditMode(null);
   };
 
   const handleCancelClick = () => {
     setEditMode(null);
-    setTempValues({ title: "", description: "",weight: 0 });
+    setTempValues({ title: "", description: "",weight: 0,question: 0 });
   };
 
   const handelChange = (e: any) =>{
@@ -235,54 +236,55 @@ const ListOfItems = ({
                           {item.description}
                         </Typography>
                       )}
+                        {name === "subject" &&
+                            <Box sx={{
+                              width:"fit-content",
+                              display:"flex",
+                              justifyContent:"center",
+                              alignItems:"flex-end",
+                              flexDirection:"column",
+                              gap:"0.5rem",
+                              textAlign:editMode ? "end" : "center"
+                            }}>
+                              <Typography sx={{
+                                ...theme.typography.labelCondensed,
+                                color:"#6C8093",
+                                width:"100%"
+                              }}>
+                                <Trans i18nKey={"weight"} />
+                              </Typography>
 
-                                <Box sx={{
-                                  width:"fit-content",
-                                  display:"flex",
-                                  justifyContent:"center",
-                                  alignItems:"flex-end",
-                                  flexDirection:"column",
-                                  gap:"0.5rem",
-                                  textAlign:editMode ? "end" : "center"
-                                }}>
-                                  <Typography sx={{
-                                    ...theme.typography.labelCondensed,
-                                    color:"#6C8093",
-                                    width:"100%"
-                                  }}>
-                                    <Trans i18nKey={"weight"} />
-                                  </Typography>
-                                  {editMode === item.id ? (
-                                      <TextField
-                                          required
-                                          value={tempValues.weight}
-                                          onChange={(e) =>handelChange(e) }
-                                          name="weight"
-                                          variant="outlined"
-                                          fullWidth
-                                          size="small"
-                                          // label={<Trans i18nKey="weight" />}
-                                          margin="normal"
-                                          type="number"
-                                          inputProps={{
-                                            style: { textAlign: "center", width: "40px" },
-                                          }}
-                                          sx={{
-                                            mb: 1,
-                                            mt: 1,
-                                            fontSize: 14,
-                                            "& .MuiInputBase-root": {
-                                              fontSize: 14,
-                                              overflow: "auto",
-                                            },
-                                            "& .MuiFormLabel-root": {
-                                              fontSize: 14,
-                                            },
-                                            background:"#fff",
-                                            borderRadius:"8px",
-                                          }}
-                                      />
-                                  ) : (
+                              {editMode === item.id ? (
+                                  <TextField
+                                      required
+                                      value={tempValues.weight}
+                                      onChange={(e) =>handelChange(e) }
+                                      name="weight"
+                                      variant="outlined"
+                                      fullWidth
+                                      size="small"
+                                      // label={<Trans i18nKey="weight" />}
+                                      margin="normal"
+                                      type="number"
+                                      inputProps={{
+                                        style: { textAlign: "center", width: "40px" },
+                                      }}
+                                      sx={{
+                                        mb: 1,
+                                        mt: 1,
+                                        fontSize: 14,
+                                        "& .MuiInputBase-root": {
+                                          fontSize: 14,
+                                          overflow: "auto",
+                                        },
+                                        "& .MuiFormLabel-root": {
+                                          fontSize: 14,
+                                        },
+                                        background:"#fff",
+                                        borderRadius:"8px",
+                                      }}
+                                  />
+                              ) : (
                                   <Box
                                       aria-label="weight"
                                       style={{
@@ -298,8 +300,44 @@ const ListOfItems = ({
                                   >
                                     {item.weight}
                                   </Box>
-                                  )}
-                                </Box>
+                              )}
+                            </Box>
+
+                        }
+                        {name == "questionnaires" &&
+                            <Box sx={{
+                              width:"fit-content",
+                              display:"flex",
+                              justifyContent:"center",
+                              alignItems:"flex-end",
+                              flexDirection:"column",
+                              gap:"0.5rem",
+                              textAlign:editMode ? "end" : "center"
+                            }}>
+                              <Typography sx={{
+                                ...theme.typography.labelCondensed,
+                                color:"#6C8093",
+                                width:"100%"
+                              }}>
+                                <Trans i18nKey={"questions"} />
+                              </Typography>
+                            <Box
+                                aria-label="questionnaires"
+                                style={{
+                                  width:"3.75rem",
+                                  height:"3.75rem",
+                                  borderRadius: '50%',  // برای دایره‌ای کردن دکمه
+                                  backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
+                                  color: '#2B333B',
+                                  display:"flex",
+                                  alignItems:" center",
+                                  justifyContent:"center"
+                                }}
+                            >
+                              {item.questionsCount}
+                             </Box>
+                          </Box>
+                        }
                       </Box>
                     </Box>
                   </Box>

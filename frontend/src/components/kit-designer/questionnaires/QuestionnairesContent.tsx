@@ -225,6 +225,7 @@ const QuestionnairesContent = () => {
                         onDelete={handleDelete}
                         deleteBtn={false}
                         onReorder={handleReorder}
+                        name={"questionnaires"}
                       />
                     </Box>
                 ) : (

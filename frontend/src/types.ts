@@ -197,7 +197,8 @@ export interface KitDesignListItems {
   value: number;
   index: number;
   description: string;
-  weight: number
+  weight?: number,
+  questionsCount?: number
 }
 
 export interface IImage {

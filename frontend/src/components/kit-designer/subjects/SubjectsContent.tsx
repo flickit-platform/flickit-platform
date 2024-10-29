@@ -109,7 +109,7 @@ const SubjectsContent = () => {
         description: "",
         index: fetchSubjectKit.data?.items.length + 1 || 1,
         value: fetchSubjectKit.data?.items.length + 1 || 1,
-        weight: 1,
+        weight: 0,
         id: null,
       });
     } catch (e) {
@@ -225,6 +225,7 @@ const SubjectsContent = () => {
                         onDelete={handleDelete}
                         deleteBtn={false}
                         onReorder={handleReorder}
+                        name={"subject"}
                       />
                     </Box>
                 ) : (
