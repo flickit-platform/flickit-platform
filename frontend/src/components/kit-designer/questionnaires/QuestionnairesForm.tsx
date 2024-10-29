@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import {theme} from "@config/theme";
 
 interface QuestionnairesFormProps {
-    newSubject: {
+    newItem: {
     title: string;
     description: string;
     weight: number;
