@@ -52,13 +52,11 @@ const SubjectForm = ({
         type="number"
         name="value"
         value={newSubject.value}
-        inputProps={{
-            "data-testid": "subject-value",
-        }}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
         inputProps={{
+          "data-testid": "subject-value",
           style: { textAlign: "center", width: "40px" },
         }}
         sx={{
