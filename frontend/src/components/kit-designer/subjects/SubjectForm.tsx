@@ -52,6 +52,9 @@ const SubjectForm = ({
         type="number"
         name="value"
         value={newSubject.value}
+        inputProps={{
+            "data-testid": "subject-value",
+        }}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
@@ -73,6 +76,9 @@ const SubjectForm = ({
         required
         label={<Trans i18nKey="title" />}
         name="title"
+        inputProps={{
+            "data-testid": "subject-title",
+        }}
         value={newSubject.title}
         onChange={handleInputChange}
         fullWidth
@@ -95,6 +101,9 @@ const SubjectForm = ({
       <TextField
         label={<Trans i18nKey="description" />}
         name="description"
+        inputProps={{
+            "data-testid": "subject-description",
+        }}
         required
         value={newSubject.description}
         onChange={handleInputChange}
@@ -133,10 +142,10 @@ const SubjectForm = ({
         }}
       >
         {" "}
-        <IconButton size="small" color="primary" onClick={handleSave}>
+        <IconButton size="small" color="primary" data-testid="subject-check-icon" onClick={handleSave}>
           <CheckIcon />
         </IconButton>
-        <IconButton size="small" color="secondary" onClick={handleCancel}>
+        <IconButton size="small" color="secondary" data-testid="subject-close-icon" onClick={handleCancel}>
           <CloseIcon />
         </IconButton>
       </Link>
