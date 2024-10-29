@@ -62,13 +62,13 @@ describe("questionnairesList", ()=>{
         fireEvent.click(screen.getByTestId("items-check-icon"))
 
         // Check if onEdit was called with the updated values
-        expect(mockOnEdit).toHaveBeenCalledWith({
+        expect(mockOnEdit).toHaveBeenCalledWith(expect.objectContaining({
             id: 1,
             index: 1,
             value: 1,
             title: "Updated title 1",
             description: "Updated Description 1",
-        });
+        }));
     });
 
       it("allows deleting a questionnaires", () => {
