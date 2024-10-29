@@ -5,12 +5,13 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "i18next";
 import userEvent from "@testing-library/user-event";
 
-describe("QuestionnairesForm", ()=> {
+describe("SubjectForm", ()=> {
   const newItem = {
     title: "title test",
     description: "description test",
     index: 1,
     value: 2,
+    weight: 3,
   };
 
    const handleInputChange = vi.fn();
@@ -21,7 +22,7 @@ describe("QuestionnairesForm", ()=> {
      render(
          <I18nextProvider i18n={i18n}>
            <SubjectForm
-               newItem={newItem}
+               newSubject={newItem}
                handleInputChange={handleInputChange}
                handleSave={handleSave}
                handleCancel={handleCancel}
