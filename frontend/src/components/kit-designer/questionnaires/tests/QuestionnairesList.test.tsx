@@ -1,16 +1,15 @@
 import { render, fireEvent, screen } from "@testing-library/react";
-import { KitDesignListItems, TId} from "@/types";
 import { vi } from "vitest";
 import ListOfItems from "@components/kit-designer/commen/itemsList";
 
-const mockQuestionnaires : KitDesignListItems[] = [
+const mockQuestionnaires = [
     {
-    id: 1,
-    title: "title test 1",
-    value: 1,
-    index: 1,
-    description: "description test 1",
-    questionsCount: 0
+        id: 1,
+        title: "title test 1",
+        value: 1,
+        index: 1,
+        description: "description test 1",
+        questionsCount: 0
     },
     {
         id: 2,

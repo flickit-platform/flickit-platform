@@ -23,7 +23,12 @@ interface ListOfItemsProps {
   deleteBtn: boolean
   name: string
 }
-
+interface ITempValues {
+  title: string,
+  description: string,
+  weight: number | undefined,
+  question: number | undefined,
+}
 const ListOfItems = ({
   items,
   onEdit,
@@ -34,7 +39,7 @@ const ListOfItems = ({
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
-  const [tempValues, setTempValues] = useState({ title: "", description: "", weight: 0,question: 0 });
+  const [tempValues, setTempValues] = useState<ITempValues>({ title: "", description: "", weight: 0,question: 0 });
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
