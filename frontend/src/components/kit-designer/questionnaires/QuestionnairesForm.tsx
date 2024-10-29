@@ -13,7 +13,6 @@ interface QuestionnairesFormProps {
     newItem: {
     title: string;
     description: string;
-    weight: number;
     index: number;
     value: number;
   };
@@ -56,6 +55,7 @@ const QuestionnairesForm = ({
         variant="outlined"
         size="small"
         inputProps={{
+          "data-testid": "questionnaires-value",
           style: { textAlign: "center", width: "40px" },
         }}
         sx={{
@@ -76,6 +76,9 @@ const QuestionnairesForm = ({
         value={newItem.title}
         onChange={handleInputChange}
         fullWidth
+        inputProps={{
+            "data-testid": "questionnaires-title",
+        }}
         margin="normal"
         sx={{
           mt: 0,
@@ -98,6 +101,9 @@ const QuestionnairesForm = ({
         required
         value={newItem.description}
         onChange={handleInputChange}
+        inputProps={{
+            "data-testid": "questionnaires-description",
+        }}
         fullWidth
         margin="normal"
         multiline
@@ -133,60 +139,13 @@ const QuestionnairesForm = ({
         }}
       >
         {" "}
-        <IconButton size="small" color="primary" onClick={handleSave}>
+        <IconButton size="small" color="primary" data-testid="questionnaires-check-icon" onClick={handleSave}>
           <CheckIcon />
         </IconButton>
-        <IconButton size="small" color="secondary" onClick={handleCancel}>
+        <IconButton size="small" color="secondary" data-testid="questionnaires-check-icon" onClick={handleCancel}>
           <CloseIcon />
         </IconButton>
       </Link>
-      {/*  <Box sx={{*/}
-      {/*      width:"fit-content",*/}
-      {/*      display:"flex",*/}
-      {/*      justifyContent:"center",*/}
-      {/*      alignItems:"flex-end",*/}
-      {/*      flexDirection:"column",*/}
-      {/*      gap:"0.5rem",*/}
-      {/*      textAlign:"center"*/}
-      {/*  }}>*/}
-
-      {/*  <Typography sx={{*/}
-      {/*      ...theme.typography.labelCondensed,*/}
-      {/*      color:"#6C8093",*/}
-      {/*      width:"100%"*/}
-      {/*  }}>*/}
-      {/*      <Trans i18nKey={"weight"} />*/}
-      {/*  </Typography>*/}
-      {/*  <TextField*/}
-      {/*      required*/}
-      {/*      value={newItem.weight}*/}
-      {/*      onChange={handleInputChange}*/}
-      {/*      name="weight"*/}
-      {/*      variant="outlined"*/}
-      {/*      fullWidth*/}
-      {/*      size="small"*/}
-      {/*      // label={<Trans i18nKey="weight" />}*/}
-      {/*      margin="normal"*/}
-      {/*      type="number"*/}
-      {/*      inputProps={{*/}
-      {/*          style: { textAlign: "center", width: "40px" },*/}
-      {/*      }}*/}
-      {/*      sx={{*/}
-      {/*          mb: 1,*/}
-      {/*          mt: 1,*/}
-      {/*          fontSize: 14,*/}
-      {/*          "& .MuiInputBase-root": {*/}
-      {/*              fontSize: 14,*/}
-      {/*              overflow: "auto",*/}
-      {/*          },*/}
-      {/*          "& .MuiFormLabel-root": {*/}
-      {/*              fontSize: 14,*/}
-      {/*          },*/}
-      {/*          background:"#fff",*/}
-      {/*          borderRadius:"8px",*/}
-      {/*      }}*/}
-      {/*  />*/}
-      {/*</Box>*/}
     </Box>
   </Box>
 );

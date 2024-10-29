@@ -129,6 +129,9 @@ const ListOfItems = ({
                             required
                             value={tempValues.title}
                             onChange={ (e) => handelChange(e) }
+                            inputProps={{
+                              "data-testid": "items-title",
+                            }}
                             variant="outlined"
                             fullWidth
                             size="small"
@@ -166,6 +169,7 @@ const ListOfItems = ({
                               onClick={() => handleSaveClick(item)}
                               sx={{ mx: 1 }}
                               color="success"
+                              data-testid="items-check-icon"
                             >
                               <CheckRoundedIcon fontSize="small" />
                             </IconButton>
@@ -185,6 +189,7 @@ const ListOfItems = ({
                               onClick={() => handleEditClick(item)}
                               sx={{ mx: 1 }}
                               color="success"
+                              data-testid="items-edit-icon"
                             >
                               <EditRoundedIcon fontSize="small" />
                             </IconButton>
@@ -193,6 +198,7 @@ const ListOfItems = ({
                                 onClick={() => onDelete(item.id)}
                                 sx={{ mx: 1 }}
                                 color="secondary"
+                                data-testid="items-delete-icon"
                             >
                               <DeleteRoundedIcon fontSize="small" />
                             </IconButton>
@@ -207,6 +213,9 @@ const ListOfItems = ({
                           value={tempValues.description}
                           onChange={(e) => handelChange(e)}
                           name="description"
+                          inputProps={{
+                            "data-testid": "items-description",
+                          }}
                           variant="outlined"
                           fullWidth
                           size="small"
