@@ -135,6 +135,9 @@ const MaturityLevelList = ({
                               },
                             }}
                             name="title"
+                            inputProps={{
+                              "data-testid": "maturity-level-title",
+                            }}
                             label={<Trans i18nKey="title" />}
                           />
                         ) : (
@@ -151,6 +154,7 @@ const MaturityLevelList = ({
                               onClick={() => handleSaveClick(item)}
                               sx={{ ml: 1 }}
                               color="success"
+                              data-testid="maturity-level-check-icon"
                             >
                               <CheckRoundedIcon fontSize="small" />
                             </IconButton>
@@ -170,6 +174,7 @@ const MaturityLevelList = ({
                               onClick={() => handleEditClick(item)}
                               sx={{ ml: 1 }}
                               color="success"
+                              data-testid="maturity-level-edit-icon"
                             >
                               <EditRoundedIcon fontSize="small" />
                             </IconButton>
@@ -178,6 +183,7 @@ const MaturityLevelList = ({
                               onClick={() => onDelete(item.id)}
                               sx={{ ml: 1 }}
                               color="secondary"
+                              data-testid="maturity-level-delete-icon"
                             >
                               <DeleteRoundedIcon fontSize="small" />
                             </IconButton>
@@ -195,6 +201,9 @@ const MaturityLevelList = ({
                               description: e.target.value,
                             })
                           }
+                          inputProps={{
+                            "data-testid": "maturity-level-description",
+                          }}
                           name="description"
                           variant="outlined"
                           fullWidth

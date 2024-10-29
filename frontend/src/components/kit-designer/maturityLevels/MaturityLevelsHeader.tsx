@@ -43,7 +43,7 @@ const MaturityLevelsHeader = ({
             alignItems: "center",
           }}
         >
-          <Button variant="contained" onClick={onNewMaturityLevelClick}>
+          <Button variant="contained" onClick={onNewMaturityLevelClick} data-test-id="newMaturity">
             <Trans i18nKey="newMaturityLevel" />
           </Button>
         </Link>
