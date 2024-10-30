@@ -11,8 +11,8 @@ interface EmptyStateProps {
   btnTitle: string;
   title: string;
   SubTitle: string;
-  disabled: boolean;
-  disableTextBox: ReactElement<any, any>;
+  disabled?: boolean;
+  disableTextBox?: ReactElement<any, any>;
 }
 
 const EmptyState = ({
