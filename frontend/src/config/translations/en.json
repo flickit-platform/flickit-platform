@@ -684,5 +684,10 @@
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
   "subjectEmptyStateDetailed": "No subjects in the kit so far? Create your first subject just by one click!",
   "AttributeEmptyStateDetailed": "Don’t worry! we made it easy for you! just click the button below and create your first attribute",
-  "disableAttributeMessage":"You can't add new attribute till you have at least one new subject."
+  "disableAttributeMessage":"You can't add new attribute till you have at least one new subject.",
+  "questionnairesKitDesignerDescription": "Questionnaires provide a structure for organizing and categorizing various questions. By dividing an assessment into different questionnaires, evaluators who intend to use your kit can navigate and utilize your assessment more easily. Questions can be categorized in various ways, but the most common method is by topic. In this way, questions that are most similar in terms of the topic are grouped into one questionnaire. It is recommended that each questionnaire contains a maximum of 15 questions and a minimum of 3 questions.",
+  "questionnairesList": "questionnaires",
+  "newQuestionnaire": "New Questionnaire",
+  "questionnairesListEmptyState": "Oops! No Questionnaire so far",
+  "questionnairesEmptyStateDetailed": "Questionnaires are necessary to create questions! Create your first questionnaires here"
 }

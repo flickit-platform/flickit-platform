@@ -682,6 +682,54 @@ export const createService = (
         config,
       );
     },
+     fetchQuestionnairesKit(
+          { kitVersionId }: { kitVersionId: TId },
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.get(
+              `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
+              config,
+          );
+      },
+      changeQuestionnairesOrder(
+          { kitVersionId }: { kitVersionId: TId },
+          data: any,
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.put(
+              `/api/v1/kit-versions/${kitVersionId}/questionnaires-change-order/`,
+              data,
+              config,
+          );
+      },
+      deleteQuestionnairesKit(
+          { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
+          config?: AxiosRequestConfig<any>
+      ) {
+          return axios.delete(
+              `/api/v1/kit-versions/${kitVersionId}/questionnaires/${subjectId}/`,
+              config,
+          );
+      },
+      postQuestionnairesKit(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
+              data,
+              config,
+          );
+      },
+      updateKitQuestionnaires(
+          { kitVersionId, questionnaireId, data }: { kitVersionId: TId, questionnaireId : TId, data: any, },
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.put(`api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
+              data,
+              config,
+          )
+      },
     createAdvice(
       {
         assessmentId,
