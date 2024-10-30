@@ -2,9 +2,8 @@ import requests
 from rest_framework import status
 
 from account.services import space_services
+from assessment.services.assessment_services import get_questionnaires_with_assessment_id
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
-from baseinfo.models.basemodels import Questionnaire
-from baseinfo.services import assessmentkitservice
 
 
 def get_subject_progress(request, assessment_id, subject_id):
@@ -14,44 +13,59 @@ def get_subject_progress(request, assessment_id, subject_id):
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
 
 
-def get_path_info_with_assessment_id(request, assessments_details):
-    result = dict()
-    questionnaire = None
-    kit = assessmentkitservice.load_assessment_kit(assessments_details["kit"]["id"])
-    if "questionnaire_id" in request.query_params:
-        if Questionnaire.objects.filter(id=request.query_params["questionnaire_id"]).filter(
-                kit_version=kit.kit_version_id).exists():
-            questionnaire_object = Questionnaire.objects.get(id=request.query_params["questionnaire_id"])
-            questionnaire = {"id": questionnaire_object.id,
-                             "title": questionnaire_object.title
-                             }
-        else:
-            result["Success"] = False
-            result["body"] = {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"}
-            result["status_code"] = status.HTTP_400_BAD_REQUEST
-            return result
+def get_title_by_id(data, target_id):
+    for item in data:
+        if item.get("id") == target_id:
+            return item.get("title")
+    return None
 
-    assessment = {"id": assessments_details["id"],
-                  "title": assessments_details["title"]
-                  }
-    result_space = space_services.get_space(request, assessments_details["space"]["id"])
-    if result_space["status_code"] != status.HTTP_200_OK:
+
+def get_questionnaires(request, assessment_id, questionnaire_id):
+    result = get_questionnaires_with_assessment_id(request, assessment_id)
+    if result.get("status_code") == 200:
+        questionnaires_list = result.get("body", {}).get("items", [])
+        return get_title_by_id(questionnaires_list, questionnaire_id)
+    return None
+
+
+def get_path_info_with_assessment_id(request, assessments_details):
+    result = {"status_code": status.HTTP_200_OK}
+    questionnaire = None
+
+    if "questionnaire_id" in request.query_params:
+        questionnaire_id = int(request.query_params["questionnaire_id"])
+        questionnaire_title = get_questionnaires(request, assessments_details["id"], questionnaire_id)
+        if questionnaire_title is not None:
+            questionnaire = {"id": questionnaire_id, "title": questionnaire_title}
+        else:
+            return {
+                "Success": False,
+                "body": {"code": "NOT_FOUND", "message": "'questionnaire_id' does not exist"},
+                "status_code": status.HTTP_400_BAD_REQUEST
+            }
+
+    assessment = {
+        "id": assessments_details.get("id"),
+        "title": assessments_details.get("title")
+    }
+
+    result_space = space_services.get_space(request, assessments_details["space"].get("id"))
+    if result_space.get("status_code") != status.HTTP_200_OK:
         return result_space
 
-    space = {"id": result_space["body"]["id"],
-             "title": result_space["body"]["title"]
-             }
+    space = {
+        "id": result_space["body"].get("id"),
+        "title": result_space["body"].get("title")
+    }
 
-    if questionnaire is None:
-        result["body"] = {"assessment": assessment,
-                          "space": space,
-                          }
-    else:
-        result["body"] = {"assessment": assessment,
-                          "space": space,
-                          "questionnaire": questionnaire
-                          }
-    result["status_code"] = status.HTTP_200_OK
+    result["body"] = {
+        "assessment": assessment,
+        "space": space
+    }
+
+    if questionnaire:
+        result["body"]["questionnaire"] = questionnaire
+
     return result
 
 
