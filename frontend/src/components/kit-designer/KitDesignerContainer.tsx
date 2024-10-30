@@ -13,12 +13,8 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@/utils/useQuery";
 import { IKitVersion } from "@/types";
-<<<<<<< HEAD
-import AttributesContent from "./attributes/AttributeContent";
-import QuestionnairesContent from "./questionnaires/QuestionnairesContent";
-=======
 import QuestionnairesContent from "@components/kit-designer/questionnaires/QuestionnairesContent";
->>>>>>> main
+import AttributesContent from "./attributes/AttributeContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
