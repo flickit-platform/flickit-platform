@@ -2,7 +2,6 @@ import requests
 from rest_framework import status
 
 from account.services import space_services
-from assessment.services.assessment_services import get_questionnaires_with_assessment_id
 from assessmentplatform.settings import ASSESSMENT_URL, ASSESSMENT_SERVER_PORT
 
 
@@ -21,10 +20,30 @@ def get_title_by_id(data, target_id):
 
 
 def get_questionnaires(request, assessment_id, questionnaire_id):
-    result = get_questionnaires_with_assessment_id(request, assessment_id)
-    if result.get("status_code") == 200:
-        questionnaires_list = result.get("body", {}).get("items", [])
-        return get_title_by_id(questionnaires_list, questionnaire_id)
+    page = 0
+    while True:
+        query_params = {"page": page}
+        headers = {'Authorization': request.headers.get('Authorization')}
+        result = requests.get(
+            ASSESSMENT_URL + f'assessment-core/api/assessments/{assessment_id}/questionnaires',
+            params=query_params,
+            headers=headers
+        )
+
+        if result.status_code != 200:
+            return None
+
+        response_body = result.json()
+        questionnaires_list = response_body.get("items", [])
+        title = get_title_by_id(questionnaires_list, questionnaire_id)
+        if title:
+            return title
+
+        if len(questionnaires_list) < response_body.get("size", 0):
+            break
+
+        page += 1
+
     return None
 
 
