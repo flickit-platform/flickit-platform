@@ -29,29 +29,26 @@ const AttributesContent = () => {
 
   const fetchSubjectKit = useQuery({
     service: (args = { kitVersionId }, config) =>
-      service.fetchSubjectKit(args, config)
+      service.fetchSubjectKit(args, config),
   });
 
   const fetchAttributeKit = useQuery({
     service: (args = { kitVersionId }, config) =>
-      service.fetchAttributeKit(args, config)
+      service.fetchAttributeKit(args, config),
   });
 
   const postAttributeKit = useQuery({
-    service: (args, config) =>
-      service.postAttributeKit(args, config),
+    service: (args, config) => service.postAttributeKit(args, config),
     runOnMount: false,
   });
 
   const deleteAttributeKit = useQuery({
-    service: (args, config) =>
-      service.deleteAttributeKit(args, config),
+    service: (args, config) => service.deleteAttributeKit(args, config),
     runOnMount: false,
   });
 
   const updateKitAttribute = useQuery({
-    service: (args, config) =>
-      service.updateKitAttribute(args, config),
+    service: (args, config) => service.updateKitAttribute(args, config),
     runOnMount: false,
   });
 
@@ -111,7 +108,7 @@ const AttributesContent = () => {
         title: newAttribute.title,
         weight: newAttribute.weight,
         description: newAttribute.description,
-        subjectId: subjectId
+        subjectId: subjectId,
       };
       if (newAttribute?.id) {
         await service.updateKitAttribute({
@@ -122,6 +119,7 @@ const AttributesContent = () => {
       } else {
         await postAttributeKit.query({ kitVersionId, data });
       }
+      setShowNewAttributeForm(false);
 
       await fetchAttributeKit.query();
 
@@ -169,6 +167,7 @@ const AttributesContent = () => {
         title: AttributeItem.title,
         weight: AttributeItem.weight,
         description: AttributeItem.description,
+        subjectId: AttributeItem.subject.id,
       };
       await updateKitAttribute.query({
         kitVersionId,
@@ -204,23 +203,29 @@ const AttributesContent = () => {
     }
   };
 
-  const debouncedHandleReorder = debounce(async (newOrder: any[]) => {
-    try {
-      const orders = newOrder.map((item, idx) => ({
-        id: item?.id,
-        index: idx + 1,
-      }));
+  const debouncedHandleReorder = debounce(
+    async (newOrder: any[], destinationSubjectId: any) => {
+      try {
+        const orders = newOrder.map((item, idx) => ({
+          id: item?.id,
+          index: idx + 1,
+        }));
 
-      await service.changeAttributeOrder({ kitVersionId }, { orders });
-      handleCancel();
-    } catch (e) {
-      const err = e as ICustomError;
-      toastError(err);
-    }
-  }, 2000);
+        await service.changeAttributeOrder(
+          { kitVersionId },
+          { orders, subjectId: destinationSubjectId },
+        );
+        handleCancel();
+      } catch (e) {
+        const err = e as ICustomError;
+        toastError(err);
+      }
+    },
+    2000,
+  );
 
-  const handleReorder = (newOrder: any[]) => {
-    debouncedHandleReorder(newOrder);
+  const handleReorder = (newOrder: any[], destinationSubjectId: any) => {
+    debouncedHandleReorder(newOrder, destinationSubjectId);
   };
 
   return (
@@ -228,12 +233,17 @@ const AttributesContent = () => {
       <Box width="100%">
         <KitDHeader
           onAddNewRow={handleAddNewRow}
-          hasBtn={fetchAttributeKit.loaded && fetchAttributeKit.data.items.length !== 0}
+          hasBtn={
+            fetchAttributeKit.loaded &&
+            fetchAttributeKit.data.items.length !== 0
+          }
           mainTitle={"attributes"}
           description={"attributesKitDesignerDescription"}
           subTitle={"attributesList"}
+          btnTitle={"newAttribute"}
         />
-        {fetchAttributeKit.loaded && fetchAttributeKit.data.items.length !== 0 ? (
+        {fetchAttributeKit.loaded &&
+        fetchAttributeKit.data.items.length !== 0 ? (
           <Typography variant="bodyMedium" mt={1}>
             <Trans i18nKey="changeOrderHelper" />
           </Typography>
@@ -246,7 +256,7 @@ const AttributesContent = () => {
           render={([AttributeData]) => (
             <>
               {AttributeData?.items?.length > 0 || showNewAttributeForm ? (
-                <Box maxHeight={500} overflow="auto">
+                <Box>
                   <SubjectTable
                     subjects={subjects}
                     initialAttributes={AttributeData?.items}
@@ -257,17 +267,22 @@ const AttributesContent = () => {
                     handleSave={handleSave}
                     newAttribute={newAttribute}
                     setNewAttribute={setNewAttribute}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
                   />
                 </Box>
-              ) : !showNewAttributeForm && (
-                <EmptyState
-                  btnTitle={"newAttribute"}
-                  title={"attributesListEmptyState"}
-                  SubTitle={"AttributeEmptyStateDetailed"}
-                  onAddNewRow={handleAddNewRow}
-                />
+              ) : (
+                !showNewAttributeForm && (
+                  <EmptyState
+                    btnTitle={"newAttribute"}
+                    title={"attributesListEmptyState"}
+                    SubTitle={"AttributeEmptyStateDetailed"}
+                    onAddNewRow={handleAddNewRow}
+                    disabled={subjects.length === 0}
+                    disableTextBox={<Trans i18nKey={"disableAttributeMessage"}/>}
+                  />
+                )
               )}
-
             </>
           )}
         />

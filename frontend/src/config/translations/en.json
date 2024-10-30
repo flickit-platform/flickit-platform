@@ -78,6 +78,7 @@
   "subjectsListEmptyState": "Oops! No Subject is Created.",
   "subjectListEmptyStateDatailed": "No subjects in this kit so far? Create your first subject just by one click!",
   "subjectsKitDesignerDescription":"Subjects are the most critical components of an evaluation. The maturity level of an evaluation is determined based on the maturity levels of the subjects and by calculating their weighted average. Each subject consists of several attributes, and its score is derived from the weighted average of these attributes.<br/>In this section, you can define the subjects relevant to your evaluation, add the necessary descriptions for them, and finally, determine the weight of each subject in the final calculation of the evaluation's maturity level.",
+  "attributesKitDesignerDescription":"Attributes are the most critical components of an evaluation. The maturity level of an evaluation is determined based on the maturity levels of the subjects and by calculating their weighted average. Each subject consists of several attributes, and its score is derived from the weighted average of these attributes.<br/>In this section, you can define the subjects relevant to your evaluation, add the necessary descriptions for them, and finally, determine the weight of each subject in the final calculation of the evaluation's maturity level.",
   "questionnairesAndImpacts": "Questionaires And Impacts",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",
@@ -682,5 +683,6 @@
   "youSelected": "You've selected",
   "youveGotSyntaxErrorsInYourDslFile": "You've got syntax errors in your dsl file",
   "subjectEmptyStateDetailed": "No subjects in the kit so far? Create your first subject just by one click!",
-  "AttributeEmptyStateDetailed": "Don’t worry! we made it easy for you! just click the button below and create your first attribute"
+  "AttributeEmptyStateDetailed": "Don’t worry! we made it easy for you! just click the button below and create your first attribute",
+  "disableAttributeMessage":"You can't add new attribute till you have at least one new subject."
 }

@@ -20,7 +20,7 @@ const AttributeForm = ({
   handleSave,
   handleCancel,
 }: AttributeFormProps) => (
-  <TableRow id="new-maturity">
+  <TableRow id="new-maturity" sx={{ background: "#F9F9F9" }}>
     <TableCell>
       <Box
         sx={{
@@ -108,7 +108,7 @@ const AttributeForm = ({
         }}
       />
     </TableCell>
-    <TableCell sx={{ display: "flex", mt:'16px' }}>
+    <TableCell sx={{ display: "flex", mt: "16px" }}>
       <Link
         href="#maturity-header"
         sx={{
