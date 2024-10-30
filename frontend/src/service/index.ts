@@ -662,7 +662,7 @@ export const createService = (
       { kitVersionId, attributeId, data }: { kitVersionId: TId, attributeId: TId, data: any, },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(`api/v1/kit-versions/${kitVersionId}/attributes/${attributeId}/`,
+      return axios.put(`/api/v1/kit-versions/${kitVersionId}/attributes/${attributeId}/`,
         data,
         config,
       )
