@@ -6,15 +6,15 @@ import PermissionControl from "../../common/PermissionControl";
 import QueryBatchData from "../../common/QueryBatchData";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
-import ListOfItems from "../commen/itemsList";
-import EmptyState from "../commen/EmptyState";
+import ListOfItems from "../common/itemsList";
+import EmptyState from "../common/EmptyState";
 import { Trans } from "react-i18next";
 import { useParams } from "react-router-dom";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
-import KitDHeader from "@components/kit-designer/commen/KitHeader";
+import KitDHeader from "@components/kit-designer/common/KitHeader";
 import QuestionnairesForm from "./QuestionnairesForm";
 
 const QuestionnairesContent = () => {
