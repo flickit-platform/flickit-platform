@@ -15,6 +15,7 @@ import { useQuery } from "@/utils/useQuery";
 import { IKitVersion } from "@/types";
 <<<<<<< HEAD
 import AttributesContent from "./attributes/AttributeContent";
+import QuestionnairesContent from "./questionnaires/QuestionnairesContent";
 =======
 import QuestionnairesContent from "@components/kit-designer/questionnaires/QuestionnairesContent";
 >>>>>>> main
@@ -163,21 +164,8 @@ const KitDesignerContainer = () => {
           >
             {selectedTab === 0 && <MaturityLevelsContent />}
             {selectedTab === 1 && <SubjectsContent/>}
-<<<<<<< HEAD
             {selectedTab === 2 && <AttributesContent />}
-            {selectedTab === 3 && (
-              <Typography>
-                <Trans i18nKey="questionnairesContent" />
-              </Typography>
-            )}{" "}
-=======
-            {selectedTab === 2 && (
-              <Typography>
-                <Trans i18nKey="attributesContent" />
-              </Typography>
-            )}
             {selectedTab === 3 && <QuestionnairesContent />}
->>>>>>> main
             {selectedTab === 4 && (
               <Typography>
                 <Trans i18nKey="attributes" />
