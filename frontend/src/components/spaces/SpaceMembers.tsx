@@ -112,7 +112,7 @@ export const SpaceMembers = (props: any) => {
                 user_id_ref.current.value = "";
               } catch (e) {
                 const err = e as ICustomError;
-                if (err.response?.data.code === "user-is-member") {
+                if (err.response?.data.code !== "NOT_FOUND") {
                   toastError(err);
                 } else {
                   dialogProps.openDialog({
