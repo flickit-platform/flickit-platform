@@ -429,6 +429,7 @@
   "oneFileOnly": "You can only upload one file at a time.",
   "options": "Options",
   "optionValue": "Option {{index}}",
+  "order": "Order",
   "Outdated": "outdated",
   "overalConfidence": "Overal confidence",
   "overallInsight": "{{title}} Overall Insights",
