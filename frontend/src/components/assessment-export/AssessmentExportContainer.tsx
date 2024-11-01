@@ -170,6 +170,9 @@ const AssessmentExportContainer = () => {
         .query()
         .then(() => AssessmentReport.query());
     }
+    if (AssessmentReport?.errorObject?.response?.data?.code === "DEPRECATED") {
+      AssessmentReport.query();
+    }
   }, [AssessmentReport?.errorObject]);
 
   const createAttributesDataPromises = (ignoreIds: any[]) =>
