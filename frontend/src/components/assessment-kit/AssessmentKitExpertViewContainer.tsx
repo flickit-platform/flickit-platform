@@ -1705,7 +1705,7 @@ const MaturityLevelsDetails = (props: any) => {
                         fontSize=".75rem"
                         color="#fff"
                       >
-                        {title}:{value}%{competences.length - 1 !== key && ", "}
+                        {title}:  {value}%  {competences.length - 1 !== key && ",   "}
                       </Typography>
                     );
                   })}
