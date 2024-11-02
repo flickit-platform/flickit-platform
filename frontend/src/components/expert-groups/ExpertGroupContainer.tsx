@@ -59,6 +59,7 @@ import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -77,6 +78,10 @@ const ExpertGroupContainer = () => {
     service: (args = { id: expertGroupId, status: "PENDING" }, config) =>
       service.fetchExpertGroupMembers(args, config),
   });
+  const removeExpertGroupMembers = useQuery({
+    service: (args, config) =>
+      service.removeExpertGroupMembers(args, config),
+  });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
   const createAssessmentKitDialogProps = useDialog({
@@ -89,6 +94,10 @@ const ExpertGroupContainer = () => {
 
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
+  const handelRemoveMember = async (userId: any) =>{
+     await removeExpertGroupMembers.query({id: expertGroupId, userId: userId})
+     await expertGroupMembersQueryData.query()
+  }
   return (
     <QueryData
       {...queryData}
@@ -177,6 +186,7 @@ const ExpertGroupContainer = () => {
                     inviteeQueryData={expertGroupMembersInviteeQueryData}
                     hasAccess={editable}
                     setNumberOfMembers={setNumberOfMembers}
+                    handelRemoveMember={handelRemoveMember}
                   />
                 </Box>
               </Grid>
@@ -1119,7 +1129,7 @@ const AssessmentKitsList = (props: any) => {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
+  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers, handelRemoveMember } = props;
 
   return (
     <>
@@ -1189,8 +1199,16 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 backgroundRepeat: "no-repeat",
                                 py: 1,
                                 px: 1.8,
+                                height:"220px",
+                                position: "relative"
                               }}
                             >
+                                <Tooltip title={<Trans i18nKey={"remove"} />}>
+                                    <IconButton onClick={()=>handelRemoveMember(id)}
+                                                sx={{position: "absolute", right: 0, top: 0}} size="small" color="secondary" >
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Tooltip>
                               <Box
                                 sx={{
                                   mt: "28px",

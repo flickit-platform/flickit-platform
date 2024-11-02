@@ -1492,6 +1492,15 @@ export const createService = (
         },
       });
     },
+      removeExpertGroupMembers(
+      args: { id: TId; userId: TId },
+      config: AxiosRequestConfig<any> | undefined,
+    ) {
+      const { id,userId  } = args ?? {};
+          return axios.delete(`/api/v1/expert-groups/${id}/members/${userId}`, {
+        ...(config ?? {})
+      });
+    },
     confirmExpertGroupInvitation(
       args: { token: TId; expert_group_id: TId },
       config: AxiosRequestConfig<any> | undefined,
