@@ -128,7 +128,7 @@ const AdviceDialog = ({
               onClick={createAdvice}
               loading={loading}
             >
-              <Trans i18nKey="setTheseParameters" />
+              <Trans i18nKey="next" />
             </LoadingButton>
           </Box>
         </Box>
