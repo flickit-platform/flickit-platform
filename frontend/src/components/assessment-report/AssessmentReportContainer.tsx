@@ -89,9 +89,9 @@ const AssessmentReportContainer = (props: any) => {
     ) {
       calculateConfidenceLevel();
     }
-    if (queryData?.errorObject?.response?.data?.code === "DEPRECATED") {
-      queryData.query();
-    }
+    // if (queryData?.errorObject?.response?.data?.code === "DEPRECATED") {
+    //   queryData.query();
+    // }
   }, [queryData.errorObject]);
   const { spaceId } = useParams();
   const fetchAssessmentsRoles = useQuery<RolesType>({
