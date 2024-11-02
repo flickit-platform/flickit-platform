@@ -55,6 +55,35 @@ const QuestionnairesContent = () => {
     weight: 1
   });
 
+  const ItemDB = {
+      "questions": [
+        {
+          "id": 89306,
+          "title": "q1_title",
+          "index": 1,
+          "hint": "myHint",
+          "mayNotBeApplicable": true,
+          "advisable": true
+        },
+        {
+          "id": 89307,
+          "title": "q2_title",
+          "index": 2,
+          "hint": "myHint",
+          "mayNotBeApplicable": true,
+          "advisable": true
+        },
+        {
+          "id": 89308,
+          "title": "q3_title",
+          "index": 3,
+          "hint": "myHint",
+          "mayNotBeApplicable": true,
+          "advisable": true
+        }
+      ]
+    }
+
   useEffect(() => {
     if (fetchQuestionnairesKit.data?.items?.length) {
       setNewQuestionnaires((prev) => ({
@@ -225,6 +254,7 @@ const QuestionnairesContent = () => {
                         onDelete={handleDelete}
                         deleteBtn={false}
                         onReorder={handleReorder}
+                        questions={ItemDB.questions}
                         name={"questionnaires"}
                       />
                     </Box>

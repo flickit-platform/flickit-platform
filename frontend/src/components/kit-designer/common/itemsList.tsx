@@ -14,6 +14,11 @@ import { KitDesignListItems } from "@types";
 import { Trans } from "react-i18next";
 import {theme} from "@config/theme";
 import languageDetector from "@utils/languageDetector";
+import QuestionContain from "@components/kit-designer/questionnaires/questions/questionContain";
+import QueryData from "@common/QueryData";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
@@ -22,6 +27,7 @@ interface ListOfItemsProps {
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean
   name: string
+  questions: []
 }
 interface ITempValues {
   title: string,
@@ -35,7 +41,8 @@ const ListOfItems = ({
   onDelete,
   onReorder,
   deleteBtn,
-  name
+  name,
+  questions
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
@@ -91,269 +98,302 @@ const ListOfItems = ({
                 index={index}
               >
                 {(provided: any) => (
-                  <Box
+                    <Box
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     mt={1.5}
-                    p={1.5}
                     sx={{
                       backgroundColor: editMode === item.id ? "#F3F5F6" : "#fff",
                       borderRadius: "8px",
                       border: "0.3px solid #73808c30",
                       display: "flex",
-                      alignItems: "flex-start",
-                      position: "relative",
+                      flexDirection:"column",
                     }}
                   >
-                    <Box
-                      sx={{ ...styles.centerVH, background: "#F3F5F6",width: {xs:"50px", md:"64px"},justifyContent:"space-around" }}
-                      borderRadius="0.5rem"
-                      mr={2}
-                      px={1.5}
+                      <Accordion>
+                    <AccordionSummary
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          '& .MuiAccordionSummary-content': { margin: 0 },
+                          '& .MuiAccordionSummary-content.Mui-expanded': {
+                            margin: 0,
+                          }
+                        }}
                     >
-                      <Typography variant="semiBoldLarge">
-                        {index + 1}
-                      </Typography>
-
-                      <IconButton disableRipple disableFocusRipple sx={{
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                          color: 'inherit',
-                        },
-                      }} size="small">
-                        <SwapVertRoundedIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-
-                    <Box sx={{ flexGrow: 1, display: "flex", flexDirection:"column", gap: "5px" }}>
-                      {/* Title and icons in the same row */}
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        {editMode === item.id ? (
-                          <TextField
-                            required
-                            value={tempValues.title}
-                            onChange={ (e) => handelChange(e) }
-                            inputProps={{
-                              "data-testid": "items-title",
-                            }}
-                            variant="outlined"
-                            fullWidth
-                            size="small"
-                            sx={{
-                              mb: 1,
-                              fontSize: 14,
-                              "& .MuiInputBase-root": {
-                                fontSize: 14,
-                                overflow: "auto",
-                              },
-                              "& .MuiFormLabel-root": {
-                                fontSize: 14,
-                              },
-                              width: {sx:"100%", md:"60%"},
-                              background:"#fff",
-                              borderRadius:"8px"
-                            }}
-                            name="title"
-                            label={<Trans i18nKey="title" />}
-                          />
-                        ) : (
-                          <Typography variant="h6" sx={{ flexGrow: 1,width:"80%" }}>
-                            {item.title}
-                          </Typography>
-                        )}
-
-                        {/* Icons (Edit/Delete or Check/Close) */}
-                        {editMode === item.id ? (
-                          <Box sx={{
-                            mr: theme.direction == "rtl" ? "auto" : "unset",
-                            ml: theme.direction == "ltr" ?  "auto" : "unset"
-                          }}>
-                            <IconButton
-                              size="small"
-                              onClick={() => handleSaveClick(item)}
-                              sx={{ mx: 1 }}
-                              color="success"
-                              data-testid="items-check-icon"
-                            >
-                              <CheckRoundedIcon fontSize="small" />
-                            </IconButton>
-                            <IconButton
-                              size="small"
-                              onClick={handleCancelClick}
-                              sx={{ mx: 1}}
-                              color="secondary"
-                            >
-                              <CloseRoundedIcon fontSize="small" />
-                            </IconButton>
-                          </Box>
-                        ) : (
-                          <>
-                            <IconButton
-                              size="small"
-                              onClick={() => handleEditClick(item)}
-                              sx={{ mx: 1 }}
-                              color="success"
-                              data-testid="items-edit-icon"
-                            >
-                              <EditRoundedIcon fontSize="small" />
-                            </IconButton>
-                            {deleteBtn && <IconButton
-                                size="small"
-                                onClick={() => onDelete(item.id)}
-                                sx={{ mx: 1 }}
-                                color="secondary"
-                                data-testid="items-delete-icon"
-                            >
-                              <DeleteRoundedIcon fontSize="small" />
-                            </IconButton>
-                            }
-                          </>
-                        )}
-                      </Box>
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent:"space-between" }}>
-                      {editMode === item.id ? (
-                        <TextField
-                          required
-                          value={tempValues.description}
-                          onChange={(e) => handelChange(e)}
-                          name="description"
-                          inputProps={{
-                            "data-testid": "items-description",
-                          }}
-                          variant="outlined"
-                          fullWidth
-                          size="small"
-                          label={<Trans i18nKey="description" />}
-                          margin="normal"
-                          multiline
-                          minRows={2}
-                          maxRows={3}
-                          sx={{
-                            mb: 1,
-                            mt: 1,
-                            fontSize: 14,
-                            "& .MuiInputBase-root": {
-                              fontSize: 14,
-                              overflow: "auto",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: 14,
-                            },
-                            background:"#fff",
-                            borderRadius:"8px",
-                            width: {xs:'100%', md: "85%"},
-                          }}
-                        />
-                      ) : (
-                        <Typography sx={{wordBreak:"break-word", textAlign:languageDetector(item.description) ? "right" : "left",width:"80%" }} variant="body2" mt={1}>
-                          {item.description}
+                    <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      position: "relative",
+                      pb:"1rem",
+                      width:"100%",
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                    }}
+                    pt={1.5}
+                    px={1.5}
+                    >
+                      <Box
+                          sx={{ ...styles.centerVH, background: "#F3F5F6",width: {xs:"50px", md:"64px"},justifyContent:"space-around" }}
+                          borderRadius="0.5rem"
+                          mr={2}
+                          px={1.5}
+                      >
+                        <Typography variant="semiBoldLarge">
+                          {index + 1}
                         </Typography>
-                      )}
-                        {name === "subject" &&
-                            <Box sx={{
-                              width:"fit-content",
-                              display:"flex",
-                              justifyContent:"center",
-                              alignItems:"flex-end",
-                              flexDirection:"column",
-                              gap:"0.5rem",
-                              textAlign:editMode ? "end" : "center"
-                            }}>
-                              <Typography sx={{
-                                ...theme.typography.labelCondensed,
-                                color:"#6C8093",
-                                width:"100%"
-                              }}>
-                                <Trans i18nKey={"weight"} />
-                              </Typography>
 
-                              {editMode === item.id ? (
-                                  <TextField
-                                      required
-                                      value={tempValues.weight}
-                                      onChange={(e) =>handelChange(e) }
-                                      name="weight"
-                                      variant="outlined"
-                                      fullWidth
-                                      size="small"
-                                      // label={<Trans i18nKey="weight" />}
-                                      margin="normal"
-                                      type="number"
-                                      inputProps={{
-                                        style: { textAlign: "center", width: "40px" },
-                                      }}
-                                      sx={{
-                                        mb: 1,
-                                        mt: 1,
-                                        fontSize: 14,
-                                        "& .MuiInputBase-root": {
-                                          fontSize: 14,
-                                          overflow: "auto",
-                                        },
-                                        "& .MuiFormLabel-root": {
-                                          fontSize: 14,
-                                        },
-                                        background:"#fff",
-                                        borderRadius:"8px",
-                                      }}
-                                  />
-                              ) : (
-                                  <Box
-                                      aria-label="weight"
-                                      style={{
-                                        width:"3.75rem",
-                                        height:"3.75rem",
-                                        borderRadius: '50%',  // برای دایره‌ای کردن دکمه
-                                        backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
-                                        color: '#2B333B',
-                                        display:"flex",
-                                        alignItems:" center",
-                                        justifyContent:"center"
-                                      }}
-                                  >
-                                    {item.weight}
-                                  </Box>
-                              )}
-                            </Box>
+                        <IconButton disableRipple disableFocusRipple sx={{
+                          '&:hover': {
+                            backgroundColor: 'transparent',
+                            color: 'inherit',
+                          },
+                        }} size="small">
+                          <SwapVertRoundedIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
 
-                        }
-                        {name == "questionnaires" &&
-                            <Box sx={{
-                              width:"fit-content",
-                              display:"flex",
-                              justifyContent:"center",
-                              alignItems:"flex-end",
-                              flexDirection:"column",
-                              gap:"0.5rem",
-                              textAlign:editMode ? "end" : "center"
-                            }}>
-                              <Typography sx={{
-                                ...theme.typography.labelCondensed,
-                                color:"#6C8093",
-                                width:"100%"
-                              }}>
-                                <Trans i18nKey={"questions"} />
+
+                      <Box sx={{ flexGrow: 1, display: "flex", flexDirection:"column", gap: "5px" }}>
+                        {/* Title and icons in the same row */}
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          {editMode === item.id ? (
+                              <TextField
+                                  required
+                                  value={tempValues.title}
+                                  onChange={ (e) => handelChange(e) }
+                                  inputProps={{
+                                    "data-testid": "items-title",
+                                  }}
+                                  variant="outlined"
+                                  fullWidth
+                                  size="small"
+                                  sx={{
+                                    mb: 1,
+                                    fontSize: 14,
+                                    "& .MuiInputBase-root": {
+                                      fontSize: 14,
+                                      overflow: "auto",
+                                    },
+                                    "& .MuiFormLabel-root": {
+                                      fontSize: 14,
+                                    },
+                                    width: {sx:"100%", md:"60%"},
+                                    background:"#fff",
+                                    borderRadius:"8px"
+                                  }}
+                                  name="title"
+                                  label={<Trans i18nKey="title" />}
+                              />
+                          ) : (
+                              <Typography variant="h6" sx={{ flexGrow: 1,width:"80%" }}>
+                                {item.title}
                               </Typography>
-                            <Box
-                                aria-label="questionnaires"
-                                style={{
-                                  width:"3.75rem",
-                                  height:"3.75rem",
-                                  borderRadius: '50%',  // برای دایره‌ای کردن دکمه
-                                  backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
-                                  color: '#2B333B',
-                                  display:"flex",
-                                  alignItems:" center",
-                                  justifyContent:"center"
-                                }}
-                            >
-                              {item.questionsCount}
-                             </Box>
-                          </Box>
-                        }
+                          )}
+                          {/* Icons (Edit/Delete or Check/Close) */}
+                          {editMode === item.id ? (
+                              <Box sx={{
+                                mr: theme.direction == "rtl" ? "auto" : "unset",
+                                ml: theme.direction == "ltr" ?  "auto" : "unset"
+                              }}>
+                                <IconButton
+                                    size="small"
+                                    onClick={() => handleSaveClick(item)}
+                                    sx={{ mx: 1 }}
+                                    color="success"
+                                    data-testid="items-check-icon"
+                                >
+                                  <CheckRoundedIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton
+                                    size="small"
+                                    onClick={handleCancelClick}
+                                    sx={{ mx: 1}}
+                                    color="secondary"
+                                >
+                                  <CloseRoundedIcon fontSize="small" />
+                                </IconButton>
+                              </Box>
+                          ) : (
+                              <>
+                                <IconButton
+                                    size="small"
+                                    onClick={() => handleEditClick(item)}
+                                    sx={{ mx: 1 }}
+                                    color="success"
+                                    data-testid="items-edit-icon"
+                                >
+                                  <EditRoundedIcon fontSize="small" />
+                                </IconButton>
+                                {deleteBtn && <IconButton
+                                    size="small"
+                                    onClick={() => onDelete(item.id)}
+                                    sx={{ mx: 1 }}
+                                    color="secondary"
+                                    data-testid="items-delete-icon"
+                                >
+                                  <DeleteRoundedIcon fontSize="small" />
+                                </IconButton>
+                                }
+                              </>
+                          )}
+                        </Box>
+                        <Box sx={{ display: "flex", alignItems: "center", justifyContent:"space-between" }}>
+                          {editMode === item.id ? (
+                              <TextField
+                                  required
+                                  value={tempValues.description}
+                                  onChange={(e) => handelChange(e)}
+                                  name="description"
+                                  inputProps={{
+                                    "data-testid": "items-description",
+                                  }}
+                                  variant="outlined"
+                                  fullWidth
+                                  size="small"
+                                  label={<Trans i18nKey="description" />}
+                                  margin="normal"
+                                  multiline
+                                  minRows={2}
+                                  maxRows={3}
+                                  sx={{
+                                    mb: 1,
+                                    mt: 1,
+                                    fontSize: 14,
+                                    "& .MuiInputBase-root": {
+                                      fontSize: 14,
+                                      overflow: "auto",
+                                    },
+                                    "& .MuiFormLabel-root": {
+                                      fontSize: 14,
+                                    },
+                                    background:"#fff",
+                                    borderRadius:"8px",
+                                    width: {xs:'100%', md: "85%"},
+                                  }}
+                              />
+                          ) : (
+                              <Typography sx={{wordBreak:"break-word", textAlign:languageDetector(item.description) ? "right" : "left",width:"80%" }} variant="body2" mt={1}>
+                                {item.description}
+                              </Typography>
+                          )}
+                          {name === "subject" &&
+                              <Box sx={{
+                                width:"fit-content",
+                                display:"flex",
+                                justifyContent:"center",
+                                alignItems:"flex-end",
+                                flexDirection:"column",
+                                gap:"0.5rem",
+                                textAlign:editMode ? "end" : "center"
+                              }}>
+                                <Typography sx={{
+                                  ...theme.typography.labelCondensed,
+                                  color:"#6C8093",
+                                  width:"100%"
+                                }}>
+                                  <Trans i18nKey={"weight"} />
+                                </Typography>
+
+                                {editMode === item.id ? (
+                                    <TextField
+                                        required
+                                        value={tempValues.weight}
+                                        onChange={(e) =>handelChange(e) }
+                                        name="weight"
+                                        variant="outlined"
+                                        fullWidth
+                                        size="small"
+                                        // label={<Trans i18nKey="weight" />}
+                                        margin="normal"
+                                        type="number"
+                                        inputProps={{
+                                          style: { textAlign: "center", width: "40px" },
+                                        }}
+                                        sx={{
+                                          mb: 1,
+                                          mt: 1,
+                                          fontSize: 14,
+                                          "& .MuiInputBase-root": {
+                                            fontSize: 14,
+                                            overflow: "auto",
+                                          },
+                                          "& .MuiFormLabel-root": {
+                                            fontSize: 14,
+                                          },
+                                          background:"#fff",
+                                          borderRadius:"8px",
+                                        }}
+                                    />
+                                ) : (
+                                    <Box
+                                        aria-label="weight"
+                                        style={{
+                                          width:"3.75rem",
+                                          height:"3.75rem",
+                                          borderRadius: '50%',  // برای دایره‌ای کردن دکمه
+                                          backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
+                                          color: '#2B333B',
+                                          display:"flex",
+                                          alignItems:" center",
+                                          justifyContent:"center"
+                                        }}
+                                    >
+                                      {item.weight}
+                                    </Box>
+                                )}
+                              </Box>
+
+                          }
+                          {name == "questionnaires" &&
+                              <Box sx={{
+                                width:"fit-content",
+                                display:"flex",
+                                justifyContent:"center",
+                                alignItems:"flex-end",
+                                flexDirection:"column",
+                                gap:"0.5rem",
+                                textAlign:editMode ? "end" : "center"
+                              }}>
+                                <Typography sx={{
+                                  ...theme.typography.labelCondensed,
+                                  color:"#6C8093",
+                                  width:"100%"
+                                }}>
+                                  <Trans i18nKey={"questions"} />
+                                </Typography>
+                                <Box
+                                    aria-label="questionnaires"
+                                    style={{
+                                      width:"3.75rem",
+                                      height:"3.75rem",
+                                      borderRadius: '50%',  // برای دایره‌ای کردن دکمه
+                                      backgroundColor: '#E2E5E9',  // رنگ پس‌زمینه
+                                      color: '#2B333B',
+                                      display:"flex",
+                                      alignItems:" center",
+                                      justifyContent:"center"
+                                    }}
+                                >
+                                  {item.questionsCount}
+                                </Box>
+                              </Box>
+                          }
+                        </Box>
                       </Box>
                     </Box>
+                      </AccordionSummary>
+                      <AccordionDetails sx={{ margin: 0, padding: 0, py:"20px" }}>
+                    {/*<QueryData*/}
+                    {/*/>*/}
+                    {questions.map((question, index) =>{
+                      return (
+                        <QuestionContain questionCount={item.questionsCount} {...question} />
+                      )
+                    })}
+                      </AccordionDetails>
+                      </Accordion>
                   </Box>
                 )}
               </Draggable>
