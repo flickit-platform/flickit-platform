@@ -328,6 +328,12 @@ class QuestionImpactApi(APIView):
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
 
+    def delete(self, request, kit_version_id, question_impact_id):
+        result = kit_versions_services.delete_question_impact(request, kit_version_id, question_impact_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class QuestionImpactListApi(APIView):
     permission_classes = [IsAuthenticated]
