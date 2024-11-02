@@ -171,7 +171,9 @@ const AssessmentExportContainer = () => {
         .then(() => AssessmentReport.query());
     }
     if (AssessmentReport?.errorObject?.response?.data?.code === "DEPRECATED") {
-      service.migrateKitVersion({ assessmentId });
+      service.migrateKitVersion({ assessmentId }).then(() => {
+        AssessmentReport.query();
+      });
     }
   }, [AssessmentReport?.errorObject]);
 

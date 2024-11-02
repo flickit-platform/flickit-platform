@@ -780,7 +780,7 @@ export const createService = (
       config?: AxiosRequestConfig<any> | undefined,
     ) {
       const { assessmentId } = args ?? {};
-      return axios.get(`/api/v2/assessments/${assessmentId}/migrate-kit-version`, {
+      return axios.post(`/api/v1/assessments/${assessmentId}/migrate-kit-version/`, {
         ...config,
       });
     },
