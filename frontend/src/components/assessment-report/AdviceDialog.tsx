@@ -40,7 +40,7 @@ const AdviceDialog = ({
               marginLeft: theme.direction === "rtl" ? "6px" : "unset",
             }}
           />
-          <Trans i18nKey="settingImprovementTargets" />
+          <Trans i18nKey="adviceAssistant" />
         </>
       </DialogTitle>
 
