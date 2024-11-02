@@ -332,7 +332,6 @@ const AssessmentExportContainer = () => {
       toast.error("Element not found. Please try again.");
     }
   };
-
   return (
     <PermissionControl error={[errorObject]}>
       <QueryBatchData
@@ -357,12 +356,15 @@ const AssessmentExportContainer = () => {
             assessment || {};
           const { questionsCount, answersCount } = progress;
 
-          const selectedNarration =
-            adviceSection?.aiNarration || adviceSection?.assessorNarration;
-          if (selectedNarration) {
-            setAdviceNarration(selectedNarration?.narration);
-            adviceSection?.aiNarration && setAiGenerated(true);
-          }
+          useEffect(() => {
+            const selectedNarration =
+              adviceSection?.aiNarration || adviceSection?.assessorNarration;
+            if (selectedNarration) {
+              setAdviceNarration(selectedNarration?.narration);
+              adviceSection?.aiNarration && setAiGenerated(true);
+            }
+          }, [adviceSection]);
+
           useEffect(() => {
             setDocumentTitle(
               `${t("document", { title: assessment?.title })}`,
