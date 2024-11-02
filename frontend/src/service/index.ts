@@ -775,7 +775,15 @@ export const createService = (
         config,
       );
     },
-
+    migrateKitVersion(
+      args: { assessmentId: TId },
+      config?: AxiosRequestConfig<any> | undefined,
+    ) {
+      const { assessmentId } = args ?? {};
+      return axios.get(`/api/v2/assessments/${assessmentId}/migrate-kit-version`, {
+        ...config,
+      });
+    },
     fetchQuestionnaires(
       args: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined,
