@@ -341,3 +341,13 @@ class QuestionImpactListApi(APIView):
     def get(self, request, kit_version_id, question_id):
         result = kit_versions_services.get_question_impacts_list(request, kit_version_id, question_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AnswerOptionApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, kit_version_id, answer_option_id):
+        result = kit_versions_services.delete_answer_option(request, kit_version_id, answer_option_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
