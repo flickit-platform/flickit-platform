@@ -172,7 +172,7 @@ const KitDesignerContainer = () => {
             {/*    <Trans i18nKey="questionnairesContent" />*/}
             {/*  </Typography>*/}
             {/*)}*/}
-            {selectedTab === 5 && <PublishContent />}
+            {selectedTab === 5 && <PublishContent  kitVersion={kitVersion.data} />}
           </Grid>
         </Grid>
       </Grid>

@@ -8,8 +8,9 @@ import { useServiceContext } from "@/providers/ServiceProvider";
 import { Link, useParams } from "react-router-dom";
 import { ICustomError } from "@/utils/CustomError";
 import toastError from "@/utils/toastError";
+import { IKitVersion } from "@/types";
 
-const PublishContent = () => {
+const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
   const { service } = useServiceContext();
   const { kitVersionId = "", expertGroupId } = useParams();
   const handlePublish = async () => {
@@ -35,7 +36,7 @@ const PublishContent = () => {
             variant="contained"
             onClick={handlePublish}
             component={Link}
-            to={`/user/expert-groups/${expertGroupId}/assessment-kits/${kitVersionId}`}
+            to={`/user/expert-groups/${expertGroupId}/assessment-kits/${kitVersion.assessmentKit.id}`}
           >
             <Trans i18nKey="publish" />
           </Button>
