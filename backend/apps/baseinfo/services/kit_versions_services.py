@@ -315,3 +315,10 @@ def delete_answer_option(request, kit_version_id, answer_option_id):
     if response.status_code == 204:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def get_question_options_list(request, kit_version_id, question_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questions/{question_id}/options',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
