@@ -351,3 +351,11 @@ class AnswerOptionApi(APIView):
         if result["Success"]:
             return Response(status=result["status_code"])
         return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionOptionsListApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, kit_version_id, question_id):
+        result = kit_versions_services.get_question_options_list(request, kit_version_id, question_id)
+        return Response(data=result["body"], status=result["status_code"])
