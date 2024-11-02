@@ -86,7 +86,7 @@ import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { primaryFontFamily, secondaryFontFamily, theme } from "@config/theme";
+import {farsiFontFamily, primaryFontFamily, secondaryFontFamily, theme} from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
@@ -2597,7 +2597,7 @@ const EvidenceDetail = (props: any) => {
                     width: { xs: "auto", sm: "250px" },
                   }}
                 >
-                  <Typography sx={{ ...theme?.typography?.bodyLarge }}>
+                  <Typography style={languageDetector(description) ? {fontFamily: farsiFontFamily} : {fontFamily: primaryFontFamily}} sx={{ ...theme?.typography?.bodyLarge, fontWeight:"normal" }}>
                     {description}
                   </Typography>
                   <Box
