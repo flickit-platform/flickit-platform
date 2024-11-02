@@ -15,6 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AttributeForm from "./AttributeForm";
+import { Trans } from "react-i18next";
 
 interface Attribute {
   id: string | number;
@@ -33,6 +34,7 @@ interface Subject {
   id: string | number;
   title: string;
   description: string;
+  weight: number;
 }
 
 interface SubjectTableProps {
@@ -115,11 +117,6 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
       const updatedAttributes = [
         ...attributes.filter((attr) => attr.id !== movedAttribute.id),
       ];
-      updatedAttributes.splice(result.source.index, 0, {
-        ...movedAttribute,
-        subject: { id: Number(sourceSubjectId), title: "" },
-      });
-
       const attributesBySubject = updatedAttributes.reduce(
         (acc, attr) => {
           if (!acc[attr.subject.id]) acc[attr.subject.id] = [];
@@ -127,6 +124,18 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
           return acc;
         },
         {} as Record<number, Attribute[]>,
+      );
+
+      if (!attributesBySubject[destinationSubjectId]) {
+        attributesBySubject[destinationSubjectId] = [];
+      }
+
+      attributesBySubject[destinationSubjectId].splice(
+        result.destination.index,
+        0,
+        {
+          ...movedAttribute,
+        },
       );
 
       Object.keys(attributesBySubject).forEach((subjectId) => {
@@ -142,15 +151,17 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
           id: Number(destinationSubjectId),
           title: "",
         };
+        const destAttrLength = attributes.filter(
+          (attr) => Number(destinationSubjectId) === attr.subject.id,
+        ).length;
+        movedAttribute.index = destAttrLength + 1;
+        updatedAttributes.filter(
+          (attr) => String(attr.id) !== movedAttributeId,
+        );
         handleEdit(movedAttribute);
       }
-
-      const finalArray = updatedAttributes.filter(
-        (attr) => attr.subject.id == destinationSubjectId,
-      );
-
       setAttributes(reorderedAttributes);
-      onReorder(finalArray, sourceSubjectId);
+      onReorder(attributesBySubject[destinationSubjectId], sourceSubjectId);
     }
   };
 
@@ -160,11 +171,19 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: "10%" }}>Order</TableCell>
-              <TableCell sx={{ width: "30%" }}>Title</TableCell>
-              <TableCell sx={{ width: "50%" }}>Description</TableCell>
-              <TableCell sx={{ width: "10%" }}>Weight</TableCell>
-              <TableCell sx={{ width: "10%" }}>Actions</TableCell>
+              <TableCell sx={{ width: "10%" }}>
+                <Trans i18nKey="order" />
+              </TableCell>
+              <TableCell sx={{ width: "30%" }}>
+                <Trans i18nKey="title" />
+              </TableCell>
+              <TableCell sx={{ width: "50%" }}>
+                <Trans i18nKey="description" />
+              </TableCell>
+              <TableCell sx={{ width: "10%" }}>
+                <Trans i18nKey="weight" />
+              </TableCell>
+              <TableCell sx={{ width: "10%" }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -174,28 +193,11 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                   sx={{ background: "#F9F9F9", borderRadius: "0.5rem", mb: 1 }}
                 >
                   <TableCell>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        background: "#F3F5F6",
-                        borderRadius: "0.5rem",
-                        width: { xs: "50px", md: "64px" },
-                        justifyContent: "space-around",
-                        px: 1.5,
-                      }}
-                    >
-                      <Typography variant="semiBoldLarge">
-                        {index + 1}
-                      </Typography>
-                      <IconButton disableRipple disableFocusRipple size="small">
-                        <SwapVertRoundedIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
+                    <Typography variant="semiBoldLarge">{index + 1}</Typography>
                   </TableCell>
                   <TableCell>{subject.title}</TableCell>
                   <TableCell>{subject.description}</TableCell>
-                  <TableCell />
+                  <TableCell>{subject.weight}</TableCell>
                   <TableCell />
                 </TableRow>
 

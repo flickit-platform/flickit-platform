@@ -399,6 +399,7 @@
     "oneFileOnly": "تنها می‌توانید یک فایل را در یک زمان بارگذاری کنید.",
     "options": "گزینه‌ها",
     "optionValue": "گزینه {{index}}",
+    "order": "ترتیب",
     "Outdated": "منسوخ‌شده",
     "overalConfidence": "سطح اطمینان کلی",
     "overallInsight": "بینش کلی {{title}}",
