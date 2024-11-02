@@ -280,3 +280,10 @@ def create_question_impact(request, kit_version_id):
         json=request.data,
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_question_impacts_list(request, kit_version_id, question_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questions/{question_id}/impacts',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

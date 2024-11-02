@@ -315,3 +315,10 @@ class QuestionImpactsApi(APIView):
     def post(self, request, kit_version_id):
         result = kit_versions_services.create_question_impact(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionImpactListApi(APIView):
+
+    def get(self, request, kit_version_id, question_id):
+        result = kit_versions_services.get_question_impacts_list(request, kit_version_id, question_id)
+        return Response(data=result["body"], status=result["status_code"])
