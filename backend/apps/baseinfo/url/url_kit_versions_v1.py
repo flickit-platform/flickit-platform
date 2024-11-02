@@ -36,4 +36,6 @@ urlpatterns = [
          kit_versions_views.QuestionsChangeOrderApi.as_view()),
     path("<str:kit_version_id>/question-impacts/",
          kit_versions_views.QuestionImpactsApi.as_view()),
+    path("<str:kit_version_id>/question-impacts/<str:question_impact_id>/",
+         kit_versions_views.QuestionImpactApi.as_view()),
 ]

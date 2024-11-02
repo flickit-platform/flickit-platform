@@ -317,7 +317,20 @@ class QuestionImpactsApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class QuestionImpactApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, question_impact_id):
+        result = kit_versions_services.update_question_impact(request, kit_version_id, question_impact_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class QuestionImpactListApi(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, kit_version_id, question_id):
         result = kit_versions_services.get_question_impacts_list(request, kit_version_id, question_id)
