@@ -110,8 +110,11 @@ const AutocompleteBaseField = (
     formatRequest = (request) => request,
     helperText,
     label,
-    getOptionLabel = (option) =>
-      typeof option === "string" ? option : option?.[filterFields[0]] || null,
+    getOptionLabel = (option) => {
+      if (option){
+        return typeof option === "string" ? option : option?.[filterFields[0]] || option.inputValue
+      }
+    },
     filterSelectedOption = (options: readonly any[], value: any): any[] =>
       value
         ? options.filter((option) => option?.id != value?.id)
