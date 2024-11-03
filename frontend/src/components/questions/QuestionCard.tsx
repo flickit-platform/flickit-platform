@@ -1263,6 +1263,15 @@ const Evidence = (props: any) => {
                     hasCounter={true}
                     isFarsi={is_farsi}
                     rtl={rtl}
+                    inputProps = {
+                        {
+                            sx: {
+                                '&::placeholder': {
+                                    ...theme.typography.bodyMedium
+                                },
+                            },
+                        }
+                    }
                   />
                   <FormControlLabel
                     sx={{
@@ -2415,7 +2424,6 @@ const EvidenceDetail = (props: any) => {
               >
                 <Grid container display={"flex"} justifyContent={"end"}>
                   <Grid item xs={12} position={"relative"}>
-                    {isEditing && (
                       <Typography
                         sx={{
                           fontSize: "1.125rem",
@@ -2431,8 +2439,6 @@ const EvidenceDetail = (props: any) => {
                       >
                         <Trans i18nKey="editing" />
                       </Typography>
-                    )}
-
                     <InputFieldUC
                       multiline
                       minRows={3}
