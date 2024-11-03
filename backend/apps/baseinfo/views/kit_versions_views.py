@@ -372,3 +372,16 @@ class QuestionnaireListQuestionsApi(APIView):
     def get(self, request, kit_version_id, questionnaire_id):
         result = kit_versions_services.get_questionnaire_questions_list(request, kit_version_id, questionnaire_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AnswerRangesApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.get_answer_ranges(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])

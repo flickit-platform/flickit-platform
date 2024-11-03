@@ -44,4 +44,7 @@ urlpatterns = [
          kit_versions_views.QuestionImpactApi.as_view()),
     path("<str:kit_version_id>/answer-options/<str:answer_option_id>/",
          kit_versions_views.AnswerOptionApi.as_view()),
+    path("<str:kit_version_id>/answer-ranges/",
+         kit_versions_views.AnswerRangesApi.as_view()),
+
 ]
