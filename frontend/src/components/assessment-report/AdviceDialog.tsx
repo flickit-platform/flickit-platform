@@ -40,7 +40,7 @@ const AdviceDialog = ({
               marginLeft: theme.direction === "rtl" ? "6px" : "unset",
             }}
           />
-          <Trans i18nKey="settingImprovementTargets" />
+          <Trans i18nKey="adviceAssistant" />
         </>
       </DialogTitle>
 
@@ -128,7 +128,7 @@ const AdviceDialog = ({
               onClick={createAdvice}
               loading={loading}
             >
-              <Trans i18nKey="setTheseParameters" />
+              <Trans i18nKey="next" />
             </LoadingButton>
           </Box>
         </Box>
