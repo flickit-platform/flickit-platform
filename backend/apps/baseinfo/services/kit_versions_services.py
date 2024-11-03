@@ -322,3 +322,11 @@ def get_question_options_list(request, kit_version_id, question_id):
         ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questions/{question_id}/options',
         headers={'Authorization': request.headers['Authorization']})
     return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_questionnaire_questions_list(request, kit_version_id, questionnaire_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questionnaires/{questionnaire_id}/questions',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

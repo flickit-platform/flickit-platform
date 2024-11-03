@@ -24,6 +24,8 @@ urlpatterns = [
     path("<str:kit_version_id>/questionnaires/", kit_versions_views.QuestionnairesApi.as_view()),
     path("<str:kit_version_id>/questionnaires/<str:questionnaire_id>/"
          , kit_versions_views.QuestionnaireApi.as_view()),
+    path("<str:kit_version_id>/questionnaires/<str:questionnaire_id>/questions/"
+         , kit_versions_views.QuestionnaireListQuestionsApi.as_view()),
     path("<str:kit_version_id>/questionnaires-change-order/",
          kit_versions_views.QuestionnaireChangeOrderApi.as_view()),
     path("<str:kit_version_id>/questions/",
