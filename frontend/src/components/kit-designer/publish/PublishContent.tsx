@@ -12,6 +12,7 @@ import { IKitVersion } from "@/types";
 import { InfoOutlined } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "@/components/common/dialogs/DeleteConfirmationDialog";
 import { useState } from "react";
+import { Tooltip } from "@mui/material";
 
 const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
   const { service } = useServiceContext();
@@ -34,7 +35,7 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
   const handleDeleteDraft = async () => {
     try {
       await service.deleteKitVersion({ kitVersionId });
-      navigate(`/user/expert-groups/${expertGroupId}/`)
+      navigate(`/user/expert-groups/${expertGroupId}/`);
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -53,12 +54,6 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
           <Trans i18nKey="publishDescription" />
         </Typography>
         <Divider sx={{ my: 1 }} />
-        <Box display="flex" gap={1} alignItems="center">
-          <InfoOutlined fontSize="small" sx={{ color: "#6C8093" }} />
-          <Typography variant="labelSmall" color="#6C8093">
-            <Trans i18nKey="releaseNote" />
-          </Typography>
-        </Box>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -73,13 +68,15 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
             >
               <Trans i18nKey="deleteDraft" />
             </Button>
-            <Button
-              variant="outlined"
-              component={Link}
-              to={`/user/expert-groups/${expertGroupId}/`}
-            >
-              <Trans i18nKey="saveInDraft" />
-            </Button>
+            <Tooltip title={<Trans i18nKey="releaseNote" />}>
+              <Button
+                variant="outlined"
+                component={Link}
+                to={`/user/expert-groups/${expertGroupId}/`}
+              >
+                <Trans i18nKey="close" />
+              </Button>
+            </Tooltip>
           </Box>
           <Button
             variant="contained"

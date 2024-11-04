@@ -222,7 +222,7 @@ const ListOfItems = ({
                           margin: 0,
                           padding: 0,
                           "&.Mui-expanded": {
-                            backgroundColor: "#E6ECEF",
+                            backgroundColor: "#F3F5F6",
                           },
                           "& .MuiAccordionSummary-content": {
                             margin: 0,
