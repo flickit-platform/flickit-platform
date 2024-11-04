@@ -131,6 +131,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
                 // disabled={!draftVersionId}
                 // component={!draftVersionId ? Link : "div"}
                 // to={!draftVersionId ? `kit-designer/${draftVersionId}` : ''}
+                color={!draftVersionId ? "primary" : "inherit"}
                 onClick={draftClicked}
                 loading={cloneAssessmentKit.loading}
               >

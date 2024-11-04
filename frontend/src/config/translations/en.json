@@ -80,7 +80,6 @@
   "subjectListEmptyStateDatailed": "No subjects in this kit so far? Create your first subject just by one click!",
   "subjectsKitDesignerDescription":"Subjects are the most critical components of an evaluation. The maturity level of an evaluation is determined based on the maturity levels of the subjects and by calculating their weighted average. Each subject consists of several attributes, and its score is derived from the weighted average of these attributes.<br/>In this section, you can define the subjects relevant to your evaluation, add the necessary descriptions for them, and finally, determine the weight of each subject in the final calculation of the evaluation's maturity level.",
   "attributesKitDesignerDescription":"Attributes are the most critical components of an evaluation. The maturity level of an evaluation is determined based on the maturity levels of the subjects and by calculating their weighted average. Each subject consists of several attributes, and its score is derived from the weighted average of these attributes.<br/>In this section, you can define the subjects relevant to your evaluation, add the necessary descriptions for them, and finally, determine the weight of each subject in the final calculation of the evaluation's maturity level.",
-  "questionnairesAndImpacts": "Questionaires And Impacts",
   "notApplicable": "Not applicable",
   "submitAnswerAutomaticallyAndGoToNextQuestion": "Submit answer automatically and go to the next question",
   "submitAnswerAutomatically": "Submit answer automatically",
@@ -468,7 +467,7 @@
   "progressBarTitle": "{{numaratur}} of {{denominator}}",
   "providedBy": "Provided by",
   "public": "Public",
-  "publish": "Release",
+  "release": "Release",
   "publishDescription": "In this section, the final tasks related to the release and usage of the kit are performed. If any parts of the kit have issues, they will be reported here. Additionally, the settings for kit accessibility are also located in this section. If you need to save or use different versions of your kit, you can utilize the version control section as well.",
   "published": "Published",
   "publishedAssessmentKits": "Published assessment kits",
@@ -691,5 +690,10 @@
   "questionnairesList": "questionnaires",
   "newQuestionnaire": "New Questionnaire",
   "questionnairesListEmptyState": "Oops! No Questionnaire so far",
-  "questionnairesEmptyStateDetailed": "Questionnaires are necessary to create questions! Create your first questionnaires here"
+  "questionnairesEmptyStateDetailed": "Questionnaires are necessary to create questions! Create your first questionnaires here",
+  "releaseNote": "Note: All changes you made are saved automatically in draft.",
+  "deleteDraft": "Delete Draft",
+  "saveInDraft": "Save In Drafts",
+  "deleteDraftConfirmation": "Delete Draft",
+  "deleteDraftConfirmationMessage": "Are you sure you want to delete this draft?<br/> This action cannot be undone. All unsaved changes will be lost."
 }
