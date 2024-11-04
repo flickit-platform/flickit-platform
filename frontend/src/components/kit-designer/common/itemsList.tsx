@@ -81,7 +81,8 @@ const ListOfItems = ({
     setReorderedItems(newReorderedItems);
     onReorder(newReorderedItems);
   };
-  const handleEditClick = (item: KitDesignListItems) => {
+  const handleEditClick = (e: any, item: KitDesignListItems) => {
+    e.stopPropagation();
     setEditMode(Number(item.id));
     setTempValues({
       title: item.title,
@@ -91,7 +92,8 @@ const ListOfItems = ({
     });
   };
 
-  const handleSaveClick = (item: KitDesignListItems) => {
+  const handleSaveClick = (e: any, item: KitDesignListItems) => {
+    e.stopPropagation();
     onEdit({
       ...item,
       title: tempValues.title,
@@ -101,7 +103,8 @@ const ListOfItems = ({
     setEditMode(null);
   };
 
-  const handleCancelClick = () => {
+  const handleCancelClick = (e: any) => {
+    e.stopPropagation();
     setEditMode(null);
     setTempValues({ title: "", description: "", weight: 0, question: 0 });
   };
@@ -169,7 +172,6 @@ const ListOfItems = ({
       index: idx + 1,
     }));
     handleReorder(reorderedQuestions);
-
     setQuestionData(reorderedQuestions);
   };
 
@@ -282,6 +284,7 @@ const ListOfItems = ({
                             <Box sx={{ display: "flex", alignItems: "center" }}>
                               {editMode === item.id ? (
                                 <TextField
+                                  onClick={(e) => e.stopPropagation()}
                                   required
                                   value={tempValues.title}
                                   onChange={(e) => handelChange(e)}
@@ -332,7 +335,7 @@ const ListOfItems = ({
                                 >
                                   <IconButton
                                     size="small"
-                                    onClick={() => handleSaveClick(item)}
+                                    onClick={(e) => handleSaveClick(e, item)}
                                     sx={{ mx: 1 }}
                                     color="success"
                                     data-testid="items-check-icon"
@@ -352,7 +355,7 @@ const ListOfItems = ({
                                 <>
                                   <IconButton
                                     size="small"
-                                    onClick={() => handleEditClick(item)}
+                                    onClick={(e) => handleEditClick(e, item)}
                                     sx={{ mx: 1 }}
                                     color="success"
                                     data-testid="items-edit-icon"
@@ -384,6 +387,7 @@ const ListOfItems = ({
                                 <TextField
                                   required
                                   value={tempValues.description}
+                                  onClick={(e) => e.stopPropagation()}
                                   onChange={(e) => handelChange(e)}
                                   name="description"
                                   inputProps={{
