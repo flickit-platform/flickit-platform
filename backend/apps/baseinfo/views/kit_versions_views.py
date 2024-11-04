@@ -14,6 +14,12 @@ class KitVersionsApi(APIView):
         result = kit_versions_services.load_kit_with_version_id(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
 
+    def delete(self, request, kit_version_id):
+        result = kit_versions_services.delete_kit_version(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class KitVersionSubjectsApi(APIView):
     permission_classes = [IsAuthenticated]
