@@ -468,7 +468,7 @@
   "progressBarTitle": "{{numaratur}} of {{denominator}}",
   "providedBy": "Provided by",
   "public": "Public",
-  "publish": "Release",
+  "release": "Release",
   "publishDescription": "In this section, the final tasks related to the release and usage of the kit are performed. If any parts of the kit have issues, they will be reported here. Additionally, the settings for kit accessibility are also located in this section. If you need to save or use different versions of your kit, you can utilize the version control section as well.",
   "published": "Published",
   "publishedAssessmentKits": "Published assessment kits",
@@ -691,5 +691,10 @@
   "questionnairesList": "questionnaires",
   "newQuestionnaire": "New Questionnaire",
   "questionnairesListEmptyState": "Oops! No Questionnaire so far",
-  "questionnairesEmptyStateDetailed": "Questionnaires are necessary to create questions! Create your first questionnaires here"
+  "questionnairesEmptyStateDetailed": "Questionnaires are necessary to create questions! Create your first questionnaires here",
+  "releaseNote": "Note: All changes you made are saved automatically in draft.",
+  "deleteDraft": "Delete Draft",
+  "saveInDraft": "Save In Drafts",
+  "deleteDraftConfirmation": "Delete Draft",
+  "deleteDraftConfirmationMessage": "Are you sure you want to delete this draft?<br/> This action cannot be undone. All unsaved changes will be lost."
 }

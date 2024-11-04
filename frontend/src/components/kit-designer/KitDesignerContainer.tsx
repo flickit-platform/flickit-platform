@@ -145,7 +145,7 @@ const KitDesignerContainer = () => {
                 }}
                 label={
                   <Typography variant="semiBoldLarge">
-                    <Trans i18nKey="publish" />
+                    <Trans i18nKey="release" />
                   </Typography>
                 }
               />
@@ -159,7 +159,7 @@ const KitDesignerContainer = () => {
             sx={{ height: "100%", padding: 3, background: "white" }}
           >
             {selectedTab === 0 && <MaturityLevelsContent />}
-            {selectedTab === 1 && <SubjectsContent/>}
+            {selectedTab === 1 && <SubjectsContent />}
             {selectedTab === 2 && <AttributesContent />}
             {selectedTab === 3 && <QuestionnairesContent />}
             {selectedTab === 4 && (
@@ -172,7 +172,9 @@ const KitDesignerContainer = () => {
             {/*    <Trans i18nKey="questionnairesContent" />*/}
             {/*  </Typography>*/}
             {/*)}*/}
-            {selectedTab === 5 && <PublishContent  kitVersion={kitVersion.data} />}
+            {selectedTab === 5 && (
+              <PublishContent kitVersion={kitVersion.data} />
+            )}
           </Grid>
         </Grid>
       </Grid>
