@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import { CircularProgress } from "@mui/material";
+import { debounce } from "lodash";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
@@ -48,14 +49,7 @@ interface IQuestion {
   mayNotBeApplicable: boolean;
   title: string;
 }
-interface IQuestions {
-  items: IQuestion[];
-  order: string;
-  page: number;
-  size: number;
-  sort: string;
-  total: number;
-}
+
 const ListOfItems = ({
   items,
   onEdit,
@@ -73,7 +67,8 @@ const ListOfItems = ({
     question: 0,
   });
   const [expanded, setExpanded] = useState(false);
-  const [questionData, setQuestionData] = useState<IQuestions | null>();
+  const [questionnaireId, setQuestionnaireId] = useState(null);
+  const [questionData, setQuestionData] = useState<IQuestion[]>([]);
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
   const handleDragEnd = (result: any) => {
@@ -127,19 +122,56 @@ const ListOfItems = ({
   const handelChangeAccordion =
     ({ id }: { id: TId }) =>
     async (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded);
+      setQuestionnaireId(id as any);
       try {
         if (isExpanded) {
           const data = await fetchQuestionListKit.query({
             kitVersionId,
             questionnaireId: id,
           });
-          setQuestionData(data);
+          setQuestionData(data?.items);
         }
       } catch (e) {
         const err = e as ICustomError;
         toastError(err);
       }
     };
+
+  const debouncedHandleReorder = debounce(async (newOrder: any[]) => {
+    try {
+      const orders = newOrder.map((item, idx) => ({
+        questionId: item.id,
+        index: idx + 1,
+      }));
+
+      await service.changeQuestionsOrder(
+        { kitVersionId },
+        { questionOrders: orders, questionnaireId: questionnaireId },
+      );
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  }, 2000);
+
+  const handleReorder = (newOrder: any[]) => {
+    debouncedHandleReorder(newOrder);
+  };
+  const handleQuestionDragEnd = (result: any) => {
+    if (!result.destination) return;
+    const updatedQuestions = Array.from(questionData);
+    const [movedQuestion] = updatedQuestions.splice(result.source.index, 1);
+    updatedQuestions.splice(result.destination.index, 0, movedQuestion);
+
+    const reorderedQuestions = updatedQuestions.map((question, idx) => ({
+      ...question,
+      index: idx + 1,
+    }));
+    handleReorder(reorderedQuestions);
+
+    setQuestionData(reorderedQuestions);
+  };
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -151,6 +183,7 @@ const ListOfItems = ({
                 key={item.id}
                 draggableId={item.id.toString()}
                 index={index}
+                isDragDisabled={expanded}
               >
                 {(provided: any) => (
                   <Box
@@ -183,7 +216,6 @@ const ListOfItems = ({
                           borderRadius: "8px",
                           border: "0.3px solid #73808c30",
                           display: "flex",
-                          alignItems: "flex-start",
                           position: "relative",
                           margin: 0,
                           padding: 0,
@@ -398,118 +430,42 @@ const ListOfItems = ({
                                   {item.description}
                                 </Typography>
                               )}
-                              {name === "subject" && (
-                                <Box
+                              <Box
+                                sx={{
+                                  width: "fit-content",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "flex-end",
+                                  flexDirection: "column",
+                                  gap: "0.5rem",
+                                  textAlign: editMode ? "end" : "center",
+                                }}
+                              >
+                                <Typography
                                   sx={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "flex-end",
-                                    flexDirection: "column",
-                                    gap: "0.5rem",
-                                    textAlign: editMode ? "end" : "center",
+                                    ...theme.typography.labelCondensed,
+                                    color: "#6C8093",
+                                    width: "100%",
                                   }}
                                 >
-                                  <Typography
-                                    sx={{
-                                      ...theme.typography.labelCondensed,
-                                      color: "#6C8093",
-                                      width: "100%",
-                                    }}
-                                  >
-                                    <Trans i18nKey={"weight"} />
-                                  </Typography>
-
-                                  {editMode === item.id ? (
-                                    <TextField
-                                      required
-                                      value={tempValues.weight}
-                                      onChange={(e) => handelChange(e)}
-                                      name="weight"
-                                      variant="outlined"
-                                      fullWidth
-                                      size="small"
-                                      // label={<Trans i18nKey="weight" />}
-                                      margin="normal"
-                                      type="number"
-                                      inputProps={{
-                                        style: {
-                                          textAlign: "center",
-                                          width: "40px",
-                                        },
-                                      }}
-                                      sx={{
-                                        mb: 1,
-                                        mt: 1,
-                                        fontSize: 14,
-                                        "& .MuiInputBase-root": {
-                                          fontSize: 14,
-                                          overflow: "auto",
-                                        },
-                                        "& .MuiFormLabel-root": {
-                                          fontSize: 14,
-                                        },
-                                        background: "#fff",
-                                        borderRadius: "8px",
-                                      }}
-                                    />
-                                  ) : (
-                                    <Box
-                                      aria-label="weight"
-                                      style={{
-                                        width: "3.75rem",
-                                        height: "3.75rem",
-                                        borderRadius: "50%", // برای دایره‌ای کردن دکمه
-                                        backgroundColor: "#E2E5E9", // رنگ پس‌زمینه
-                                        color: "#2B333B",
-                                        display: "flex",
-                                        alignItems: " center",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      {item.weight}
-                                    </Box>
-                                  )}
-                                </Box>
-                              )}
-                              {name == "questionnaires" && (
+                                  <Trans i18nKey={"questions"} />
+                                </Typography>
                                 <Box
-                                  sx={{
-                                    width: "fit-content",
+                                  aria-label="questionnaires"
+                                  style={{
+                                    width: "3.75rem",
+                                    height: "3.75rem",
+                                    borderRadius: "50%", // برای دایره‌ای کردن دکمه
+                                    backgroundColor: "#E2E5E9", // رنگ پس‌زمینه
+                                    color: "#2B333B",
                                     display: "flex",
+                                    alignItems: " center",
                                     justifyContent: "center",
-                                    alignItems: "flex-end",
-                                    flexDirection: "column",
-                                    gap: "0.5rem",
-                                    textAlign: editMode ? "end" : "center",
                                   }}
                                 >
-                                  <Typography
-                                    sx={{
-                                      ...theme.typography.labelCondensed,
-                                      color: "#6C8093",
-                                      width: "100%",
-                                    }}
-                                  >
-                                    <Trans i18nKey={"questions"} />
-                                  </Typography>
-                                  <Box
-                                    aria-label="questionnaires"
-                                    style={{
-                                      width: "3.75rem",
-                                      height: "3.75rem",
-                                      borderRadius: "50%", // برای دایره‌ای کردن دکمه
-                                      backgroundColor: "#E2E5E9", // رنگ پس‌زمینه
-                                      color: "#2B333B",
-                                      display: "flex",
-                                      alignItems: " center",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    {item.questionsCount}
-                                  </Box>
+                                  {item.questionsCount}
                                 </Box>
-                              )}
+                              </Box>
                             </Box>
                           </Box>
                         </Box>
@@ -529,19 +485,41 @@ const ListOfItems = ({
                             <CircularProgress />
                           </Box>
                         ) : (
-                          <>
-                            {" "}
-                            {questionData?.items.map(
-                              (question: any, index: any) => {
-                                return (
-                                  <QuestionContain
-                                    key={question.index}
-                                    {...question}
-                                  />
-                                );
-                              },
-                            )}
-                          </>
+                          <DragDropContext onDragEnd={handleQuestionDragEnd}>
+                            <Droppable droppableId={`questions-${item.id}`}>
+                              {(provided) => (
+                                <Box
+                                  {...provided.droppableProps}
+                                  ref={provided.innerRef}
+                                >
+                                  {questionData?.map(
+                                    (question: any, index: number) => (
+                                      <Draggable
+                                        key={question.id}
+                                        draggableId={question.id.toString()}
+                                        index={index}
+                                      >
+                                        {(provided) => (
+                                          <Box
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            sx={{ marginBottom: 1 }}
+                                          >
+                                            <QuestionContain
+                                              key={question.id}
+                                              {...question}
+                                            />
+                                          </Box>
+                                        )}
+                                      </Draggable>
+                                    ),
+                                  )}
+                                  {provided.placeholder}
+                                </Box>
+                              )}
+                            </Droppable>
+                          </DragDropContext>
                         )}
                       </AccordionDetails>
                     </Accordion>

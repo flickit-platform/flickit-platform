@@ -721,6 +721,17 @@ export const createService = (
         },
       );
     },
+    changeQuestionsOrder(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questions-change-order/`,
+        data,
+        config,
+      );
+    },
     changeQuestionnairesOrder(
       { kitVersionId }: { kitVersionId: TId },
       data: any,
