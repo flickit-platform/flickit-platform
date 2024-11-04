@@ -55,6 +55,7 @@ const QuestionnairesContent = () => {
     weight: 1
   });
 
+
   useEffect(() => {
     if (fetchQuestionnairesKit.data?.items?.length) {
       setNewQuestionnaires((prev) => ({
