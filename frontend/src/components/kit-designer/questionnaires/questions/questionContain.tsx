@@ -8,7 +8,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import Divider from "@mui/material/Divider";
 const QuestionContain = (props: any) => {
 
-    const {title,index,questionCount} = props
+    const {title,index,total} = props
     return (
         <>
         <Box sx={{display:"flex" , py:".5rem", px:"1rem"}}>
@@ -42,7 +42,7 @@ const QuestionContain = (props: any) => {
                 </IconButton>
             </Box>
         </Box>
-            {(index != questionCount ) && <Divider sx={{width:"95%", mx:"auto"}} /> }
+            {(index != total ) && <Divider sx={{width:"95%", mx:"auto"}} /> }
         </>
     );
 };

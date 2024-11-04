@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +10,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { styles } from "@styles";
-import { KitDesignListItems } from "@types";
+import {KitDesignListItems, TId} from "@types";
 import { Trans } from "react-i18next";
 import {theme} from "@config/theme";
 import languageDetector from "@utils/languageDetector";
@@ -19,6 +19,11 @@ import QueryData from "@common/QueryData";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
+import {useQuery} from "@utils/useQuery";
+import {useServiceContext} from "@providers/ServiceProvider";
+import {useParams} from "react-router-dom";
+import {ICustomError} from "@utils/CustomError";
+import toastError from "@utils/toastError";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
@@ -27,13 +32,28 @@ interface ListOfItemsProps {
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean
   name: string
-  questions: []
 }
 interface ITempValues {
   title: string,
   description: string,
   weight: number | undefined,
   question: number | undefined,
+}
+interface IQuestion {
+  advisable: boolean,
+  hint: null | any
+  id: number
+  index: number
+  mayNotBeApplicable: boolean
+  title: string
+}
+interface IQuestions {
+  items: IQuestion
+  order: string
+  page: number
+  size: number
+  sort: string
+  total: number
 }
 const ListOfItems = ({
   items,
@@ -42,12 +62,14 @@ const ListOfItems = ({
   onReorder,
   deleteBtn,
   name,
-  questions
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
   const [tempValues, setTempValues] = useState<ITempValues>({ title: "", description: "", weight: 0,question: 0 });
-
+  const [expanded, setExpanded] = useState(false);
+  const [questionData,setQuestionData] = useState<IQuestions | null>()
+  const { service } = useServiceContext();
+  const {  kitVersionId = "" } = useParams();
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -86,6 +108,25 @@ const ListOfItems = ({
     })
   }
 
+  const fetchQuestionListKit = useQuery({
+    service: (args,config) =>
+        service.fetchQuestionListKit(args,config),
+    runOnMount: false,
+  })
+
+  const handelChangeAccordion =
+      ({id}:{id: TId}) => async (event: React.SyntheticEvent, isExpanded: boolean) => {
+          try {
+           if (isExpanded){
+             const data = await fetchQuestionListKit.query({kitVersionId,questionnaireId : id})
+             setQuestionData(data)
+           }
+          } catch (e){
+            const err = e as ICustomError;
+            toastError(err);
+          }
+      };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="subjects">
@@ -111,7 +152,9 @@ const ListOfItems = ({
                       flexDirection:"column",
                     }}
                   >
-                      <Accordion>
+                      <Accordion
+                       onChange={handelChangeAccordion(item)}
+                      >
                     <AccordionSummary
                         sx={{
                           margin: 0,
@@ -153,8 +196,6 @@ const ListOfItems = ({
                           <SwapVertRoundedIcon fontSize="small" />
                         </IconButton>
                       </Box>
-
-
                       <Box sx={{ flexGrow: 1, display: "flex", flexDirection:"column", gap: "5px" }}>
                         {/* Title and icons in the same row */}
                         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -385,11 +426,9 @@ const ListOfItems = ({
                     </Box>
                       </AccordionSummary>
                       <AccordionDetails sx={{ margin: 0, padding: 0, py:"20px" }}>
-                    {/*<QueryData*/}
-                    {/*/>*/}
-                    {questions.map((question, index) =>{
+                    {questionData?.items?.map((question, index) =>{
                       return (
-                        <QuestionContain questionCount={item.questionsCount} {...question} />
+                        <QuestionContain key={question.index} {...question} />
                       )
                     })}
                       </AccordionDetails>
