@@ -127,18 +127,6 @@ const KitDesignerContainer = () => {
                 }
               />{" "}
               <Tab
-                disabled
-                sx={{
-                  alignItems: "flex-start",
-                  textTransform: "none",
-                }}
-                label={
-                  <Typography variant="semiBoldLarge">
-                    <Trans i18nKey="questionnairesAndImpacts" />
-                  </Typography>
-                }
-              />
-              <Tab
                 sx={{
                   alignItems: "flex-start",
                   textTransform: "none",
@@ -163,16 +151,6 @@ const KitDesignerContainer = () => {
             {selectedTab === 2 && <AttributesContent />}
             {selectedTab === 3 && <QuestionnairesContent />}
             {selectedTab === 4 && (
-              <Typography>
-                <Trans i18nKey="attributes" />
-              </Typography>
-            )}{" "}
-            {/*{selectedTab === 5 && (*/}
-            {/*  <Typography>*/}
-            {/*    <Trans i18nKey="questionnairesContent" />*/}
-            {/*  </Typography>*/}
-            {/*)}*/}
-            {selectedTab === 5 && (
               <PublishContent kitVersion={kitVersion.data} />
             )}
           </Grid>
