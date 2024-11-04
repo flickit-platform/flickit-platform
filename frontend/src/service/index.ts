@@ -614,7 +614,7 @@ export const createService = (
       { kitVersionId, subjectId, data }: { kitVersionId: TId, subjectId: TId, data: any, },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(`api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+      return axios.put(`/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
         data,
         config,
       )
@@ -725,7 +725,7 @@ export const createService = (
           { kitVersionId, questionnaireId, data }: { kitVersionId: TId, questionnaireId : TId, data: any, },
           config?: AxiosRequestConfig<any>,
       ){
-          return axios.put(`api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
+          return axios.put(`/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
               data,
               config,
           )
