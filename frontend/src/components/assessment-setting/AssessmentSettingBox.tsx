@@ -472,7 +472,7 @@ export const AssessmentSettingMemberBox = (props: {
               fontSize="small"
               style={{ color: "#EDFCFC" }}
             />
-            <Trans i18nKey={"addRole"} />
+            <Trans i18nKey={"grantAccess"} />
           </Button>
         </Box>
         <Divider sx={{ width: "100%", marginTop: "24px" }} />

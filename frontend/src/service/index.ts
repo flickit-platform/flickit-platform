@@ -416,7 +416,7 @@ export const createService = (
     },
     loadAIReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
-      config: AxiosRequestConfig<any> | undefined,
+      config?: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.get(
         `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`,
@@ -425,7 +425,7 @@ export const createService = (
     },
     fetchAIReport(
       { assessmentId, attributeId }: { assessmentId: string; attributeId: TId },
-      config: AxiosRequestConfig<any> | undefined,
+      config?: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.post(
         `/api/v1/assessments/${assessmentId}/ai-report/attributes/${attributeId}/`,
@@ -573,6 +573,12 @@ export const createService = (
         config,
       );
     },
+    deleteKitVersion(
+      { kitVersionId }: { kitVersionId: string },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(`/api/v1/kit-versions/${kitVersionId}/`, config);
+    },
     fetchSubjectKit(
       { kitVersionId }: { kitVersionId: TId },
       config?: AxiosRequestConfig<any>,
@@ -620,8 +626,7 @@ export const createService = (
       }: { kitVersionId: TId; subjectId: TId; data: any },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(
-        `api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+      return axios.put(`/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
         data,
         config,
       );
@@ -771,7 +776,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.put(
-        `api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
         data,
         config,
       );
@@ -821,7 +826,18 @@ export const createService = (
         config,
       );
     },
-
+    migrateKitVersion(
+      args: { assessmentId: TId },
+      config?: AxiosRequestConfig<any> | undefined,
+    ) {
+      const { assessmentId } = args ?? {};
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/migrate-kit-version/`,
+        {
+          ...config,
+        },
+      );
+    },
     fetchQuestionnaires(
       args: { assessmentId: TId },
       config: AxiosRequestConfig<any> | undefined,

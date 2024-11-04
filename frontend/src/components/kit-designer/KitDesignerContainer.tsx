@@ -127,25 +127,13 @@ const KitDesignerContainer = () => {
                 }
               />{" "}
               <Tab
-                disabled
                 sx={{
                   alignItems: "flex-start",
                   textTransform: "none",
                 }}
                 label={
                   <Typography variant="semiBoldLarge">
-                    <Trans i18nKey="questionnairesAndImpacts" />
-                  </Typography>
-                }
-              />
-              <Tab
-                sx={{
-                  alignItems: "flex-start",
-                  textTransform: "none",
-                }}
-                label={
-                  <Typography variant="semiBoldLarge">
-                    <Trans i18nKey="publish" />
+                    <Trans i18nKey="release" />
                   </Typography>
                 }
               />
@@ -159,20 +147,12 @@ const KitDesignerContainer = () => {
             sx={{ height: "100%", padding: 3, background: "white" }}
           >
             {selectedTab === 0 && <MaturityLevelsContent />}
-            {selectedTab === 1 && <SubjectsContent/>}
+            {selectedTab === 1 && <SubjectsContent />}
             {selectedTab === 2 && <AttributesContent />}
             {selectedTab === 3 && <QuestionnairesContent />}
             {selectedTab === 4 && (
-              <Typography>
-                <Trans i18nKey="attributes" />
-              </Typography>
-            )}{" "}
-            {/*{selectedTab === 5 && (*/}
-            {/*  <Typography>*/}
-            {/*    <Trans i18nKey="questionnairesContent" />*/}
-            {/*  </Typography>*/}
-            {/*)}*/}
-            {selectedTab === 5 && <PublishContent />}
+              <PublishContent kitVersion={kitVersion.data} />
+            )}
           </Grid>
         </Grid>
       </Grid>

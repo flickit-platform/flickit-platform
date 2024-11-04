@@ -6,7 +6,7 @@ import { ReactNode, useState, useRef, useEffect, ChangeEvent } from "react";
 import { useFormContext } from "react-hook-form";
 import getFieldError from "@utils/getFieldError";
 import firstCharDetector from "@/utils/firstCharDetector";
-import {farsiFontFamily, primaryFontFamily} from "@/config/theme";
+import {primaryFontFamily, theme} from "@/config/theme";
 import { evidenceAttachmentInput } from "@utils/enumType";
 
 const InputField = () => {
@@ -113,7 +113,7 @@ const InputFieldUC = (props: IInputFieldUCProps) => {
       inputRef={inputRef}
       onChange={handleInputChange}
       sx={{
-        "& ::placeholder": { fontFamily: isFarsi ?  farsiFontFamily  :  primaryFontFamily },
+        "& ::placeholder": {...theme.typography.bodyMedium},
         background: pallet?.background,
         borderRadius: borderRadius,
         "& .MuiOutlinedInput-root": {

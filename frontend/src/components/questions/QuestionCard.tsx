@@ -86,7 +86,7 @@ import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import Skeleton from "@mui/material/Skeleton";
 import FileType from "@components/questions/iconFiles/fileType";
-import { primaryFontFamily, secondaryFontFamily, theme } from "@config/theme";
+import {farsiFontFamily, primaryFontFamily, secondaryFontFamily, theme} from "@config/theme";
 import { AcceptFile } from "@utils/acceptFile";
 import { format } from "date-fns";
 import { convertToRelativeTime } from "@/utils/convertToRelativeTime";
@@ -1263,6 +1263,15 @@ const Evidence = (props: any) => {
                     hasCounter={true}
                     isFarsi={is_farsi}
                     rtl={rtl}
+                    inputProps = {
+                        {
+                            sx: {
+                                '&::placeholder': {
+                                    ...theme.typography.bodyMedium
+                                },
+                            },
+                        }
+                    }
                   />
                   <FormControlLabel
                     sx={{
@@ -2415,7 +2424,6 @@ const EvidenceDetail = (props: any) => {
               >
                 <Grid container display={"flex"} justifyContent={"end"}>
                   <Grid item xs={12} position={"relative"}>
-                    {isEditing && (
                       <Typography
                         sx={{
                           fontSize: "1.125rem",
@@ -2431,8 +2439,6 @@ const EvidenceDetail = (props: any) => {
                       >
                         <Trans i18nKey="editing" />
                       </Typography>
-                    )}
-
                     <InputFieldUC
                       multiline
                       minRows={3}
@@ -2597,7 +2603,7 @@ const EvidenceDetail = (props: any) => {
                     width: { xs: "auto", sm: "250px" },
                   }}
                 >
-                  <Typography sx={{ ...theme?.typography?.bodyLarge }}>
+                  <Typography style={languageDetector(description) ? {fontFamily: farsiFontFamily} : {fontFamily: primaryFontFamily}} sx={{ ...theme?.typography?.bodyLarge, fontWeight:"normal" }}>
                     {description}
                   </Typography>
                   <Box

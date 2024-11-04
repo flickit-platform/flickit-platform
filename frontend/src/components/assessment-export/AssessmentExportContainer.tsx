@@ -46,6 +46,7 @@ import { theme } from "@/config/theme";
 import AIGenerated from "../common/tags/AIGenerated";
 import { handleCopyAsImage } from "@/utils/handleCopy";
 import PermissionControl from "../common/PermissionControl";
+import { toast } from "react-toastify";
 
 const AssessmentExportContainer = () => {
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -168,6 +169,11 @@ const AssessmentExportContainer = () => {
       calculateConfidenceLevelQuery
         .query()
         .then(() => AssessmentReport.query());
+    }
+    if (AssessmentReport?.errorObject?.response?.data?.code === "DEPRECATED") {
+      service.migrateKitVersion({ assessmentId }).then(() => {
+        AssessmentReport.query();
+      });
     }
   }, [AssessmentReport?.errorObject]);
 
@@ -307,13 +313,8 @@ const AssessmentExportContainer = () => {
     return newIgnoreIds;
   };
 
-  const handleCopyClick = (id: string) => {
-    handleCopyAsImage(refs.current[id] || null, (loading) =>
-      setLoadingId(loading ? id : null),
-    );
-  };
-
   const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
   const handleSetRef = useCallback(
     (id: string) => (element: HTMLDivElement | null) => {
       refs.current[id] = element;
@@ -321,6 +322,18 @@ const AssessmentExportContainer = () => {
     [],
   );
 
+  const handleCopyClick = (id: string) => {
+    const element = refs.current[id];
+    if (element) {
+      handleCopyAsImage(
+        element,
+        (loading) => setLoadingId(loading ? id : null),
+        id,
+      );
+    } else {
+      toast.error("Element not found. Please try again.");
+    }
+  };
   return (
     <PermissionControl error={[errorObject]}>
       <QueryBatchData
@@ -345,12 +358,15 @@ const AssessmentExportContainer = () => {
             assessment || {};
           const { questionsCount, answersCount } = progress;
 
-          const selectedNarration =
-            adviceSection?.aiNarration || adviceSection?.assessorNarration;
-          if (selectedNarration) {
-            setAdviceNarration(selectedNarration?.narration);
-            adviceSection?.aiNarration && setAiGenerated(true);
-          }
+          useEffect(() => {
+            const selectedNarration =
+              adviceSection?.aiNarration || adviceSection?.assessorNarration;
+            if (selectedNarration) {
+              setAdviceNarration(selectedNarration?.narration);
+              adviceSection?.aiNarration && setAiGenerated(true);
+            }
+          }, [adviceSection]);
+
           useEffect(() => {
             setDocumentTitle(
               `${t("document", { title: assessment?.title })}`,
