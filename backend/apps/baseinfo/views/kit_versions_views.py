@@ -14,6 +14,12 @@ class KitVersionsApi(APIView):
         result = kit_versions_services.load_kit_with_version_id(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
 
+    def delete(self, request, kit_version_id):
+        result = kit_versions_services.delete_kit_version(request, kit_version_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
 
 class KitVersionSubjectsApi(APIView):
     permission_classes = [IsAuthenticated]
@@ -306,4 +312,82 @@ class QuestionsChangeOrderApi(APIView):
         result = kit_versions_services.change_questions_order(request, kit_version_id)
         if result["Success"]:
             return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionImpactsApi(APIView):
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={201: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_question_impact(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionImpactApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, question_impact_id):
+        result = kit_versions_services.update_question_impact(request, kit_version_id, question_impact_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+    def delete(self, request, kit_version_id, question_impact_id):
+        result = kit_versions_services.delete_question_impact(request, kit_version_id, question_impact_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionImpactListApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, kit_version_id, question_id):
+        result = kit_versions_services.get_question_impacts_list(request, kit_version_id, question_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class AnswerOptionApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, kit_version_id, answer_option_id):
+        result = kit_versions_services.delete_answer_option(request, kit_version_id, answer_option_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionOptionsListApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, kit_version_id, question_id):
+        result = kit_versions_services.get_question_options_list(request, kit_version_id, question_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class QuestionnaireListQuestionsApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, kit_version_id, questionnaire_id):
+        result = kit_versions_services.get_questionnaire_questions_list(request, kit_version_id, questionnaire_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
+class AnswerRangesApi(APIView):
+    permission_classes = [IsAuthenticated]
+    size_param = openapi.Parameter('size', openapi.IN_QUERY, description="size param",
+                                   type=openapi.TYPE_INTEGER)
+    page_param = openapi.Parameter('page', openapi.IN_QUERY, description="page param",
+                                   type=openapi.TYPE_INTEGER)
+
+    @swagger_auto_schema(manual_parameters=[size_param, page_param])
+    def get(self, request, kit_version_id):
+        result = kit_versions_services.get_answer_ranges(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])

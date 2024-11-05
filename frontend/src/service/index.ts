@@ -208,8 +208,10 @@ export const createService = (
       config: AxiosRequestConfig<any> | undefined,
     ) {
       return axios.get(
-        `/api/v1/path-info?${assessmentId ? `assessment_id=${assessmentId}` : ""
-        }${spaceId ? `&&space_id=${spaceId}` : ""}${questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
+        `/api/v1/path-info?${
+          assessmentId ? `assessment_id=${assessmentId}` : ""
+        }${spaceId ? `&&space_id=${spaceId}` : ""}${
+          questionnaireId ? `&&questionnaire_id=${questionnaireId}` : ""
         }`,
         {
           ...(config ?? {}),
@@ -571,6 +573,12 @@ export const createService = (
         config,
       );
     },
+    deleteKitVersion(
+      { kitVersionId }: { kitVersionId: string },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(`/api/v1/kit-versions/${kitVersionId}/`, config);
+    },
     fetchSubjectKit(
       { kitVersionId }: { kitVersionId: TId },
       config?: AxiosRequestConfig<any>,
@@ -602,8 +610,8 @@ export const createService = (
       );
     },
     deleteSubjectKit(
-      { kitVersionId, subjectId }: { kitVersionId: TId, subjectId: TId },
-      config?: AxiosRequestConfig<any>
+      { kitVersionId, subjectId }: { kitVersionId: TId; subjectId: TId },
+      config?: AxiosRequestConfig<any>,
     ) {
       return axios.delete(
         `/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
@@ -611,13 +619,17 @@ export const createService = (
       );
     },
     updateKitSubject(
-      { kitVersionId, subjectId, data }: { kitVersionId: TId, subjectId: TId, data: any, },
+      {
+        kitVersionId,
+        subjectId,
+        data,
+      }: { kitVersionId: TId; subjectId: TId; data: any },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(`api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+      return axios.put(`/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
         data,
         config,
-      )
+      );
     },
     fetchAttributeKit(
       { kitVersionId }: { kitVersionId: TId },
@@ -650,8 +662,8 @@ export const createService = (
       );
     },
     deleteAttributeKit(
-      { kitVersionId, attributeId }: { kitVersionId: TId, attributeId: TId },
-      config?: AxiosRequestConfig<any>
+      { kitVersionId, attributeId }: { kitVersionId: TId; attributeId: TId },
+      config?: AxiosRequestConfig<any>,
     ) {
       return axios.delete(
         `/api/v1/kit-versions/${kitVersionId}/attributes/${attributeId}/`,
@@ -659,13 +671,18 @@ export const createService = (
       );
     },
     updateKitAttribute(
-      { kitVersionId, attributeId, data }: { kitVersionId: TId, attributeId: TId, data: any, },
+      {
+        kitVersionId,
+        attributeId,
+        data,
+      }: { kitVersionId: TId; attributeId: TId; data: any },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(`/api/v1/kit-versions/${kitVersionId}/attributes/${attributeId}/`,
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/attributes/${attributeId}/`,
         data,
         config,
-      )
+      );
     },
     fetchAssessment(
       { assessmentId }: { assessmentId: string },
@@ -682,54 +699,88 @@ export const createService = (
         config,
       );
     },
-     fetchQuestionnairesKit(
-          { kitVersionId }: { kitVersionId: TId },
-          config?: AxiosRequestConfig<any>,
-      ){
-          return axios.get(
-              `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
-              config,
-          );
-      },
-      changeQuestionnairesOrder(
-          { kitVersionId }: { kitVersionId: TId },
-          data: any,
-          config?: AxiosRequestConfig<any>,
-      ) {
-          return axios.put(
-              `/api/v1/kit-versions/${kitVersionId}/questionnaires-change-order/`,
-              data,
-              config,
-          );
-      },
-      deleteQuestionnairesKit(
-          { kitVersionId,subjectId }: { kitVersionId: TId, subjectId : TId },
-          config?: AxiosRequestConfig<any>
-      ) {
-          return axios.delete(
-              `/api/v1/kit-versions/${kitVersionId}/questionnaires/${subjectId}/`,
-              config,
-          );
-      },
-      postQuestionnairesKit(
-          { kitVersionId, data }: { kitVersionId: TId; data: any },
-          config?: AxiosRequestConfig<any>,
-      ) {
-          return axios.post(
-              `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
-              data,
-              config,
-          );
-      },
-      updateKitQuestionnaires(
-          { kitVersionId, questionnaireId, data }: { kitVersionId: TId, questionnaireId : TId, data: any, },
-          config?: AxiosRequestConfig<any>,
-      ){
-          return axios.put(`api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
-              data,
-              config,
-          )
-      },
+    fetchQuestionnairesKit(
+      { kitVersionId }: { kitVersionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
+        config,
+      );
+    },
+    fetchQuestionListKit(
+      {
+        kitVersionId,
+        questionnaireId,
+      }: { kitVersionId: TId; questionnaireId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
+        {
+          ...(config ?? {}),
+          params: {
+            page: 0,
+            size: 100,
+          },
+        },
+      );
+    },
+    changeQuestionsOrder(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questions-change-order/`,
+        data,
+        config,
+      );
+    },
+    changeQuestionnairesOrder(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires-change-order/`,
+        data,
+        config,
+      );
+    },
+    deleteQuestionnairesKit(
+      { kitVersionId, subjectId }: { kitVersionId: TId; subjectId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${subjectId}/`,
+        config,
+      );
+    },
+    postQuestionnairesKit(
+      { kitVersionId, data }: { kitVersionId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/`,
+        data,
+        config,
+      );
+    },
+    updateKitQuestionnaires(
+      {
+        kitVersionId,
+        questionnaireId,
+        data,
+      }: { kitVersionId: TId; questionnaireId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
+        data,
+        config,
+      );
+    },
     createAdvice(
       {
         assessmentId,
@@ -780,9 +831,12 @@ export const createService = (
       config?: AxiosRequestConfig<any> | undefined,
     ) {
       const { assessmentId } = args ?? {};
-      return axios.post(`/api/v1/assessments/${assessmentId}/migrate-kit-version/`, {
-        ...config,
-      });
+      return axios.post(
+        `/api/v1/assessments/${assessmentId}/migrate-kit-version/`,
+        {
+          ...config,
+        },
+      );
     },
     fetchQuestionnaires(
       args: { assessmentId: TId },
@@ -1548,15 +1602,15 @@ export const createService = (
       const { description, questionId, assessmentId, type, id } = args ?? {};
       return id
         ? axios.put(`/api/v1/evidences/${id}/`, {
-          description,
-          type,
-        })
+            description,
+            type,
+          })
         : axios.post(`/api/v1/evidences/`, {
-          assessmentId: assessmentId,
-          questionId: questionId,
-          type: type,
-          description,
-        });
+            assessmentId: assessmentId,
+            questionId: questionId,
+            type: type,
+            description,
+          });
     },
     deleteEvidence(
       args: { id: TId },

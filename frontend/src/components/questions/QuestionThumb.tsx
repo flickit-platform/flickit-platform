@@ -3,7 +3,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
-import { theme } from "@/config/theme";
+import {farsiFontFamily, primaryFontFamily, theme} from "@/config/theme";
+import LanguageDetector from "@utils/languageDetector";
 
 export const QuestionThumb = (props: any) => {
   const {
@@ -24,7 +25,7 @@ export const QuestionThumb = (props: any) => {
           <Trans i18nKey={"question"} /> {questionIndex}/
           {total_number_of_questions}
         </Typography>
-        <Typography variant="h6">{question?.title}</Typography>
+        <Typography variant="h6" sx={LanguageDetector(question?.title)? {fontFamily: farsiFontFamily, textAlign: "right" } : {fontFamily: primaryFontFamily, textAlign: "left"}}>{question?.title}</Typography>
       </Box>
       {question.answer?.selectedOption && (
         <Box mt={3}>

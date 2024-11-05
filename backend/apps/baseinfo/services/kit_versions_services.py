@@ -272,3 +272,78 @@ def change_questions_order(request, kit_version_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def create_question_impact(request, kit_version_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/question-impacts',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_question_impacts_list(request, kit_version_id, question_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questions/{question_id}/impacts',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def update_question_impact(request, kit_version_id, question_impact_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/question-impacts/{question_impact_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_question_impact(request, kit_version_id, question_impact_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/question-impacts/{question_impact_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_answer_option(request, kit_version_id, answer_option_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/answer-options/{answer_option_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def get_question_options_list(request, kit_version_id, question_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questions/{question_id}/options',
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_questionnaire_questions_list(request, kit_version_id, questionnaire_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/questionnaires/{questionnaire_id}/questions',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def get_answer_ranges(request, kit_version_id):
+    response = requests.get(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/answer-ranges',
+        params=request.query_params,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}
+
+
+def delete_kit_version(request, kit_version_id):
+    response = requests.delete(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}',
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 204:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}

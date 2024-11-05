@@ -261,7 +261,7 @@ const AssessmentAdviceContainer = (props: any) => {
                           onClick={handleClickOpen}
                           disabled={!narrationComponent.aiEnabled}
                         >
-                          <Trans i18nKey="useAdviceGenerator" />
+                          <Trans i18nKey="useAdviceAssistant" />
                           <FaWandMagicSparkles />
                         </Button>
                       </div>
@@ -301,7 +301,7 @@ const AssessmentAdviceContainer = (props: any) => {
                               i18nKey={
                                 AIGenerated
                                   ? "regenerate"
-                                  : "useAdviceGenerator"
+                                  : "useAdviceAssistant"
                               }
                             />
                             <FaWandMagicSparkles />

@@ -24,12 +24,27 @@ urlpatterns = [
     path("<str:kit_version_id>/questionnaires/", kit_versions_views.QuestionnairesApi.as_view()),
     path("<str:kit_version_id>/questionnaires/<str:questionnaire_id>/"
          , kit_versions_views.QuestionnaireApi.as_view()),
+    path("<str:kit_version_id>/questionnaires/<str:questionnaire_id>/questions/"
+         , kit_versions_views.QuestionnaireListQuestionsApi.as_view()),
     path("<str:kit_version_id>/questionnaires-change-order/",
          kit_versions_views.QuestionnaireChangeOrderApi.as_view()),
     path("<str:kit_version_id>/questions/",
          kit_versions_views.QuestionsApi.as_view()),
     path("<str:kit_version_id>/questions/<str:question_id>/",
          kit_versions_views.QuestionApi.as_view()),
+    path("<str:kit_version_id>/questions/<str:question_id>/impacts/",
+         kit_versions_views.QuestionImpactListApi.as_view()),
+    path("<str:kit_version_id>/questions/<str:question_id>/options/",
+         kit_versions_views.QuestionOptionsListApi.as_view()),
     path("<str:kit_version_id>/questions-change-order/",
          kit_versions_views.QuestionsChangeOrderApi.as_view()),
+    path("<str:kit_version_id>/question-impacts/",
+         kit_versions_views.QuestionImpactsApi.as_view()),
+    path("<str:kit_version_id>/question-impacts/<str:question_impact_id>/",
+         kit_versions_views.QuestionImpactApi.as_view()),
+    path("<str:kit_version_id>/answer-options/<str:answer_option_id>/",
+         kit_versions_views.AnswerOptionApi.as_view()),
+    path("<str:kit_version_id>/answer-ranges/",
+         kit_versions_views.AnswerRangesApi.as_view()),
+
 ]
