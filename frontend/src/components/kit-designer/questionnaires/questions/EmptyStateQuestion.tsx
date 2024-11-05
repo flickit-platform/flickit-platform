@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Trans } from "react-i18next";
-import { styles } from "@/config/styles";
+import { styles } from "@styles";
 import {alpha, Tooltip} from "@mui/material";
 import { ReactElement } from "react";
 import {theme} from "@config/theme";

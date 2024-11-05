@@ -26,7 +26,7 @@ import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
 import {alpha, CircularProgress} from "@mui/material";
 import { debounce } from "lodash";
-import EmptyStateQuestion from "@components/kit-designer/common/EmptyStateQuestion";
+import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
