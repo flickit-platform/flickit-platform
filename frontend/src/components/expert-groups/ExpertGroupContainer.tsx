@@ -23,7 +23,7 @@ import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
-import {t, use} from "i18next";
+import {t} from "i18next";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import AssessmentKitListItem from "../assessment-kit/AssessmentKitListItem";
