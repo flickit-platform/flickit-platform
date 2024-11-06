@@ -32,12 +32,12 @@ import QuestionForm from "./questions/QuestionForm";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
-  fetchQuery: any;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean;
   name: string;
+  fetchQuery?: any;
 }
 interface ITempValues {
   title: string;

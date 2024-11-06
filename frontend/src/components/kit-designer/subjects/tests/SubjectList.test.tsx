@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from "@testing-library/react";
 import { vi } from "vitest";
-import ListOfItems from "../../questionnaires/QuestionnaireList";
+import ListOfItems from "../../common/GeneralList";
 
 const mockQSubject = [
     {
