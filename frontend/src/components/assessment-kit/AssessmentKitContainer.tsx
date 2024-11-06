@@ -188,7 +188,7 @@ const AssessmentKit = (props: any) => {
                       textDecoration: "none",
                     }}
                     component={Link}
-                    to={`/user/expert-groups/${id}`}
+                    to={`/user/expert-groups/${id}/1`}
                   >
                     <CardHeader
                       titleTypographyProps={{

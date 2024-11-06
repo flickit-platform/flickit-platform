@@ -32,7 +32,7 @@ const KitDesignerTitle = ({ kitVersion }: { kitVersion: IKitVersion }) => {
             },
             {
               title: kitVersion?.assessmentKit?.expertGroup?.title,
-              to: `/user/expert-groups/${kitVersion?.assessmentKit?.expertGroup?.id}`,
+              to: `/user/expert-groups/${kitVersion?.assessmentKit?.expertGroup?.id}/1`,
             },
 
             { title: kitVersion?.assessmentKit?.title },

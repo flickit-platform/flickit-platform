@@ -81,7 +81,7 @@ const Routes = () => {
           {/* Account related routes */}
           <Route path="/user/:accountTab" element={<UserScreen />} />
           <Route
-            path="/user/:accountTab/:expertGroupId"
+            path="/user/:accountTab/:expertGroupId/:page"
             element={<ExpertGroupScreen />}
           />
           <Route
