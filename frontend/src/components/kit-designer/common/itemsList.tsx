@@ -14,7 +14,7 @@ import { KitDesignListItems, TId } from "@types";
 import { Trans } from "react-i18next";
 import { theme } from "@config/theme";
 import languageDetector from "@utils/languageDetector";
-import QuestionContain from "@components/kit-designer/questionnaires/questions/questionContain";
+import QuestionContainer from "@/components/kit-designer/questionnaires/questions/QuestionContainer";
 import QueryData from "@common/QueryData";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -500,6 +500,7 @@ const ListOfItems = ({
                                                 {...provided.droppableProps}
                                                 ref={provided.innerRef}
                                             >
+<<<<<<< Updated upstream:frontend/src/components/kit-designer/common/itemsList.tsx
                                               {questionData?.map(
                                                   (question: any, index: number) => (
                                                       <Draggable
@@ -522,6 +523,20 @@ const ListOfItems = ({
                                                         )}
                                                       </Draggable>
                                                   ),
+=======
+                                              {(provided) => (
+                                                <Box
+                                                  ref={provided.innerRef}
+                                                  {...provided.draggableProps}
+                                                  {...provided.dragHandleProps}
+                                                  sx={{ marginBottom: 1 }}
+                                                >
+                                                  <QuestionContainer
+                                                    key={question.id}
+                                                    {...question}
+                                                  />
+                                                </Box>
+>>>>>>> Stashed changes:frontend/src/components/kit-designer/questionnaires/QuestionnaireList.tsx
                                               )}
                                               {provided.placeholder}
                                             </Box>
