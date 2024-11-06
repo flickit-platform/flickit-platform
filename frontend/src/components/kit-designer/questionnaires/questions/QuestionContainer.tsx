@@ -8,7 +8,7 @@ import { Divider, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 const QuestionContain = (props: any) => {
-  const { title, index, total, id } = props;
+  const { question, fetchQuery } = props;
   const { kitVersionId = "" } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -34,9 +34,9 @@ const QuestionContain = (props: any) => {
           mr={2}
           px={0.2}
         >
-          <Typography variant="semiBoldLarge">{`Q. ${index}`}</Typography>
+          <Typography variant="semiBoldLarge">{`Q. ${question?.index}`}</Typography>
         </Box>
-        <Box sx={{ width: { xs: "80%", md: "90%" } }}>{title}</Box>
+        <Box sx={{ width: { xs: "80%", md: "90%" } }}>{question?.title}</Box>
         <Box
           sx={{
             width: { xs: "20%", md: "10%" },
@@ -49,12 +49,15 @@ const QuestionContain = (props: any) => {
           </IconButton>
         </Box>
       </Box>
-      {index !== total && <Divider sx={{ width: "95%", mx: "auto" }} />}
+      {question.index !== question.total && (
+        <Divider sx={{ width: "95%", mx: "auto" }} />
+      )}
       <QuestionDialog
         open={isDialogOpen}
-        questionId={id}
+        question={question}
         kitVersionId={kitVersionId}
         onClose={handleCloseDialog}
+        fetchQuery={fetchQuery}
       />
     </>
   );

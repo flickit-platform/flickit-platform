@@ -16,43 +16,69 @@ import { useForm, FormProvider } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import { useServiceContext } from "@/providers/ServiceProvider";
+import { IQuestionInfo } from "@/types";
+import { useQuery } from "@/utils/useQuery";
 
 interface QuestionDialogProps {
   open: boolean;
-  questionId: string;
+  question: IQuestionInfo;
   kitVersionId: string;
   onClose: () => void;
+  fetchQuery: any;
 }
 
 const QuestionDialog: React.FC<QuestionDialogProps> = ({
   open,
-  questionId,
+  question,
   kitVersionId,
   onClose,
+  fetchQuery,
 }) => {
+  const fetchAttributeKit = useQuery({
+    service: (args = { kitVersionId }, config) =>
+      service.fetchAttributeKit(args, config),
+    runOnMount: false,
+  });
+
+  useEffect(() => {}, []);
   const [questionData, setQuestionData] = useState<any>(null);
-  const formMethods = useForm();
+  const formMethods = useForm({
+    defaultValues: {
+      title: question?.title || "",
+      hint: question?.hint || "",
+      options: question?.options || [{ text: "" }], // Default to an array with one empty option if none exist
+      mayNotBeApplicable: question?.mayNotBeApplicable || false,
+      advisable: question?.advisable || false,
+    },
+  });
   const { service } = useServiceContext();
 
   useEffect(() => {
-    if (open && questionId) {
-    //   service
-    //     .loadQuestionsKit({ kitVersionId, questionId })
-    //     .then((response) => {
-    //       setQuestionData(response.data);
-    //       // Populate form with existing data if needed
-    //       formMethods.reset(response.data);
-    //     });
+    if (open && question.id) {
+      fetchAttributeKit.query();
+      console.log(fetchAttributeKit.data)
+      formMethods.reset({
+        title: question?.title || "",
+        hint: question?.hint || "",
+        options: question?.options || [{ text: "" }],
+        mayNotBeApplicable: question?.mayNotBeApplicable || false,
+        advisable: question?.advisable || false,
+      });
     }
-  }, [open, questionId, kitVersionId, service, formMethods]);
+  }, [open, question, formMethods]);
 
   const onSubmit = async (data: any) => {
     try {
+      const requestData = {
+        ...data,
+        index: 1, // Ensure index is included in the request payload
+      };
       await service.updateQuestionsKit({
         kitVersionId,
-        questionId,
-        data,
+        questionId: question?.id,
+        data: requestData,
       });
+      fetchQuery.query();
       onClose();
     } catch (error) {
       console.error("Failed to update question:", error);
@@ -82,7 +108,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  {...formMethods.register("question", { required: true })}
+                  {...formMethods.register("title", { required: true })}
                   fullWidth
                   label="Question"
                   placeholder="Write the question here"
@@ -101,24 +127,32 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                 <Typography variant="body2">
                   <Trans i18nKey="answerOptions" />
                 </Typography>
-                {/* Example option input fields */}
-                <Box display="flex" alignItems="center" mt={1}>
-                  <TextField {...formMethods.register("options[0]")} fullWidth placeholder="Option 1" />
-                  <IconButton>
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
-                <Box display="flex" alignItems="center" mt={1}>
-                  <TextField {...formMethods.register("options[1]")} fullWidth placeholder="Option 2" />
-                  <IconButton>
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
+                {formMethods
+                  .watch("options")
+                  .map((option: any, index: number) => (
+                    <Box display="flex" alignItems="center" mt={1} key={index}>
+                      <TextField
+                        //   {...formMethods.register(`options[${index}].text`)}
+                        fullWidth
+                        placeholder={`Option ${index + 1}`}
+                        defaultValue={option.text}
+                      />
+                      <IconButton>
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                  ))}
                 <Button
                   startIcon={<AddIcon />}
                   variant="outlined"
                   fullWidth
                   sx={{ mt: 2 }}
+                  //   onClick={() =>
+                  //     formMethods.setValue("options", [
+                  //       ...formMethods.getValues("options"),
+                  //       { text: "" },
+                  //     ])
+                  //   }
                 >
                   <Trans i18nKey="newOption" />
                 </Button>
@@ -132,8 +166,11 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             <Typography variant="body2" color="textSecondary">
               Impact indicates how options affect various attributes.
             </Typography>
-            <Button variant="outlined" fullWidth sx={{ mt: 2 }}>
-              <Trans i18nKey="selectAttribute" />
+            <Button variant="outlined" fullWidth sx={{ mt: 2 }} disabled>
+              <Trans
+                i18nKey="selectAttribute"
+                disabled={fetchAttributeKit?.data?.items?.length === 0}
+              />
             </Button>
 
             {/* Section 3: Advanced Settings */}
@@ -148,13 +185,19 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                 <Typography variant="body2">
                   <Trans i18nKey="notApplicable" />
                 </Typography>
-                <Switch {...formMethods.register("notApplicable")} />
+                <Switch
+                  {...formMethods.register("mayNotBeApplicable")}
+                  checked={formMethods.watch("mayNotBeApplicable")}
+                />
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="body2">
                   <Trans i18nKey="notAdvisable" />
                 </Typography>
-                <Switch {...formMethods.register("notAdvisable")} />
+                <Switch
+                  {...formMethods.register("advisable")}
+                  checked={formMethods.watch("advisable")}
+                />
               </Grid>
             </Grid>
             <Box display="flex" justifyContent="space-between" p={2}>

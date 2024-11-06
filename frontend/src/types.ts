@@ -53,6 +53,7 @@ export interface IQuestionInfo {
   mayNotBeApplicable?: boolean;
   is_not_applicable?: boolean;
   confidence_level?: any;
+  advisable?: boolean
 }
 
 export interface IPermissions {
