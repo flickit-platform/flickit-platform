@@ -69,6 +69,11 @@ const ExpertGroupContainer = () => {
       service.fetchUserExpertGroup(args, config),
   });
 
+    const assessmentKitQuery = useQuery({
+        service: (args = { id: expertGroupId, size:10, page:1 }, config) =>
+            service.fetchExpertGroupAssessmentKits(args, config),
+    });
+
   const expertGroupMembersQueryData = useQuery({
     service: (args = { id: expertGroupId, status: "ACTIVE" }, config) =>
       service.fetchExpertGroupMembers(args, config),
@@ -161,7 +166,6 @@ const ExpertGroupContainer = () => {
                   </>
                 )}
                 <Box mt={5}>
-                    {/*TODO*/}
                   <AssessmentKitsList
                     queryData={queryData}
                     hasAccess={editable}
@@ -170,6 +174,7 @@ const ExpertGroupContainer = () => {
                     is_member={is_member}
                     is_expert={editable}
                     setAssessmentKitsCounts={setAssessmentKitsCounts}
+                    assessmentKitQuery={assessmentKitQuery}
                   />
                 </Box>
                 <Box mt={5}>
@@ -936,16 +941,13 @@ const AssessmentKitsList = (props: any) => {
     setAssessmentKitsCounts,
     is_member,
     excelToDslDialogProps,
+    assessmentKitQuery
   } = props;
   const { expertGroupId } = useParams();
   const kitDesignerDialogProps = useDialog({
     context: { type: "draft", data: { expertGroupId, dsl_id: 959 } },
   });
-  const { service } = useServiceContext();
-  const assessmentKitQuery = useQuery({
-    service: (args = { id: expertGroupId }, config) =>
-      service.fetchExpertGroupAssessmentKits(args, config),
-  });
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
