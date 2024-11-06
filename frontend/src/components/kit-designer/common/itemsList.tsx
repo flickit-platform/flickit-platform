@@ -24,8 +24,9 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import { CircularProgress } from "@mui/material";
+import {alpha, CircularProgress} from "@mui/material";
 import { debounce } from "lodash";
+import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
@@ -214,15 +215,15 @@ const ListOfItems = ({
                       <AccordionSummary
                         sx={{
                           backgroundColor:
-                            editMode === item.id ? "#F3F5F6" : "#fff",
-                          borderRadius: "8px",
+                            editMode === item.id ? "#F3F5F6" :  item.questionsCount == 0 ? alpha(theme.palette.error.main,.04) :  "#fff",
+                          borderRadius: questionData.length != 0 ? "8px" : "8px 8px 0 0" ,
                           border: "0.3px solid #73808c30",
                           display: "flex",
                           position: "relative",
                           margin: 0,
                           padding: 0,
                           "&.Mui-expanded": {
-                            backgroundColor: "#F3F5F6",
+                            backgroundColor:  item.questionsCount == 0 ? alpha(theme.palette.error.main,.08) : "#F3F5F6" ,
                           },
                           "& .MuiAccordionSummary-content": {
                             margin: 0,
@@ -246,7 +247,7 @@ const ListOfItems = ({
                           <Box
                             sx={{
                               ...styles.centerVH,
-                              background: "#F3F5F6",
+                              background: item.questionsCount == 0 ? alpha(theme.palette.error.main,.12) : "#F3F5F6",
                               width: { xs: "50px", md: "64px" },
                               justifyContent: "space-around",
                             }}
@@ -357,7 +358,7 @@ const ListOfItems = ({
                                     size="small"
                                     onClick={(e) => handleEditClick(e, item)}
                                     sx={{ mx: 1 }}
-                                    color="success"
+                                    color= {item.questionsCount == 0 ? "error" : "success"}
                                     data-testid="items-edit-icon"
                                   >
                                     <EditRoundedIcon fontSize="small" />
@@ -460,8 +461,8 @@ const ListOfItems = ({
                                     width: "3.75rem",
                                     height: "3.75rem",
                                     borderRadius: "50%", // برای دایره‌ای کردن دکمه
-                                    backgroundColor: "#E2E5E9", // رنگ پس‌زمینه
-                                    color: "#2B333B",
+                                    backgroundColor: item.questionsCount == 0 ? theme.palette.error.main :  "#E2E5E9", // رنگ پس‌زمینه
+                                    color: item.questionsCount == 0 ? "#FAD1D8" : "#2B333B",
                                     display: "flex",
                                     alignItems: " center",
                                     justifyContent: "center",
@@ -475,7 +476,7 @@ const ListOfItems = ({
                         </Box>
                       </AccordionSummary>
                       <AccordionDetails
-                        sx={{ margin: 0, padding: 0, py: "20px" }}
+                        sx={{ margin: 0, padding: 0, py: questionData.length != 0 ? "20px" : "unset" }}
                       >
                         {fetchQuestionListKit.loading ? (
                           <Box
@@ -489,41 +490,54 @@ const ListOfItems = ({
                             <CircularProgress />
                           </Box>
                         ) : (
-                          <DragDropContext onDragEnd={handleQuestionDragEnd}>
-                            <Droppable droppableId={`questions-${item.id}`}>
-                              {(provided) => (
-                                <Box
-                                  {...provided.droppableProps}
-                                  ref={provided.innerRef}
-                                >
-                                  {questionData?.map(
-                                    (question: any, index: number) => (
-                                      <Draggable
-                                        key={question.id}
-                                        draggableId={question.id.toString()}
-                                        index={index}
-                                      >
+                            <>
+                              {
+                                questionData.length >= 1 ?
+                                    <DragDropContext onDragEnd={handleQuestionDragEnd}>
+                                      <Droppable droppableId={`questions-${item.id}`}>
                                         {(provided) => (
-                                          <Box
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            sx={{ marginBottom: 1 }}
-                                          >
-                                            <QuestionContain
-                                              key={question.id}
-                                              {...question}
-                                            />
-                                          </Box>
+                                            <Box
+                                                {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                            >
+                                              {questionData?.map(
+                                                  (question: any, index: number) => (
+                                                      <Draggable
+                                                          key={question.id}
+                                                          draggableId={question.id.toString()}
+                                                          index={index}
+                                                      >
+                                                        {(provided) => (
+                                                            <Box
+                                                                ref={provided.innerRef}
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                sx={{ marginBottom: 1 }}
+                                                            >
+                                                              <QuestionContain
+                                                                  key={question.id}
+                                                                  {...question}
+                                                              />
+                                                            </Box>
+                                                        )}
+                                                      </Draggable>
+                                                  ),
+                                              )}
+                                              {provided.placeholder}
+                                            </Box>
                                         )}
-                                      </Draggable>
-                                    ),
-                                  )}
-                                  {provided.placeholder}
-                                </Box>
-                              )}
-                            </Droppable>
-                          </DragDropContext>
+                                      </Droppable>
+                                    </DragDropContext>
+                                    :
+                                    <EmptyStateQuestion
+                                        btnTitle={"addFirstQuestion"}
+                                        title={"noQuestionHere"}
+                                        SubTitle={"noQuestionAtTheMoment"}
+                                        // onAddNewRow={handleAddNewRow} open modal
+                                    />
+                              }
+                            </>
+
                         )}
                       </AccordionDetails>
                     </Accordion>
