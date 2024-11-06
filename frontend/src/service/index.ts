@@ -1404,7 +1404,7 @@ export const createService = (
       const { id, size, page } = args ?? {};
       return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, {
           ...config || {},
-          params:{size,page}
+          params:{ size: size, page: page - 1 }
       });
     },
     fetchExpertGroupUnpublishedAssessmentKits(
