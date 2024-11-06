@@ -24,12 +24,15 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import {alpha, CircularProgress} from "@mui/material";
+import { alpha, Button, CircularProgress } from "@mui/material";
 import { debounce } from "lodash";
 import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
+import { Add } from "@mui/icons-material";
+import QuestionForm from "./questions/QuestionForm";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
+  fetchQuery: any;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
@@ -53,12 +56,34 @@ interface IQuestion {
 
 const ListOfItems = ({
   items,
+  fetchQuery,
   onEdit,
   onDelete,
   onReorder,
   deleteBtn,
   name,
 }: ListOfItemsProps) => {
+  const fetchQuestionListKit = useQuery({
+    service: (args, config) => service.fetchQuestionListKit(args, config),
+    runOnMount: false,
+  });
+  const postQuestionsKit = useQuery({
+    service: (args, config) => service.postQuestionsKit(args, config),
+    runOnMount: false,
+  });
+
+  const deleteQuestionnairesKit = useQuery({
+    service: (args, config) => service.deleteQuestionnairesKit(args, config),
+    runOnMount: false,
+  });
+
+  const updateKitQuestionnaires = useQuery({
+    service: (args, config) => service.updateKitQuestionnaires(args, config),
+    runOnMount: false,
+  });
+  const [showNewQuestionForm, setShowNewQuestionForm] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
   const [tempValues, setTempValues] = useState<ITempValues>({
@@ -118,11 +143,6 @@ const ListOfItems = ({
     });
   };
 
-  const fetchQuestionListKit = useQuery({
-    service: (args, config) => service.fetchQuestionListKit(args, config),
-    runOnMount: false,
-  });
-
   const handelChangeAccordion =
     ({ id }: { id: TId }) =>
     async (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -134,7 +154,15 @@ const ListOfItems = ({
             kitVersionId,
             questionnaireId: id,
           });
+          setNewQuestion({
+            title: "",
+            index: data?.items.length + 1 || 1,
+            value: data?.items.length + 1 || 1,
+            id: null,
+          });
           setQuestionData(data?.items);
+        } else {
+          handleCancel(id);
         }
       } catch (e) {
         const err = e as ICustomError;
@@ -176,6 +204,64 @@ const ListOfItems = ({
     setQuestionData(reorderedQuestions);
   };
 
+  const handleAddNewQuestionClick = (id: any) => {
+    setShowNewQuestionForm((prev) => ({
+      ...prev,
+      [id]: true,
+    }));
+  };
+
+  const [newQuestion, setNewQuestion] = useState({
+    title: "",
+    index: 1,
+    value: 1,
+    id: null,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const parsedValue = name === "value" ? parseInt(value) || 1 : value;
+    setNewQuestion((prev) => ({
+      ...prev,
+      [name]: parsedValue,
+    }));
+  };
+
+  const handleSave = async (id: TId) => {
+    try {
+      const data = {
+        kitVersionId,
+        index: newQuestion.index,
+        value: newQuestion.value,
+        title: newQuestion.title,
+        advisable: false,
+        mayNotBeApplicable: false,
+        questionnaireId: id,
+      };
+      handleCancel(id);
+
+      await postQuestionsKit.query({ kitVersionId, data }).then(() => {
+        fetchQuery.query();
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const handleCancel = (id: TId) => {
+    setShowNewQuestionForm((prev) => ({
+      ...prev,
+      [id]: false,
+    }));
+    setNewQuestion({
+      title: "",
+      index: fetchQuestionListKit.data?.items.length + 1 || 1,
+      value: fetchQuestionListKit.data?.items.length + 1 || 1,
+      id: null,
+    });
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="subjects">
@@ -215,15 +301,23 @@ const ListOfItems = ({
                       <AccordionSummary
                         sx={{
                           backgroundColor:
-                            editMode === item.id ? "#F3F5F6" :  item.questionsCount == 0 ? alpha(theme.palette.error.main,.04) :  "#fff",
-                          borderRadius: questionData.length != 0 ? "8px" : "8px 8px 0 0" ,
+                            editMode === item.id
+                              ? "#F3F5F6"
+                              : item.questionsCount == 0
+                                ? alpha(theme.palette.error.main, 0.04)
+                                : "#fff",
+                          borderRadius:
+                            questionData.length != 0 ? "8px" : "8px 8px 0 0",
                           border: "0.3px solid #73808c30",
                           display: "flex",
                           position: "relative",
                           margin: 0,
                           padding: 0,
                           "&.Mui-expanded": {
-                            backgroundColor:  item.questionsCount == 0 ? alpha(theme.palette.error.main,.08) : "#F3F5F6" ,
+                            backgroundColor:
+                              item.questionsCount == 0
+                                ? alpha(theme.palette.error.main, 0.08)
+                                : "#F3F5F6",
                           },
                           "& .MuiAccordionSummary-content": {
                             margin: 0,
@@ -247,7 +341,10 @@ const ListOfItems = ({
                           <Box
                             sx={{
                               ...styles.centerVH,
-                              background: item.questionsCount == 0 ? alpha(theme.palette.error.main,.12) : "#F3F5F6",
+                              background:
+                                item.questionsCount == 0
+                                  ? alpha(theme.palette.error.main, 0.12)
+                                  : "#F3F5F6",
                               width: { xs: "50px", md: "64px" },
                               justifyContent: "space-around",
                             }}
@@ -358,7 +455,11 @@ const ListOfItems = ({
                                     size="small"
                                     onClick={(e) => handleEditClick(e, item)}
                                     sx={{ mx: 1 }}
-                                    color= {item.questionsCount == 0 ? "error" : "success"}
+                                    color={
+                                      item.questionsCount == 0
+                                        ? "error"
+                                        : "success"
+                                    }
                                     data-testid="items-edit-icon"
                                   >
                                     <EditRoundedIcon fontSize="small" />
@@ -461,8 +562,14 @@ const ListOfItems = ({
                                     width: "3.75rem",
                                     height: "3.75rem",
                                     borderRadius: "50%", // برای دایره‌ای کردن دکمه
-                                    backgroundColor: item.questionsCount == 0 ? theme.palette.error.main :  "#E2E5E9", // رنگ پس‌زمینه
-                                    color: item.questionsCount == 0 ? "#FAD1D8" : "#2B333B",
+                                    backgroundColor:
+                                      item.questionsCount == 0
+                                        ? theme.palette.error.main
+                                        : "#E2E5E9", // رنگ پس‌زمینه
+                                    color:
+                                      item.questionsCount == 0
+                                        ? "#FAD1D8"
+                                        : "#2B333B",
                                     display: "flex",
                                     alignItems: " center",
                                     justifyContent: "center",
@@ -476,7 +583,11 @@ const ListOfItems = ({
                         </Box>
                       </AccordionSummary>
                       <AccordionDetails
-                        sx={{ margin: 0, padding: 0, py: questionData.length != 0 ? "20px" : "unset" }}
+                        sx={{
+                          margin: 0,
+                          padding: 0,
+                          py: questionData.length != 0 ? "20px" : "unset",
+                        }}
                       >
                         {fetchQuestionListKit.loading ? (
                           <Box
@@ -490,54 +601,95 @@ const ListOfItems = ({
                             <CircularProgress />
                           </Box>
                         ) : (
-                            <>
-                              {
-                                questionData.length >= 1 ?
-                                    <DragDropContext onDragEnd={handleQuestionDragEnd}>
-                                      <Droppable droppableId={`questions-${item.id}`}>
-                                        {(provided) => (
-                                            <Box
-                                                {...provided.droppableProps}
-                                                ref={provided.innerRef}
+                          <>
+                            {questionData.length >= 1 ? (
+                              <>
+                                <DragDropContext
+                                  onDragEnd={handleQuestionDragEnd}
+                                >
+                                  <Droppable
+                                    droppableId={`questions-${item.id}`}
+                                  >
+                                    {(provided) => (
+                                      <Box
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                      >
+                                        {questionData?.map(
+                                          (question: any, index: number) => (
+                                            <Draggable
+                                              key={question.id}
+                                              draggableId={question.id.toString()}
+                                              index={index}
                                             >
-                                              {questionData?.map(
-                                                  (question: any, index: number) => (
-                                                      <Draggable
-                                                          key={question.id}
-                                                          draggableId={question.id.toString()}
-                                                          index={index}
-                                                      >
-                                                        {(provided) => (
-                                                            <Box
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                                sx={{ marginBottom: 1 }}
-                                                            >
-                                                              <QuestionContain
-                                                                  key={question.id}
-                                                                  {...question}
-                                                              />
-                                                            </Box>
-                                                        )}
-                                                      </Draggable>
-                                                  ),
+                                              {(provided) => (
+                                                <Box
+                                                  ref={provided.innerRef}
+                                                  {...provided.draggableProps}
+                                                  {...provided.dragHandleProps}
+                                                  sx={{ marginBottom: 1 }}
+                                                >
+                                                  <QuestionContain
+                                                    key={question.id}
+                                                    {...question}
+                                                  />
+                                                </Box>
                                               )}
-                                              {provided.placeholder}
-                                            </Box>
+                                            </Draggable>
+                                          ),
                                         )}
-                                      </Droppable>
-                                    </DragDropContext>
-                                    :
-                                    <EmptyStateQuestion
-                                        btnTitle={"addFirstQuestion"}
-                                        title={"noQuestionHere"}
-                                        SubTitle={"noQuestionAtTheMoment"}
-                                        // onAddNewRow={handleAddNewRow} open modal
-                                    />
-                              }
-                            </>
-
+                                        {provided.placeholder}
+                                      </Box>
+                                    )}
+                                  </Droppable>
+                                </DragDropContext>
+                                {!showNewQuestionForm[item.id] && (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      mt: 2,
+                                    }}
+                                  >
+                                    <Button
+                                      size="small"
+                                      variant="outlined"
+                                      color="primary"
+                                      onClick={() =>
+                                        handleAddNewQuestionClick(item.id)
+                                      }
+                                    >
+                                      <Add fontSize="small" />
+                                      <Trans i18nKey="newQuestion" />
+                                    </Button>
+                                  </Box>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {!showNewQuestionForm[item.id] && (
+                                  <EmptyStateQuestion
+                                    btnTitle={"addFirstQuestion"}
+                                    title={"noQuestionHere"}
+                                    SubTitle={"noQuestionAtTheMoment"}
+                                    onAddNewRow={() =>
+                                      handleAddNewQuestionClick(item.id)
+                                    }
+                                  />
+                                )}
+                              </>
+                            )}
+                          </>
+                        )}
+                        {showNewQuestionForm[item.id] && (
+                          <Box sx={{ mt: 2 }}>
+                            <QuestionForm
+                              newItem={newQuestion}
+                              handleInputChange={handleInputChange}
+                              handleSave={() => handleSave(item.id)}
+                              handleCancel={() => handleCancel(item.id)}
+                            />
+                          </Box>
                         )}
                       </AccordionDetails>
                     </Accordion>

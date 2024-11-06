@@ -698,5 +698,6 @@
   "deleteDraftConfirmationMessage": "Are you sure you want to delete this draft?<br/> This action cannot be undone. All unsaved changes will be lost.",
   "noQuestionHere": "No question here!",
   "addFirstQuestion": "Add First question",
-  "noQuestionAtTheMoment": "No question in this questionnaire at the moment. "
+  "noQuestionAtTheMoment": "No question in this questionnaire at the moment. ",
+  "newQuestion": "New Question"
 }
