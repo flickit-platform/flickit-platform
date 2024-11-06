@@ -708,35 +708,6 @@ export const createService = (
         config,
       );
     },
-    fetchQuestionListKit(
-      {
-        kitVersionId,
-        questionnaireId,
-      }: { kitVersionId: TId; questionnaireId: TId },
-      config?: AxiosRequestConfig<any>,
-    ) {
-      return axios.get(
-        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
-        {
-          ...(config ?? {}),
-          params: {
-            page: 0,
-            size: 100,
-          },
-        },
-      );
-    },
-    changeQuestionsOrder(
-      { kitVersionId }: { kitVersionId: TId },
-      data: any,
-      config?: AxiosRequestConfig<any>,
-    ) {
-      return axios.put(
-        `/api/v1/kit-versions/${kitVersionId}/questions-change-order/`,
-        data,
-        config,
-      );
-    },
     changeQuestionnairesOrder(
       { kitVersionId }: { kitVersionId: TId },
       data: any,
@@ -777,6 +748,45 @@ export const createService = (
     ) {
       return axios.put(
         `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
+        data,
+        config,
+      );
+    },
+    fetchQuestionListKit(
+      {
+        kitVersionId,
+        questionnaireId,
+      }: { kitVersionId: TId; questionnaireId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
+        {
+          ...(config ?? {}),
+          params: {
+            page: 0,
+            size: 100,
+          },
+        },
+      );
+    },
+    changeQuestionsOrder(
+      { kitVersionId }: { kitVersionId: TId },
+      data: any,
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questions-change-order/`,
+        data,
+        config,
+      );
+    },
+    postQuestionsKit(
+      { kitVersionId, data }: { kitVersionId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/questions/`,
         data,
         config,
       );
