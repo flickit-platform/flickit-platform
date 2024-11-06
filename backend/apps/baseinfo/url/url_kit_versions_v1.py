@@ -46,5 +46,6 @@ urlpatterns = [
          kit_versions_views.AnswerOptionApi.as_view()),
     path("<str:kit_version_id>/answer-ranges/",
          kit_versions_views.AnswerRangesApi.as_view()),
-
+    path("<str:kit_version_id>/answer-ranges/<str:answer_range_id>/",
+         kit_versions_views.AnswerRangeApi.as_view()),
 ]

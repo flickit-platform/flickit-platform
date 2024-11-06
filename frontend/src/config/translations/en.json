@@ -696,5 +696,9 @@
   "saveInDraft": "Save In Drafts",
   "deleteDraftConfirmation": "Delete Draft",
   "deleteDraftConfirmationMessage": "Are you sure you want to delete this draft?<br/> This action cannot be undone. All unsaved changes will be lost.",
-  "removeMemberExpertGroup": "Are you sure you want to delete this member?"
+  "removeMemberExpertGroup": "Are you sure you want to delete this member?",
+  "noQuestionHere": "No question here!",
+  "addFirstQuestion": "Add First question",
+  "noQuestionAtTheMoment": "No question in this questionnaire at the moment. ",
+  "newQuestion": "New Question"
 }

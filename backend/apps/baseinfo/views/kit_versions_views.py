@@ -391,3 +391,15 @@ class AnswerRangesApi(APIView):
     def get(self, request, kit_version_id):
         result = kit_versions_services.get_answer_ranges(request, kit_version_id)
         return Response(data=result["body"], status=result["status_code"])
+
+
+class AnswerRangeApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, answer_range_id):
+        result = kit_versions_services.update_answer_range(request, kit_version_id, answer_range_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])

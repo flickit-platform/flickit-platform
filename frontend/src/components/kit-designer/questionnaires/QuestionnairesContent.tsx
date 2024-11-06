@@ -6,7 +6,7 @@ import PermissionControl from "../../common/PermissionControl";
 import QueryBatchData from "../../common/QueryBatchData";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
-import ListOfItems from "../common/itemsList";
+import ListOfItems from "./QuestionnaireList";
 import EmptyState from "../common/EmptyState";
 import { Trans } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -19,30 +19,26 @@ import QuestionnairesForm from "./QuestionnairesForm";
 
 const QuestionnairesContent = () => {
   const { service } = useServiceContext();
-  const {  kitVersionId = "" } = useParams();
+  const { kitVersionId = "" } = useParams();
 
   const fetchQuestionnairesKit = useQuery({
     service: (args = { kitVersionId }, config) =>
-      service.fetchQuestionnairesKit(args , config)
+      service.fetchQuestionnairesKit(args, config),
   });
   const postQuestionnairesKit = useQuery({
-    service: (args , config) =>
-      service.postQuestionnairesKit(args, config),
-      runOnMount: false,
+    service: (args, config) => service.postQuestionnairesKit(args, config),
+    runOnMount: false,
   });
 
   const deleteQuestionnairesKit = useQuery({
-    service: (args , config) =>
-    service.deleteQuestionnairesKit(args, config),
+    service: (args, config) => service.deleteQuestionnairesKit(args, config),
     runOnMount: false,
   });
 
   const updateKitQuestionnaires = useQuery({
-    service: (args,config) =>
-        service.updateKitQuestionnaires(args,config),
+    service: (args, config) => service.updateKitQuestionnaires(args, config),
     runOnMount: false,
-  })
-
+  });
 
   const [showNewQuestionnairesForm, setShowNewQuestionnairesForm] =
     useState(false);
@@ -52,9 +48,8 @@ const QuestionnairesContent = () => {
     index: 1,
     value: 1,
     id: null,
-    weight: 1
+    weight: 1,
   });
-
 
   useEffect(() => {
     if (fetchQuestionnairesKit.data?.items?.length) {
@@ -92,11 +87,13 @@ const QuestionnairesContent = () => {
         description: newQuestionnaires.description,
       };
       if (newQuestionnaires.id) {
-        await service.updateKitQuestionnaires(
-            { kitVersionId, questionnaireId: newQuestionnaires.id, data },
-        );
+        await service.updateKitQuestionnaires({
+          kitVersionId,
+          questionnaireId: newQuestionnaires.id,
+          data,
+        });
       } else {
-        await postQuestionnairesKit.query({kitVersionId, data})
+        await postQuestionnairesKit.query({ kitVersionId, data });
       }
 
       // Reset form and re-fetch data after saving
@@ -141,9 +138,11 @@ const QuestionnairesContent = () => {
         weight: QuestionnairesItem.weight,
         description: QuestionnairesItem.description,
       };
-      await updateKitQuestionnaires.query(
-        { kitVersionId, questionnaireId: QuestionnairesItem.id, data },
-      );
+      await updateKitQuestionnaires.query({
+        kitVersionId,
+        questionnaireId: QuestionnairesItem.id,
+        data,
+      });
 
       setShowNewQuestionnairesForm(false);
       fetchQuestionnairesKit.query();
@@ -198,14 +197,18 @@ const QuestionnairesContent = () => {
     <PermissionControl scopes={["edit-assessment-kit"]}>
       <Box width="100%">
         <KitDHeader
-            onAddNewRow={handleAddNewRow}
-            hasBtn={fetchQuestionnairesKit.loaded && fetchQuestionnairesKit.data.items.length !== 0}
-            btnTitle={"newQuestionnaire"}
-            mainTitle={"questionnaires"}
-            description={"questionnairesKitDesignerDescription"}
-            subTitle={"questionnairesList"}
-            />
-        {fetchQuestionnairesKit.loaded && fetchQuestionnairesKit.data.items.length !== 0 ? (
+          onAddNewRow={handleAddNewRow}
+          hasBtn={
+            fetchQuestionnairesKit.loaded &&
+            fetchQuestionnairesKit.data.items.length !== 0
+          }
+          btnTitle={"newQuestionnaire"}
+          mainTitle={"questionnaires"}
+          description={"questionnairesKitDesignerDescription"}
+          subTitle={"questionnairesList"}
+        />
+        {fetchQuestionnairesKit.loaded &&
+        fetchQuestionnairesKit.data.items.length !== 0 ? (
           <Typography variant="bodyMedium" mt={1}>
             <Trans i18nKey="changeOrderHelper" />
           </Typography>
@@ -219,31 +222,32 @@ const QuestionnairesContent = () => {
             return (
               <>
                 {QuestionnairesData?.items?.length > 0 ? (
-                    <Box maxHeight={500} overflow="auto">
-                      <ListOfItems
-                        items={QuestionnairesData?.items}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        deleteBtn={false}
-                        onReorder={handleReorder}
-                        name={"questionnaires"}
-                      />
-                    </Box>
+                  <Box maxHeight={500} overflow="auto">
+                    <ListOfItems
+                      items={QuestionnairesData?.items}
+                      fetchQuery={fetchQuestionnairesKit}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      deleteBtn={false}
+                      onReorder={handleReorder}
+                      name={"questionnaires"}
+                    />
+                  </Box>
                 ) : (
-                      <EmptyState
-                        btnTitle={"newQuestionnaire"}
-                        title={"questionnairesListEmptyState"}
-                        SubTitle={"questionnairesEmptyStateDetailed"}
-                        onAddNewRow={handleAddNewRow}
-                      />
+                  <EmptyState
+                    btnTitle={"newQuestionnaire"}
+                    title={"questionnairesListEmptyState"}
+                    SubTitle={"questionnairesEmptyStateDetailed"}
+                    onAddNewRow={handleAddNewRow}
+                  />
                 )}
                 {showNewQuestionnairesForm && (
-                    <QuestionnairesForm
-                        newItem={newQuestionnaires}
-                        handleInputChange={handleInputChange}
-                        handleSave={handleSave}
-                        handleCancel={handleCancel}
-                    />
+                  <QuestionnairesForm
+                    newItem={newQuestionnaires}
+                    handleInputChange={handleInputChange}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                  />
                 )}
               </>
             );
