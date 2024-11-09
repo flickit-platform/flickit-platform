@@ -32,14 +32,14 @@ const ExpertGroupConfirmInvitationContainer = () => {
   const confirmInvitation = async () => {
     try {
       await confirmInvitationQueryData.query();
-      navigate(`/user/expert-groups/${expertGroupId}/1`, {
+      navigate(`/user/expert-groups/${expertGroupId}`, {
         replace: true,
       });
       toast.success("You have joined this expert group successfully.");
     } catch (e) {
       const err = e as ICustomError;
       if (err?.response?.data?.code === "ALREADY_EXISTS") {
-        navigate(`/user/expert-groups/${expertGroupId}/1`, {
+        navigate(`/user/expert-groups/${expertGroupId}`, {
           replace: true,
         });
       } else {

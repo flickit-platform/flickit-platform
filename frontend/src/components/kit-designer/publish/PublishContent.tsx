@@ -35,7 +35,7 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
   const handleDeleteDraft = async () => {
     try {
       await service.deleteKitVersion({ kitVersionId });
-      navigate(`/user/expert-groups/${expertGroupId}/1/`);
+      navigate(`/user/expert-groups/${expertGroupId}/`);
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -72,7 +72,7 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
               <Button
                 variant="outlined"
                 component={Link}
-                to={`/user/expert-groups/${expertGroupId}/1/`}
+                to={`/user/expert-groups/${expertGroupId}/`}
               >
                 <Trans i18nKey="close" />
               </Button>

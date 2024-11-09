@@ -111,13 +111,13 @@ export const AssessmentReportKit = (props: IAssessmentReportKit) => {
             </Typography>
             <Avatar
               component={Link}
-              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}/1`}
+              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
               src={assessmentKit.expertGroup.picture}
               sx={{ cursor: "pointer" }}
             />
             <Typography
               component={Link}
-              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}/1`}
+              to={`/user/expert-groups/${assessmentKit?.expertGroup.id}`}
               color="#8B0035"
               variant="titleLarge"
               sx={{

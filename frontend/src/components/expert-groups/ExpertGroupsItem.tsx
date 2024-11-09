@@ -66,7 +66,7 @@ const ExpertGroupsItem = (props: IExpertGroupsItemProps) => {
           onClick={seenExpertGroup}
           titleTypographyProps={{
             component: Link,
-            to: `/user/expert-groups/${id}/1`,
+            to: `/user/expert-groups/${id}`,
             sx: { textDecoration: "none" },
           }}
           avatar={

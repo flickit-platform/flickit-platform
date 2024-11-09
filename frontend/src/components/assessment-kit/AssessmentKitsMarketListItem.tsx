@@ -128,7 +128,7 @@ const AssessmentKitsMarketListItem = ({ bg1, bg2, data = {} }: any) => {
       <Box mt="auto">
         <CardHeader
           component={Link}
-          to={`/user/expert-groups/${data.expertGroup?.id}/1`}
+          to={`/user/expert-groups/${data.expertGroup?.id}`}
           sx={{ px: 0, textDecoration: "none" }}
           titleTypographyProps={{
             sx: { textDecoration: "none" },
