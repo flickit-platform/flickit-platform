@@ -142,7 +142,9 @@ const RichEditor = (props: IRichEditorProps) => {
                       marginBlockStart: 0,
                       marginBlockEnd: 0,
                     }
-                  : {},
+                  : {
+                      unicodeBidi: "plaintext"
+                    },
               },
             }
           : { ...(boxProps.sx || {}) }
