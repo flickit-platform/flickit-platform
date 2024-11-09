@@ -667,6 +667,7 @@
     "saveInDraft": "ذخیره در پیش‌نویس‌ها",
     "deleteDraftConfirmation": "حذف پیش‌نویس",
     "deleteDraftConfirmationMessage": "آیا مطمئن هستید که می‌خواهید این پیش‌نویس را حذف کنید؟<br/>  این عمل قابل بازگشت نیست. تمام تغییرات ذخیره نشده از بین خواهند رفت.",
+    "removeMemberExpertGroup": "آیا مطمئن هستید که می خواهید این کاربر را حذف کنید؟",
     "noQuestionHere": "هیچ سوالی اینجا نیست!",
     "addFirstQuestion": "اضافه کردن اولین سوال",
     "noQuestionAtTheMoment": "در حال حاضر سوالی در این پرسشنامه وجود ندارد.",

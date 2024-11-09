@@ -59,6 +59,7 @@ import ArrowDropUpRoundedIcon from "@mui/icons-material/ArrowDropUpRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
@@ -77,6 +78,10 @@ const ExpertGroupContainer = () => {
     service: (args = { id: expertGroupId, status: "PENDING" }, config) =>
       service.fetchExpertGroupMembers(args, config),
   });
+  const removeExpertGroupMembers = useQuery({
+    service: (args, config) =>
+      service.removeExpertGroupMembers(args, config),
+  });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
   const createAssessmentKitDialogProps = useDialog({
@@ -89,7 +94,20 @@ const ExpertGroupContainer = () => {
 
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
+  const [removeMemberDialog,setRemoveMemberDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
+  const handelRemoveMember = async (userId: any) =>{
+      try {
+          await removeExpertGroupMembers.query({id: expertGroupId, userId: removeMemberDialog.id})
+          await expertGroupMembersQueryData.query()
+          setRemoveMemberDialog({status:false,id:""})
+      }catch (e : any) {
+          const err = e as ICustomError;
+          toastError(err)
+          setRemoveMemberDialog({status:false,id:""})
+      }
+  }
   return (
+      <>
     <QueryData
       {...queryData}
       render={(data) => {
@@ -177,6 +195,7 @@ const ExpertGroupContainer = () => {
                     inviteeQueryData={expertGroupMembersInviteeQueryData}
                     hasAccess={editable}
                     setNumberOfMembers={setNumberOfMembers}
+                    setRemoveMemberDialog={setRemoveMemberDialog}
                   />
                 </Box>
               </Grid>
@@ -359,6 +378,14 @@ const ExpertGroupContainer = () => {
         );
       }}
     />
+          <DeleteConfirmationDialog
+              open={removeMemberDialog.status}
+              onClose={() => setRemoveMemberDialog({...removeMemberDialog,status: false})}
+              onConfirm={()=>handelRemoveMember}
+              title="warning"
+              content="removeMemberExpertGroup"
+          />
+      </>
   );
 };
 
@@ -1119,7 +1146,7 @@ const AssessmentKitsList = (props: any) => {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers } = props;
+  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers, setRemoveMemberDialog } = props;
 
   return (
     <>
@@ -1189,8 +1216,16 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 backgroundRepeat: "no-repeat",
                                 py: 1,
                                 px: 1.8,
+                                height:"220px",
+                                position: "relative"
                               }}
                             >
+                                <Tooltip title={<Trans i18nKey={"remove"} />}>
+                                    <IconButton onClick={()=>setRemoveMemberDialog({status:true,id})}
+                                                sx={{position: "absolute", right: 0, top: 0}} size="small" color="secondary" >
+                                        <DeleteRoundedIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
                               <Box
                                 sx={{
                                   mt: "28px",
