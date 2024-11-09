@@ -626,7 +626,8 @@ export const createService = (
       }: { kitVersionId: TId; subjectId: TId; data: any },
       config?: AxiosRequestConfig<any>,
     ) {
-      return axios.put(`/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/subjects/${subjectId}/`,
         data,
         config,
       );
@@ -787,6 +788,127 @@ export const createService = (
     ) {
       return axios.post(
         `/api/v1/kit-versions/${kitVersionId}/questions/`,
+        data,
+        config,
+      );
+    },
+    loadQuestionsKit(
+      { kitVersionId, questionId }: { kitVersionId: TId; questionId: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/`,
+        config,
+      );
+    },
+    updateQuestionsKit(
+      {
+        kitVersionId,
+        questionId,
+        data,
+      }: { kitVersionId: TId; questionId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/`,
+        data,
+        config,
+      );
+    },
+    deleteQuestionsKit(
+      { kitVersionId, questionId }: { kitVersionId: TId; questionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/`,
+        config,
+      );
+    },
+    postQuestionImpactsKit(
+      { kitVersionId, data }: { kitVersionId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/question-impacts/`,
+        data,
+        config,
+      );
+    },
+    loadQuestionImpactsList(
+      { kitVersionId, questionId }: { kitVersionId: TId; questionId: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/impacts/`,
+        config,
+      );
+    },
+    updateQuestionImpactsKit(
+      {
+        kitVersionId,
+        questionImpactId,
+        data,
+      }: { kitVersionId: TId; questionImpactId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/question-impacts/${questionImpactId}/`,
+        data,
+        config,
+      );
+    },
+    deleteQuestionImpactsKit(
+      {
+        kitVersionId,
+        questionImpactId,
+      }: { kitVersionId: TId; questionImpactId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/question-impacts/${questionImpactId}/`,
+        config,
+      );
+    },
+    loadAnswerOptionsList(
+      { kitVersionId, questionId }: { kitVersionId: TId; questionId: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/options/`,
+        config,
+      );
+    },
+    deleteAnswerOptionsKit(
+      {
+        kitVersionId,
+        answerOptionId,
+      }: { kitVersionId: TId; answerOptionId: TId },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.delete(
+        `/api/v1/kit-versions/${kitVersionId}/answer-options/${answerOptionId}/`,
+        config,
+      );
+    },
+    loadAnswerRangesList(
+      { kitVersionId, questionId }: { kitVersionId: TId; questionId: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.get(
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/answer-ranges/`,
+        config,
+      );
+    },
+    updateAnswerRangesKit(
+      {
+        kitVersionId,
+        answerRangeId,
+        data,
+      }: { kitVersionId: TId; answerRangeId: TId; data: any },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.put(
+        `/api/v1/kit-versions/${kitVersionId}/answer-ranges/${answerRangeId}/`,
         data,
         config,
       );

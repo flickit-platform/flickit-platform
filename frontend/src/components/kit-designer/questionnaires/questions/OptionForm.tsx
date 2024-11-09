@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Trans } from "react-i18next";
 import { styles } from "@/config/styles";
 
-interface QuestionFormProps {
+interface OptionFormProps {
     newItem: {
     title: string;
     index: number;
@@ -18,12 +18,12 @@ interface QuestionFormProps {
   handleCancel: () => void;
 }
 
-const QuestionForm = ({
+const OptionForm = ({
   newItem,
   handleInputChange,
   handleSave,
   handleCancel,
-}: QuestionFormProps) => (
+}: OptionFormProps) => (
   <Box
     mt={1.5}
     p={1.5}
@@ -117,4 +117,4 @@ const QuestionForm = ({
   </Box>
 );
 
-export default QuestionForm;
+export default OptionForm;

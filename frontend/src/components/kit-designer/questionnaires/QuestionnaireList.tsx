@@ -14,7 +14,7 @@ import { KitDesignListItems, TId } from "@types";
 import { Trans } from "react-i18next";
 import { theme } from "@config/theme";
 import languageDetector from "@utils/languageDetector";
-import QuestionContain from "@components/kit-designer/questionnaires/questions/questionContain";
+import QuestionContainer from "@components/kit-designer/questionnaires/questions/QuestionContainer";
 import QueryData from "@common/QueryData";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -629,9 +629,10 @@ const ListOfItems = ({
                                                   {...provided.dragHandleProps}
                                                   sx={{ marginBottom: 1 }}
                                                 >
-                                                  <QuestionContain
+                                                  <QuestionContainer
+                                                    fetchQuery={fetchQuery}
                                                     key={question.id}
-                                                    {...question}
+                                                    question={question}
                                                   />
                                                 </Box>
                                               )}
