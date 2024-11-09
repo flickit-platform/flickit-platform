@@ -15,9 +15,9 @@ import { theme } from "@/config/theme";
 
 const ExpertGroupConfirmInvitationContainer = () => {
   const { service } = useServiceContext();
-  const { expertGroupId, token } = useParams();
+  const { expertGroupId = "", token } = useParams();
   const { userInfo } = useAuthContext();
-  const { id } = userInfo;
+  const { id = "" } = userInfo;
   const navigate = useNavigate();
   const expertGroupQueryData = useQuery({
     service: (args = { id: expertGroupId }, config) =>
@@ -48,8 +48,14 @@ const ExpertGroupConfirmInvitationContainer = () => {
     }
   };
 
-  const decline = () => {
-    navigate("/spaces/1", { replace: true });
+  const decline = async () => {
+    try {
+      await service.deleteExpertGroupMember({id: expertGroupId,userId: id},{})
+      navigate("/spaces/1", { replace: true });
+    }catch (e){
+      const err = e as ICustomError;
+      toastError(err);
+    }
   };
 
   return (
