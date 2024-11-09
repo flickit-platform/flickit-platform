@@ -53,7 +53,7 @@ export interface IQuestionInfo {
   mayNotBeApplicable?: boolean;
   is_not_applicable?: boolean;
   confidence_level?: any;
-  advisable?: boolean
+  advisable?: boolean;
 }
 
 export interface IPermissions {
@@ -190,7 +190,7 @@ export interface IMaturityLevel {
   value: number;
   index: number;
   description: string;
-  weight?: number
+  weight?: number;
 }
 export interface KitDesignListItems {
   id: TId;
@@ -198,8 +198,8 @@ export interface KitDesignListItems {
   value: number;
   index: number;
   description: string;
-  weight?: number,
-  questionsCount?: number
+  weight?: number;
+  questionsCount?: number;
 }
 
 export interface IImage {
@@ -701,4 +701,11 @@ export interface IKitVersion {
       title: string;
     };
   };
+}
+
+export interface IOption {
+  id: TId;
+  title: string;
+  index: number;
+  value: number;
 }

@@ -7,11 +7,11 @@ import {
   Switch,
   Box,
   Button,
+  Divider,
 } from "@mui/material";
 import { Trans } from "react-i18next";
 import { useForm, FormProvider } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { IQuestionInfo } from "@/types";
 import { useQuery } from "@/utils/useQuery";
@@ -23,6 +23,11 @@ import FormProviderWithForm from "@/components/common/FormProviderWithForm";
 import { t } from "i18next";
 import { styles } from "@styles";
 import EmptyState from "../../common/EmptyState";
+import { ICustomError } from "@/utils/CustomError";
+import toastError from "@/utils/toastError";
+import OptionForm from "./OptionForm";
+import OptionList from "./OptionsList";
+import AttributeImpactList from "./ImpactList";
 
 interface QuestionDialogProps {
   open: boolean;
@@ -44,15 +49,35 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       service.fetchAttributeKit(args, config),
     runOnMount: false,
   });
+  const fetchImpacts = useQuery({
+    service: (args = { kitVersionId, questionId: question.id }, config) =>
+      service.loadQuestionImpactsList(args, config),
+    runOnMount: false,
+  });
+  const fetchOptions = useQuery({
+    service: (args = { kitVersionId, questionId: question.id }, config) =>
+      service.loadAnswerOptionsList(args, config),
+    runOnMount: false,
+  });
 
+  const [newOption, setNewOption] = useState({
+    title: "",
+    description: "",
+    index: 1,
+    value: 1,
+    id: null,
+  });
   const [questionData, setQuestionData] = useState<any>(null);
+  const [showNewOptionForm, setShowNewOptionForm] = useState(false);
   const formMethods = useForm({ shouldUnregister: true });
 
   const { service } = useServiceContext();
 
   useEffect(() => {
     if (open && question.id) {
+      fetchImpacts.query();
       fetchAttributeKit.query();
+      fetchOptions.query();
       formMethods.reset({
         title: question?.title || "",
         hint: question?.hint || "",
@@ -83,11 +108,65 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
 
   const handleAddNewRow = () => {};
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const parsedValue = name === "value" ? parseInt(value) || 1 : value;
+    setNewOption((prev) => ({
+      ...prev,
+      [name]: parsedValue,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const data = {
+        kitVersionId,
+        index: newOption.index,
+        value: newOption.value,
+        title: newOption.title,
+        description: newOption.description,
+      };
+      // if (NewOption.id) {
+      //   await service.updateQue({
+      //     kitVersionId,
+      //     questionnaireId: NewOption.id,
+      //     data,
+      //   });
+      // } else {
+      //   await fetchOptions.query({ kitVersionId, data });
+      // }
+
+      await fetchOptions.query();
+
+      setNewOption({
+        title: "",
+        description: "",
+        index: fetchOptions.data?.items.length + 1 || 1,
+        value: fetchOptions.data?.items.length + 1 || 1,
+        id: null,
+      });
+    } catch (e) {
+      const err = e as ICustomError;
+      toastError(err);
+    }
+  };
+
+  const handleCancel = () => {
+    setShowNewOptionForm(false);
+    setNewOption({
+      title: "",
+      description: "",
+      index: fetchOptions.data?.items.length + 1 || 1,
+      value: fetchOptions.data?.items.length + 1 || 1,
+      id: null,
+    });
+  };
+
   return (
     <CEDialog
       open={open}
       onClose={onClose}
-      title={<Trans i18nKey="addNewQuestion" />}
+      title={<Trans i18nKey="createQuestion" />}
     >
       <FormProviderWithForm
         formMethods={formMethods}
@@ -136,33 +215,71 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             <Typography variant="body2">
               <Trans i18nKey="answerOptions" />
             </Typography>
-            {/* {formMethods.watch("options").map((option: any, index: number) => (
-              <Box display="flex" alignItems="center" mt={1} key={index}>
-                <TextField
-                  fullWidth
-                  placeholder={`Option ${index + 1}`}
-                  defaultValue={option.text}
-                />
-                <IconButton>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            ))} */}
-            <Button
+            {fetchOptions?.data?.answerOptions?.length > 0 ? (
+              <>
+                <Box maxHeight={500} overflow="auto">
+                  <OptionList
+                    Options={fetchOptions?.data?.answerOptions}
+                    onEdit={handleAddNewRow}
+                    onDelete={handleAddNewRow}
+                    onReorder={handleAddNewRow}
+                  />
+                </Box>
+
+                {showNewOptionForm && (
+                  <OptionForm
+                    newItem={newOption}
+                    handleInputChange={handleInputChange}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                {showNewOptionForm ? (
+                  <OptionForm
+                    newItem={newOption}
+                    handleInputChange={handleInputChange}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                  />
+                ) : (
+                  <EmptyState
+                    btnTitle={"newOption"}
+                    title={"optionsEmptyState"}
+                    SubTitle={"optionsEmptyStateDetailed"}
+                    onAddNewRow={handleAddNewRow}
+                    disabled={fetchAttributeKit?.data?.items?.length === 0}
+                  />
+                )}
+              </>
+            )}
+            {/* <Button
               startIcon={<AddIcon />}
               variant="outlined"
               sx={{ mt: 2 }}
               size="small"
             >
               <Trans i18nKey="newOption" />
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
+        <Divider sx={{ my: 1, mt: 4 }} />
 
-        <Typography variant="subtitle1" gutterBottom sx={{ mt: 3 }}>
-          <Trans i18nKey="optionsImpacts" />
-        </Typography>
-        {fetchAttributeKit?.data?.items?.length === 0 && (
+        <Box display="flex" flexDirection="column" gap={1} mt={4}>
+          <Typography variant="semiBoldXLarge" gutterBottom>
+            <Trans i18nKey="optionsImpacts" />
+          </Typography>
+          <Typography variant="bodyMedium" color="textSecondary">
+            <Trans i18nKey="optionsImpactsDescription" />
+          </Typography>
+        </Box>
+        {fetchImpacts?.data?.attributeImpacts?.length > 0 ? (
+          <AttributeImpactList
+            attributeImpacts={fetchImpacts?.data?.attributeImpacts}
+          />
+        ) : (
           <EmptyState
             btnTitle={"newOptionImpact"}
             title={"optionsImpactsEmptyState"}
@@ -171,8 +288,9 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             disabled={fetchAttributeKit?.data?.items?.length === 0}
           />
         )}
+        <Divider sx={{ my: 1, mt: 4 }} />
 
-        <Box display="flex" flexDirection="column" gap={1}>
+        <Box display="flex" flexDirection="column" gap={1} mt={4}>
           <Typography variant="semiBoldXLarge" gutterBottom>
             <Trans i18nKey="advancedSettings" />
           </Typography>
@@ -202,6 +320,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             />
           </Grid>
         </Grid>
+        <Divider sx={{ mt: 4 }} />
       </FormProviderWithForm>
 
       <CEDialogActions
