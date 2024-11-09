@@ -173,6 +173,8 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
         style={{
           paddingBlock: 20,
           paddingInline: 40,
+          maxHeight: "80vh",
+          overflow: "auto",
         }}
       >
         <Box display="flex" flexDirection="column" gap={1}>
@@ -269,7 +271,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
 
         <Box display="flex" flexDirection="column" gap={1} mt={4}>
           <Typography variant="semiBoldXLarge" gutterBottom>
-            <Trans i18nKey="optionsImpacts" />
+            <Trans i18nKey="questionImpacts" />
           </Typography>
           <Typography variant="bodyMedium" color="textSecondary">
             <Trans i18nKey="optionsImpactsDescription" />
@@ -285,7 +287,10 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             title={"optionsImpactsEmptyState"}
             SubTitle={"optionsImpactsEmptyStateDetailed"}
             onAddNewRow={handleAddNewRow}
-            disabled={fetchAttributeKit?.data?.items?.length === 0}
+            disabled={
+              fetchAttributeKit?.data?.items?.length === 0 ||
+              fetchOptions.data?.answerOptions?.length === 0
+            }
           />
         )}
         <Divider sx={{ my: 1, mt: 4 }} />
