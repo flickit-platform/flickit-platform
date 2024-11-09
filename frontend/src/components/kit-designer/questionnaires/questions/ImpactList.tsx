@@ -47,6 +47,7 @@ const AttributeImpactList = ({
                 borderRadius: 2,
                 p: 2,
                 mb: 2,
+                mt: 1,
               }}
             >
               <Box
