@@ -719,5 +719,11 @@
   "advancedSettingsDescription": "In this section, you can make decisions about some ancillary settings for this question.",
   "optionsImpactsDescription": "Impact actually indicates how and to what extent the options of a question affect various attributes. This effect can vary across different maturity levels, meaning an option can have different impacts on multiple attributes at different maturity levels. The maximum impact weight of an option is 1.",
   "impactsOn": "impacts on",
-  "optionsValues": "Options Values"
+  "optionsValues": "Options Values",
+  "answerRange": "Answer Range",
+  "answerRangeKitDesignerDescription": "Before beginning the design and creation of questionnaires and questions, you can create templates for answer options in your kit. These templates will allow you to build questions more quickly and efficiently and will be accessible during the question creation process. Each template includes the number and title of the options, as well as the percentage each option contributes to the overall question score",
+  "answerRangeTemplates": "Answer range templates",
+  "newAnswerRange": "New Answer Range",
+  "answerRangeListEmptyState": "Ops! No Answer range is Here ",
+  "answerRangeEmptyStateDetailed": "Don’t worry! we made it easy for you! just click the button below and create your first template"
 }

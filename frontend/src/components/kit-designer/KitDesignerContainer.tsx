@@ -15,6 +15,7 @@ import { useQuery } from "@/utils/useQuery";
 import { IKitVersion } from "@/types";
 import QuestionnairesContent from "@components/kit-designer/questionnaires/QuestionnairesContent";
 import AttributesContent from "./attributes/AttributeContent";
+import AnaweRangeContent from "@components/kit-designer/answerRange/AnswerRangeContent";
 
 const KitDesignerContainer = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -115,6 +116,17 @@ const KitDesignerContainer = () => {
                   </Typography>
                 }
               />
+                <Tab
+                    sx={{
+                        alignItems: "flex-start",
+                        textTransform: "none",
+                    }}
+                    label={
+                        <Typography variant="semiBoldLarge">
+                            <Trans i18nKey="answerRange" />
+                        </Typography>
+                    }
+                />
               <Tab
                 sx={{
                   alignItems: "flex-start",
@@ -149,8 +161,9 @@ const KitDesignerContainer = () => {
             {selectedTab === 0 && <MaturityLevelsContent />}
             {selectedTab === 1 && <SubjectsContent />}
             {selectedTab === 2 && <AttributesContent />}
-            {selectedTab === 3 && <QuestionnairesContent />}
-            {selectedTab === 4 && (
+            {selectedTab === 3 && <AnaweRangeContent />}
+            {selectedTab === 4 && <QuestionnairesContent />}
+            {selectedTab === 5 && (
               <PublishContent kitVersion={kitVersion.data} />
             )}
           </Grid>
