@@ -28,7 +28,6 @@ import { alpha, Button, CircularProgress } from "@mui/material";
 import { debounce } from "lodash";
 import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 import { Add } from "@mui/icons-material";
-import QuestionForm from "./questions/QuestionForm";
 
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
@@ -263,22 +262,10 @@ const ListOfItems = ({
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="subjects">
-        {(provided: any) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef}>
+
+          <Box>
             {reorderedItems?.map((item, index) => (
-              <Draggable
-                key={item.id}
-                draggableId={item.id.toString()}
-                index={index}
-                isDragDisabled={expanded}
-              >
-                {(provided: any) => (
                   <Box
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
                     mt={1.5}
                     sx={{
                       backgroundColor:
@@ -340,46 +327,14 @@ const ListOfItems = ({
                         >
                           <Box
                             sx={{
-                              ...styles.centerVH,
-                              background:
-                                item.questionsCount == 0
-                                  ? alpha(theme.palette.error.main, 0.12)
-                                  : "#F3F5F6",
-                              width: { xs: "50px", md: "64px" },
-                              justifyContent: "space-around",
-                            }}
-                            borderRadius="0.5rem"
-                            mr={2}
-                            px={1.5}
-                          >
-                            <Typography variant="semiBoldLarge">
-                              {index + 1}
-                            </Typography>
-
-                            <IconButton
-                              disableRipple
-                              disableFocusRipple
-                              sx={{
-                                "&:hover": {
-                                  backgroundColor: "transparent",
-                                  color: "inherit",
-                                },
-                              }}
-                              size="small"
-                            >
-                              <SwapVertRoundedIcon fontSize="small" />
-                            </IconButton>
-                          </Box>
-                          <Box
-                            sx={{
-                              flexGrow: 1,
+                              // flexGrow: 1,
                               display: "flex",
-                              flexDirection: "column",
-                              gap: "5px",
+                              justifyContent: "space-between",
+                              width: "100%",
                             }}
                           >
                             {/* Title and icons in the same row */}
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Box sx={{ display: "flex", alignItems: "center",justifyContent:"space-between",width:"100%" }}>
                               {editMode === item.id ? (
                                 <TextField
                                   onClick={(e) => e.stopPropagation()}
@@ -402,7 +357,7 @@ const ListOfItems = ({
                                     "& .MuiFormLabel-root": {
                                       fontSize: 14,
                                     },
-                                    width: { sx: "100%", md: "60%" },
+                                    width: { sx: "100%", md: "40%" },
                                     background: "#fff",
                                     borderRadius: "8px",
                                   }}
@@ -412,15 +367,21 @@ const ListOfItems = ({
                               ) : (
                                 <Typography
                                   variant="h6"
-                                  sx={{ flexGrow: 1, width: "80%" }}
+                                  sx={{ flexGrow: 1, width: "40%" }}
                                 >
                                   {item.title}
                                 </Typography>
                               )}
+                              <Box sx={{ width: "60%",px:3}}>
+                                <Box sx={{width:"fit-content", background:"#EAF2FB", borderRadius:"1000px",py:1, px:2}}>
+                                  6 options
+                                </Box>
+                              </Box>
                               {/* Icons (Edit/Delete or Check/Close) */}
                               {editMode === item.id ? (
                                 <Box
                                   sx={{
+                                    display:"flex",
                                     mr:
                                       theme.direction == "rtl"
                                         ? "auto"
@@ -477,107 +438,6 @@ const ListOfItems = ({
                                   )}
                                 </>
                               )}
-                            </Box>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              {editMode === item.id ? (
-                                <TextField
-                                  required
-                                  value={tempValues.description}
-                                  onClick={(e) => e.stopPropagation()}
-                                  onChange={(e) => handelChange(e)}
-                                  name="description"
-                                  inputProps={{
-                                    "data-testid": "items-description",
-                                  }}
-                                  variant="outlined"
-                                  fullWidth
-                                  size="small"
-                                  label={<Trans i18nKey="description" />}
-                                  margin="normal"
-                                  multiline
-                                  minRows={2}
-                                  maxRows={3}
-                                  sx={{
-                                    mb: 1,
-                                    mt: 1,
-                                    fontSize: 14,
-                                    "& .MuiInputBase-root": {
-                                      fontSize: 14,
-                                      overflow: "auto",
-                                    },
-                                    "& .MuiFormLabel-root": {
-                                      fontSize: 14,
-                                    },
-                                    background: "#fff",
-                                    borderRadius: "8px",
-                                    width: { xs: "100%", md: "85%" },
-                                  }}
-                                />
-                              ) : (
-                                <Typography
-                                  sx={{
-                                    wordBreak: "break-word",
-                                    textAlign: languageDetector(
-                                      item.description,
-                                    )
-                                      ? "right"
-                                      : "left",
-                                    width: "80%",
-                                  }}
-                                  variant="body2"
-                                  mt={1}
-                                >
-                                  {item.description}
-                                </Typography>
-                              )}
-                              <Box
-                                sx={{
-                                  width: "fit-content",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "flex-end",
-                                  flexDirection: "column",
-                                  gap: "0.5rem",
-                                  textAlign: editMode ? "end" : "center",
-                                }}
-                              >
-                                <Typography
-                                  sx={{
-                                    ...theme.typography.labelCondensed,
-                                    color: "#6C8093",
-                                    width: "100%",
-                                  }}
-                                >
-                                  <Trans i18nKey={"questions"} />
-                                </Typography>
-                                <Box
-                                  aria-label="questionnaires"
-                                  style={{
-                                    width: "3.75rem",
-                                    height: "3.75rem",
-                                    borderRadius: "50%", // برای دایره‌ای کردن دکمه
-                                    backgroundColor:
-                                      item.questionsCount == 0
-                                        ? theme.palette.error.main
-                                        : "#E2E5E9", // رنگ پس‌زمینه
-                                    color:
-                                      item.questionsCount == 0
-                                        ? "#FAD1D8"
-                                        : "#2B333B",
-                                    display: "flex",
-                                    alignItems: " center",
-                                    justifyContent: "center",
-                                  }}
-                                >
-                                  {item.questionsCount}
-                                </Box>
-                              </Box>
                             </Box>
                           </Box>
                         </Box>
@@ -684,25 +544,19 @@ const ListOfItems = ({
                         )}
                         {showNewQuestionForm[item.id] && (
                           <Box sx={{ mt: 2 }}>
-                            <QuestionForm
-                              newItem={newQuestion}
-                              handleInputChange={handleInputChange}
-                              handleSave={() => handleSave(item.id)}
-                              handleCancel={() => handleCancel(item.id)}
-                            />
+                            {/*<QuestionForm*/}
+                            {/*  newItem={newQuestion}*/}
+                            {/*  handleInputChange={handleInputChange}*/}
+                            {/*  handleSave={() => handleSave(item.id)}*/}
+                            {/*  handleCancel={() => handleCancel(item.id)}*/}
+                            {/*/>*/}
                           </Box>
                         )}
                       </AccordionDetails>
                     </Accordion>
                   </Box>
-                )}
-              </Draggable>
             ))}
-            {provided.placeholder}
           </Box>
-        )}
-      </Droppable>
-    </DragDropContext>
   );
 };
 

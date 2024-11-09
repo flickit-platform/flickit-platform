@@ -215,7 +215,7 @@ const AnaweRangeContent = () => {
           render={([QuestionnairesData]) => {
             return (
               <>
-                {QuestionnairesData?.items?.length > 0 ? (
+                {QuestionnairesData?.items?.length != 0 ? (
                   <Box maxHeight={500} overflow="auto">
                     <ListOfItems
                       items={QuestionnairesData?.items}
