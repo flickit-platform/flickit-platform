@@ -349,6 +349,16 @@ class QuestionImpactListApi(APIView):
         return Response(data=result["body"], status=result["status_code"])
 
 
+class AnswerOptionsApi(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={201: ""})
+    def post(self, request, kit_version_id):
+        result = kit_versions_services.create_answer_option(request, kit_version_id)
+        return Response(data=result["body"], status=result["status_code"])
+
+
 class AnswerOptionApi(APIView):
     permission_classes = [IsAuthenticated]
 
