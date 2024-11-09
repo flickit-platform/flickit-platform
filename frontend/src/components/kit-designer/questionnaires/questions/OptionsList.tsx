@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { IOption } from "@/types";
 import { Trans } from "react-i18next";
+import { t } from "i18next";
 
 interface OptionListProps {
   Options: Array<IOption>;
@@ -98,7 +99,7 @@ const OptionList = ({
                           <IconButton size="small">
                             <SwapVertRoundedIcon fontSize="small" />
                           </IconButton>
-                          {`option ${index + 1}:`}
+                          {`${t("option")} ${index + 1}:`}
                         </Typography>
                         {editMode === item.id ? (
                           <TextField
@@ -161,9 +162,10 @@ const OptionList = ({
                           />
                         ) : (
                           <Chip
-                            label={item.value}
+                            label={t("value") + ": " + item.value}
                             color="primary"
-                            sx={{ ml: 2 }}
+                            size="small"
+                            sx={{ ml: 2, fontSize:12 }}
                           />
                         )}
 
