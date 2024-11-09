@@ -308,6 +308,16 @@ def delete_question_impact(request, kit_version_id, question_impact_id):
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
 
 
+def update_answer_option(request, kit_version_id, answer_option_id):
+    response = requests.put(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/answer-options/{answer_option_id}',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    if response.status_code == 200:
+        return {"Success": True, "body": None, "status_code": response.status_code}
+    return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
 def delete_answer_option(request, kit_version_id, answer_option_id):
     response = requests.delete(
         ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/answer-options/{answer_option_id}',

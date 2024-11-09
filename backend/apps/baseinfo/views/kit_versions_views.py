@@ -352,6 +352,14 @@ class QuestionImpactListApi(APIView):
 class AnswerOptionApi(APIView):
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT), responses={200: ""})
+    def put(self, request, kit_version_id, answer_option_id):
+        result = kit_versions_services.update_answer_option(request, kit_version_id, answer_option_id)
+        if result["Success"]:
+            return Response(status=result["status_code"])
+        return Response(data=result["body"], status=result["status_code"])
+
     def delete(self, request, kit_version_id, answer_option_id):
         result = kit_versions_services.delete_answer_option(request, kit_version_id, answer_option_id)
         if result["Success"]:
