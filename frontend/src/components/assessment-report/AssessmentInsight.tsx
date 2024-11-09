@@ -20,6 +20,7 @@ import { styles } from "@styles";
 import { theme } from "@/config/theme";
 import { t } from "i18next";
 import formatDate from "@utils/formatDate";
+import firstCharDetector from "@utils/firstCharDetector";
 
 export const AssessmentInsight = () => {
   const { service } = useServiceContext();
@@ -313,7 +314,7 @@ const OnHoverRichEditor = (props: any) => {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         >
-          <Typography dangerouslySetInnerHTML={{ __html: data }} />
+          <Typography sx={{textAlign: firstCharDetector(data.replace(/<[^>]*>/g, '')) ? "right": "left",width:"100%"}} dangerouslySetInnerHTML={{ __html: data }} />
           {isHovering && editable && (
             <IconButton
               title="Edit"

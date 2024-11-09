@@ -1183,6 +1183,10 @@ const OnHoverInput = (props: any) => {
             value={inputData}
             required={true}
             multiline={true}
+            inputProps={{style:{
+                textAlign: languageDetector(inputData) ? "right" : "left" ,
+                unicodeBidi: "plaintext"
+                }}}
             sx={{
               minHeight: "38px",
               borderRadius: "4px",
@@ -1253,7 +1257,11 @@ const OnHoverInput = (props: any) => {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
         >
-          <Typography variant="titleMedium" fontWeight="400">
+          <Typography sx={{
+              textAlign: languageDetector(data) ? "right" : "left",
+              unicodeBidi: "plaintext",
+              width:"100%"
+          }} variant="titleMedium" fontWeight="400">
             {data?.replace(/<\/?p>/g, "")}
           </Typography>
           {isHovering && (
