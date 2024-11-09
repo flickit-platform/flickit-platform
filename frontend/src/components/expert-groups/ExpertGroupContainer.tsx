@@ -66,25 +66,11 @@ const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
   const { userInfo } = useAuthContext();
-  const navigate = useNavigate()
-  const { page }= useParams()
-  const pageNumber = Number(page);
-  const {assessmentKitQuery, ...rest } = useFetchAssessmentKit()
-  const { size, total } = rest;
 
-    const handleChangePage = (
-        event: React.ChangeEvent<unknown>,
-        value: number,
-    ) => {
-        if (Math.ceil(total / size) > Number(page) || Math.ceil(total / size) == Number(page)) {
-            navigate(`/user/expert-groups/${expertGroupId}/${value}`);
-        }
-    };
+  const {assessmentKitQuery, handleChangePage, ...rest } = useFetchAssessmentKit()
+  const { size, total, page } = rest;
 
     const pageCount = size === 0 ? 1 : Math.ceil(total / size);
-    if (Math.ceil(total / size) < Number(page) && pageCount) {
-        navigate(`/user/expert-groups/${expertGroupId}/${pageCount}`);
-    }
     const queryData = useQuery({
     service: (args = { id: expertGroupId }, config) =>
       service.fetchUserExpertGroup(args, config),
@@ -206,7 +192,7 @@ const ExpertGroupContainer = () => {
                             color="primary"
                             count={pageCount}
                             onChange={handleChangePage}
-                            page={pageNumber}
+                            page={page}
                         />
                     </Stack>
                 </Box>
@@ -402,28 +388,35 @@ const ExpertGroupContainer = () => {
 };
 
 const useFetchAssessmentKit = () =>{
-        const {page } = useParams();
         const { service } = useServiceContext();
-        const pageNumber = Number(page);
         const { expertGroupId = "" } = useParams();
         const PAGESIZE: number = 10;
 
         useEffect(() => {
-            assessmentKitQuery.query();
-        }, [pageNumber]);
+            assessmentKitQuery.query({ id: expertGroupId, size:PAGESIZE, page: 1 })
+        }, []);
+
+    const handleChangePage = (
+        event: React.ChangeEvent<unknown>,
+        value: number,
+    ) => {
+        assessmentKitQuery.query({ id: expertGroupId, size:PAGESIZE, page: value || 1 })
+    };
 
     const assessmentKitQuery = useQuery({
-        service: (args = { id: expertGroupId, size:PAGESIZE, page:pageNumber }, config) =>
+        service: (args , config) =>
             service.fetchExpertGroupAssessmentKits(args, config),
+        runOnMount: false
     });
         return {
             data: assessmentKitQuery?.data?.items || [],
-            page: assessmentKitQuery?.data?.page || 0,
+            page: (assessmentKitQuery?.data?.page + 1)|| 0,
             size: assessmentKitQuery?.data?.size || 0,
             total: assessmentKitQuery?.data?.total || 0,
             requested_space: assessmentKitQuery?.data?.requested_space,
             loaded: !!assessmentKitQuery?.data,
-            assessmentKitQuery
+            assessmentKitQuery,
+            handleChangePage
         };
 };
 
