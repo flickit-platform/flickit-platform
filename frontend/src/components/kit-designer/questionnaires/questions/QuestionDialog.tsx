@@ -193,11 +193,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
               label="Question"
               placeholder={t("questionPlaceholder").toString()}
               required
-              sx={{
-                "& .MuiInputBase-root": {
-                  height: 46,
-                },
-              }}
+              multiline
             />
           </Grid>
           <Grid item xs={12}>
@@ -206,11 +202,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
               fullWidth
               label="Hint"
               placeholder={t("hintPlaceholder").toString()}
-              sx={{
-                "& .MuiInputBase-root": {
-                  height: 46,
-                },
-              }}
+              multiline
             />
           </Grid>
           <Grid item xs={12}>
