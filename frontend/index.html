@@ -54,32 +54,32 @@
             const response = await fetch("https://api.ipify.org?format=json");
             const data = await response.json();
             const userId = `ip-${data.ip}`;
-            localStorage.setItem("clarityUserId", userId);
+            sessionStorage.setItem("clarityUserId", userId);
             c.clarity("set", "userId", userId);
           } catch (error) {
             console.error("Failed to fetch IP:", error);
           }
         }
 
-        const loggedInUserId = localStorage.getItem("loggedInUserId"); 
+        const loggedInUserId = sessionStorage.getItem("loggedInUserId");
         let clarityUserId;
 
         if (loggedInUserId) {
           clarityUserId = loggedInUserId;
         } else {
-          clarityUserId = localStorage.getItem("clarityUserId");
+          clarityUserId = sessionStorage.getItem("clarityUserId");
           if (!clarityUserId) {
             setUserIdTagBasedOnIP();
           }
         }
 
         const claritySessionId =
-          localStorage.getItem("claritySessionId") ||
+          sessionStorage.getItem("claritySessionId") ||
           generateClaritySessionId();
-        localStorage.setItem("claritySessionId", claritySessionId);
+        sessionStorage.setItem("claritySessionId", claritySessionId);
 
         const clarityPageId = window.location.pathname;
-        const friendlyName = localStorage.getItem("username");
+        const friendlyName = sessionStorage.getItem("username");
 
         window.clarity(
           "identify",
