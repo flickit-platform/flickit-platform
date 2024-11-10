@@ -88,6 +88,7 @@ const ExpertGroupContainer = () => {
   const removeExpertGroupMembers = useQuery({
     service: (args, config) =>
       service.removeExpertGroupMembers(args, config),
+      runOnMount: false
   });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
