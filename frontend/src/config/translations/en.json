@@ -713,12 +713,15 @@
   "optionsImpactsEmptyState": "No Attribute is impacted by this question yet!",
   "optionsImpactsEmptyStateDetailed": "A question has to impact at least 1 attribute to be created and added to the questionnaire.",
   "newOptionImpact": "New Option Impact",
-  "createQuestion": "Create Question",
+  "editQuestion": "Edit Question",
   "notAdvisable": "Not Advicable",
   "advancedSettings": "Advance Settings",
   "advancedSettingsDescription": "In this section, you can make decisions about some ancillary settings for this question.",
   "optionsImpactsDescription": "Impact actually indicates how and to what extent the options of a question affect various attributes. This effect can vary across different maturity levels, meaning an option can have different impacts on multiple attributes at different maturity levels. The maximum impact weight of an option is 1.",
   "impactsOn": "impacts on",
   "optionsValues": "Options Values",
-  "optionsImpactsDisabled": "You can't add a new impact untill you've created options and attributes"
+  "optionsImpactsDisabled": "You can't add a new impact untill you've created options and attributes",
+  "newImpact": "New Impact",
+  "selectAttribute": "Select Attribute",
+  "selectMaturityLevel": "Select Maturity Level"
 }

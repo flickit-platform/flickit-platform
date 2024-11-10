@@ -28,6 +28,7 @@ import toastError from "@/utils/toastError";
 import OptionForm from "./OptionForm";
 import OptionList from "./OptionsList";
 import AttributeImpactList from "./ImpactList";
+import ImpactForm from "./ImpactForm";
 
 interface QuestionDialogProps {
   open: boolean;
@@ -49,6 +50,11 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       service.fetchAttributeKit(args, config),
     runOnMount: false,
   });
+  const fetchMaturityLevels = useQuery({
+    service: (args = { kitVersionId }, config) =>
+      service.getMaturityLevels(args, config),
+    runOnMount: false,
+  });
   const fetchImpacts = useQuery({
     service: (args = { kitVersionId, questionId: question.id }, config) =>
       service.loadQuestionImpactsList(args, config),
@@ -60,14 +66,26 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     runOnMount: false,
   });
 
+  const postQuestionImpactsKit = useQuery({
+    service: (args, config) => service.postQuestionImpactsKit(args, config),
+    runOnMount: false,
+  });
+
   const [newOption, setNewOption] = useState({
     title: "",
     index: 1,
     value: 1,
     id: null,
   });
+  const [newImpact, setnewImpact] = useState({
+    questionId: question.id,
+    attributeId: undefined,
+    maturityLevelId: undefined,
+    weight: 1,
+  });
   const [questionData, setQuestionData] = useState<any>(null);
   const [showNewOptionForm, setShowNewOptionForm] = useState(false);
+  const [showNewImpactForm, setShowNewImpactForm] = useState(false);
   const formMethods = useForm({ shouldUnregister: true });
 
   const { service } = useServiceContext();
@@ -76,6 +94,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     if (open && question.id) {
       fetchImpacts.query();
       fetchAttributeKit.query();
+      fetchMaturityLevels.query();
       fetchOptions.query();
       formMethods.reset({
         title: question?.title || "",
@@ -107,6 +126,14 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
 
   const handleAddNewRow = () => {
     setShowNewOptionForm(true);
+  };
+
+  const handleAddNewImpactRow = () => {
+    setShowNewImpactForm(true);
+  };
+
+  const handleImpactInputChange = (field: string, value: any) => {
+    setnewImpact((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,11 +188,34 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     });
   };
 
+  const handleSaveNewOption = async () => {
+    try {
+      await postQuestionImpactsKit
+        .query({ kitVersionId, data: newImpact })
+        .then(() => {
+          fetchImpacts.query();
+        });
+      handleCancelNewOption();
+    } catch (err) {
+      const error = err as ICustomError;
+      toastError(error);
+    }
+  };
+
+  const handleCancelNewOption = () => {
+    setShowNewImpactForm(false);
+    setnewImpact({
+      questionId: question.id,
+      attributeId: undefined,
+      maturityLevelId: undefined,
+      weight: 1,
+    });
+  };
   return (
     <CEDialog
       open={open}
       onClose={onClose}
-      title={<Trans i18nKey="createQuestion" />}
+      title={<Trans i18nKey="editQuestion" />}
     >
       <FormProviderWithForm
         formMethods={formMethods}
@@ -260,22 +310,55 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
           </Typography>
         </Box>
         {fetchImpacts?.data?.attributeImpacts?.length > 0 ? (
-          <AttributeImpactList
-            attributeImpacts={fetchImpacts?.data?.attributeImpacts}
-          />
+          <>
+            <Box maxHeight={500} overflow="auto">
+              <AttributeImpactList
+                attributeImpacts={fetchImpacts?.data?.attributeImpacts}
+                attributes={fetchAttributeKit?.data?.items}
+                maturityLevels={fetchMaturityLevels?.data?.items}
+                questionId={question.id}
+                isAddingNew={showNewImpactForm}
+                setIsAddingNew={setShowNewImpactForm}
+              />
+            </Box>
+            {showNewImpactForm && (
+              <ImpactForm
+                newItem={newImpact}
+                handleInputChange={handleImpactInputChange}
+                handleSave={handleSaveNewOption}
+                handleCancel={handleCancelNewOption}
+                attributes={fetchAttributeKit?.data?.items}
+                maturityLevels={fetchMaturityLevels?.data?.items}
+              />
+            )}
+          </>
         ) : (
-          <EmptyState
-            btnTitle={"newOptionImpact"}
-            title={"optionsImpactsEmptyState"}
-            SubTitle={"optionsImpactsEmptyStateDetailed"}
-            onAddNewRow={handleAddNewRow}
-            disabled={
-              fetchAttributeKit?.data?.items?.length === 0 ||
-              fetchOptions.data?.answerOptions?.length === 0
-            }
-            disableTextBox={<Trans i18nKey="optionsImpactsDisabled" />}
-          />
+          <>
+            {showNewImpactForm ? (
+              <ImpactForm
+                newItem={newImpact}
+                handleInputChange={handleImpactInputChange}
+                handleSave={handleSaveNewOption}
+                handleCancel={handleCancelNewOption}
+                attributes={fetchAttributeKit?.data?.items}
+                maturityLevels={fetchMaturityLevels?.data?.items}
+              />
+            ) : (
+              <EmptyState
+                btnTitle={"newOptionImpact"}
+                title={"optionsImpactsEmptyState"}
+                SubTitle={"optionsImpactsEmptyStateDetailed"}
+                onAddNewRow={handleAddNewImpactRow}
+                disabled={
+                  fetchAttributeKit?.data?.items?.length === 0 ||
+                  fetchOptions.data?.answerOptions?.length === 0
+                }
+                disableTextBox={<Trans i18nKey="optionsImpactsDisabled" />}
+              />
+            )}
+          </>
         )}
+
         <Divider sx={{ my: 1, mt: 4 }} />
 
         <Box display="flex" flexDirection="column" gap={1} mt={4}>
@@ -315,7 +398,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
         loading={false}
         onClose={onClose}
         onSubmit={formMethods.handleSubmit(onSubmit)}
-        submitButtonLabel="createQuestion"
+        submitButtonLabel="editQuestion"
         type="create"
       />
     </CEDialog>
