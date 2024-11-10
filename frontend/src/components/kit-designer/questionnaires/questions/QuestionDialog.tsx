@@ -62,7 +62,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
 
   const [newOption, setNewOption] = useState({
     title: "",
-    description: "",
     index: 1,
     value: 1,
     id: null,
@@ -106,7 +105,9 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     }
   };
 
-  const handleAddNewRow = () => {};
+  const handleAddNewRow = () => {
+    setShowNewOptionForm(true);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -124,7 +125,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
         index: newOption.index,
         value: newOption.value,
         title: newOption.title,
-        description: newOption.description,
       };
       // if (NewOption.id) {
       //   await service.updateQue({
@@ -136,11 +136,11 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       //   await fetchOptions.query({ kitVersionId, data });
       // }
 
-      await fetchOptions.query();
+      // await fetchOptions.query();
 
+      setShowNewOptionForm(false);
       setNewOption({
         title: "",
-        description: "",
         index: fetchOptions.data?.items.length + 1 || 1,
         value: fetchOptions.data?.items.length + 1 || 1,
         id: null,
@@ -155,7 +155,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     setShowNewOptionForm(false);
     setNewOption({
       title: "",
-      description: "",
       index: fetchOptions.data?.items.length + 1 || 1,
       value: fetchOptions.data?.items.length + 1 || 1,
       id: null,
@@ -217,17 +216,9 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                     onEdit={handleAddNewRow}
                     onDelete={handleAddNewRow}
                     onReorder={handleAddNewRow}
+                    onAdd={handleAddNewRow}
                   />
                 </Box>
-
-                {showNewOptionForm && (
-                  <OptionForm
-                    newItem={newOption}
-                    handleInputChange={handleInputChange}
-                    handleSave={handleSave}
-                    handleCancel={handleCancel}
-                  />
-                )}
               </>
             ) : (
               <>
@@ -244,7 +235,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                     title={"optionsEmptyState"}
                     SubTitle={"optionsEmptyStateDetailed"}
                     onAddNewRow={handleAddNewRow}
-                    disabled={fetchAttributeKit?.data?.items?.length === 0}
                   />
                 )}
               </>
@@ -283,6 +273,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
               fetchAttributeKit?.data?.items?.length === 0 ||
               fetchOptions.data?.answerOptions?.length === 0
             }
+            disableTextBox={<Trans i18nKey="optionsImpactsDisabled" />}
           />
         )}
         <Divider sx={{ my: 1, mt: 4 }} />

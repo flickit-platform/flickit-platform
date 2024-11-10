@@ -719,5 +719,6 @@
   "advancedSettingsDescription": "In this section, you can make decisions about some ancillary settings for this question.",
   "optionsImpactsDescription": "Impact actually indicates how and to what extent the options of a question affect various attributes. This effect can vary across different maturity levels, meaning an option can have different impacts on multiple attributes at different maturity levels. The maximum impact weight of an option is 1.",
   "impactsOn": "impacts on",
-  "optionsValues": "Options Values"
+  "optionsValues": "Options Values",
+  "optionsImpactsDisabled": "You can't add a new impact untill you've created options and attributes"
 }
