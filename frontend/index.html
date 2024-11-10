@@ -25,54 +25,19 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script type="text/javascript">
-      (function (c, l, a, r, i, t, y) {
-        c[a] =
-          c[a] ||
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
           function () {
-            (c[a].q = c[a].q || []).push(arguments);
+            (h.hj.q = h.hj.q || []).push(arguments);
           };
-        t = l.createElement(r);
-        t.async = 1;
-        t.src = "https://www.clarity.ms/tag/" + i;
-        y = l.getElementsByTagName(r)[0];
-        y.parentNode.insertBefore(t, y);
-
-        function generateClaritySessionId() {
-          return (
-            "session-" +
-            Math.random().toString(36).substring(2) +
-            "-" +
-            Date.now()
-          );
-        }
-
-        async function setUserIdTagBasedOnIP() {
-          try {
-            const response = await fetch("https://api.ipify.org?format=json");
-            const data = await response.json();
-            const userId = `ip-${data.ip}`;
-            localStorage.setItem("clarityUserId", userId); 
-            c.clarity("set", "userId", userId);
-          } catch (error) {
-            console.error("Failed to fetch IP:", error);
-          }
-        }
-
-        const clarityUserId = localStorage.getItem("clarityUserId");
-        if (clarityUserId) {
-          window.clarity ("set", "userId", clarityUserId)	
-          c.clarity("set", "userId", clarityUserId);
-        } else {
-          setUserIdTagBasedOnIP();
-        }
-
-        const claritySessionId =
-          localStorage.getItem("claritySessionId") ||
-          generateClaritySessionId();
-        localStorage.setItem("claritySessionId", claritySessionId);
-        c.clarity("identify", claritySessionId);
-        window.clarity("identify", claritySessionId);
-      })(window, document, "clarity", "script", "%VITE_CLARITY_KEY%");
+        h._hjSettings = { hjid: 5202264, hjsv: 6 };
+        a = o.getElementsByTagName("head")[0];
+        r = o.createElement("script");
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
     </script>
   </body>
 </html>
