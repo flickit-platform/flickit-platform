@@ -37,7 +37,7 @@ interface ListOfItemsProps {
   deleteBtn: boolean;
   name: string;
   fetchQuery?: any;
-  setOpenDeleteDialog: ({status:boolean ,id:string})=> void;
+  setOpenDeleteDialog: (status:boolean,id:string)=> void;
 }
 interface ITempValues {
   title: string;

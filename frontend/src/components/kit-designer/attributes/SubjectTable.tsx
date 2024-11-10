@@ -48,7 +48,7 @@ interface SubjectTableProps {
   newAttribute: any;
   showNewAttributeForm: boolean;
   handleEdit: any;
-  setOpenDeleteDialog: ({status:boolean,id:string})=> void;
+  setOpenDeleteDialog: (status:boolean,id:string)=> void;
 }
 
 const SubjectTable: React.FC<SubjectTableProps> = ({

@@ -18,7 +18,7 @@ interface MaturityLevelListProps {
   maturityLevels: Array<IMaturityLevel>;
   onEdit: (id: any) => void;
   onReorder: (reorderedItems: IMaturityLevel[]) => void;
-  setOpenDeleteDialog: ({status:boolean, id: string}) => void;
+  setOpenDeleteDialog: (status:boolean,id:string)=> void;
 }
 
 const MaturityLevelList = ({
