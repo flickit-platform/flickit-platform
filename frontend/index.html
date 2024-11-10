@@ -60,6 +60,7 @@
 
         const clarityUserId = localStorage.getItem("clarityUserId");
         if (clarityUserId) {
+          window.clarity ("set", "userId", clarityUserId)	
           c.clarity("set", "userId", clarityUserId);
         } else {
           setUserIdTagBasedOnIP();
@@ -70,6 +71,7 @@
           generateClaritySessionId();
         localStorage.setItem("claritySessionId", claritySessionId);
         c.clarity("identify", claritySessionId);
+        window.clarity("identify", claritySessionId);
       })(window, document, "clarity", "script", "%VITE_CLARITY_KEY%");
     </script>
   </body>
