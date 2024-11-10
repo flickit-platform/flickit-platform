@@ -45,13 +45,30 @@
             Date.now()
           );
         }
-        let claritySessionId = localStorage.getItem("claritySessionId");
 
-        if (!claritySessionId) {
-          claritySessionId = generateClaritySessionId();
-          localStorage.setItem("claritySessionId", claritySessionId);
+        async function setUserIdTagBasedOnIP() {
+          try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            const userId = `ip-${data.ip}`;
+            localStorage.setItem("clarityUserId", userId); 
+            c.clarity("set", "userId", userId);
+          } catch (error) {
+            console.error("Failed to fetch IP:", error);
+          }
         }
 
+        const clarityUserId = localStorage.getItem("clarityUserId");
+        if (clarityUserId) {
+          c.clarity("set", "userId", clarityUserId);
+        } else {
+          setUserIdTagBasedOnIP();
+        }
+
+        const claritySessionId =
+          localStorage.getItem("claritySessionId") ||
+          generateClaritySessionId();
+        localStorage.setItem("claritySessionId", claritySessionId);
         c.clarity("identify", claritySessionId);
       })(window, document, "clarity", "script", "%VITE_CLARITY_KEY%");
     </script>
