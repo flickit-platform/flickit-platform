@@ -22,9 +22,9 @@ const AnaweRangeContent = () => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
 
-  const fetchQuestionnairesKit = useQuery({
+  const fetchAnswerRangeKit = useQuery({
     service: (args = { kitVersionId }, config) =>
-      service.fetchQuestionnairesKit(args, config),
+      service.fetchAnswerRangeKit(args, config),
   });
   const postQuestionnairesKit = useQuery({
     service: (args, config) => service.postQuestionnairesKit(args, config),
@@ -36,8 +36,8 @@ const AnaweRangeContent = () => {
     runOnMount: false,
   });
 
-  const updateKitQuestionnaires = useQuery({
-    service: (args, config) => service.updateKitQuestionnaires(args, config),
+  const updateKitAnswerRange = useQuery({
+    service: (args, config) => service.updateKitAnswerRange(args, config),
     runOnMount: false,
   });
 
@@ -53,16 +53,16 @@ const AnaweRangeContent = () => {
   });
 
   useEffect(() => {
-    if (fetchQuestionnairesKit.data?.items?.length) {
+    if (fetchAnswerRangeKit.data?.items?.length) {
       setNewQuestionnaires((prev) => ({
         ...prev,
-        index: fetchQuestionnairesKit.data.items.length + 1,
-        value: fetchQuestionnairesKit.data.items.length + 1,
+        index: fetchAnswerRangeKit.data.items.length + 1,
+        value: fetchAnswerRangeKit.data.items.length + 1,
         weight: 1,
         id: null,
       }));
     }
-  }, [fetchQuestionnairesKit.data]);
+  }, [fetchAnswerRangeKit.data]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const parsedValue = name === "value" ? parseInt(value) || 1 : value;
@@ -88,9 +88,9 @@ const AnaweRangeContent = () => {
         description: newQuestionnaires.description,
       };
       if (newQuestionnaires.id) {
-        await service.updateKitQuestionnaires({
+        await service.updateKitAnswerRange({
           kitVersionId,
-          questionnaireId: newQuestionnaires.id,
+          answerRangeId: newQuestionnaires.id,
           data,
         });
       } else {
@@ -99,15 +99,15 @@ const AnaweRangeContent = () => {
 
       // Reset form and re-fetch data after saving
       // setShowQuestionnairesForm(false);
-      await fetchQuestionnairesKit.query();
+      await fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
       // Reset the form values
       setNewQuestionnaires({
         title: "",
         description: "",
-        index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
-        value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+        index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
+        value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
         weight: 1,
         id: null,
       });
@@ -122,8 +122,8 @@ const AnaweRangeContent = () => {
     setNewQuestionnaires({
       title: "",
       description: "",
-      index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
-      value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+      index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
+      value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
       weight: 0,
       id: null,
     });
@@ -139,21 +139,21 @@ const AnaweRangeContent = () => {
         weight: QuestionnairesItem.weight,
         description: QuestionnairesItem.description,
       };
-      await updateKitQuestionnaires.query({
+      await updateKitAnswerRange.query({
         kitVersionId,
-        questionnaireId: QuestionnairesItem.id,
+        answerRangeId: QuestionnairesItem.id,
         data,
       });
 
       setShowNewQuestionnairesForm(false);
-      fetchQuestionnairesKit.query();
+      fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
       setNewQuestionnaires({
         title: "",
         description: "",
-        index: fetchQuestionnairesKit.data?.items.length + 1 || 1,
-        value: fetchQuestionnairesKit.data?.items.length + 1 || 1,
+        index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
+        value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
         weight: 0,
         id: null,
       });
@@ -166,7 +166,7 @@ const AnaweRangeContent = () => {
   const handleDelete = async (questionnaireId: number) => {
     try {
       await deleteQuestionnairesKit.query({ kitVersionId, questionnaireId });
-      await fetchQuestionnairesKit.query();
+      await fetchAnswerRangeKit.query();
       handleCancel();
     } catch (e) {
       const err = e as ICustomError;
@@ -200,8 +200,8 @@ const AnaweRangeContent = () => {
         <KitDHeader
           onAddNewRow={handleAddNewRow}
           hasBtn={
-            fetchQuestionnairesKit.loaded &&
-            fetchQuestionnairesKit.data.items.length !== 0
+              fetchAnswerRangeKit.loaded &&
+              fetchAnswerRangeKit.data.items.length !== 0
           }
           btnTitle={"newAnswerRange"}
           mainTitle={"answerRange"}
@@ -210,7 +210,7 @@ const AnaweRangeContent = () => {
         />
         <Divider sx={{ my: 1 }} />
         <QueryBatchData
-          queryBatchData={[fetchQuestionnairesKit]}
+          queryBatchData={[fetchAnswerRangeKit]}
           renderLoading={() => <LoadingSkeletonKitCard />}
           render={([QuestionnairesData]) => {
             return (
@@ -219,7 +219,7 @@ const AnaweRangeContent = () => {
                   <Box maxHeight={500} overflow="auto">
                     <ListOfItems
                       items={QuestionnairesData?.items}
-                      fetchQuery={fetchQuestionnairesKit}
+                      fetchQuery={fetchAnswerRangeKit}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                       deleteBtn={false}

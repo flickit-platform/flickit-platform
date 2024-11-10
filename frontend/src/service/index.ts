@@ -913,6 +913,24 @@ export const createService = (
         config,
       );
     },
+      fetchAnswerRangeKit(
+      { kitVersionId }: { kitVersionId: TId},
+      config?: AxiosRequestConfig<any>,
+      ){
+        return axios.get(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
+            config,
+        );
+      },
+      updateKitAnswerRange(
+          { kitVersionId,answerRangeId } : { kitVersionId: TId,answerRangeId: TId},
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.put(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/${answerRangeId}/`,
+              config,
+          )
+      },
     createAdvice(
       {
         assessmentId,
