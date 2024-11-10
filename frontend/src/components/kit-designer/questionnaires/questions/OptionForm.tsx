@@ -8,7 +8,7 @@ import { Trans } from "react-i18next";
 import { styles } from "@/config/styles";
 
 interface OptionFormProps {
-    newItem: {
+  newItem: {
     title: string;
     index: number;
     value: number;
@@ -46,8 +46,8 @@ const OptionForm = ({
         required
         id="new-maturity"
         type="number"
-        name="value"
-        value={newItem.value}
+        name="index"
+        value={newItem.index}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
@@ -60,7 +60,7 @@ const OptionForm = ({
           "& .MuiInputBase-root": {
             fontSize: 14,
           },
-          background:"#fff",
+          background: "#fff",
         }}
       />
     </Box>
@@ -74,7 +74,7 @@ const OptionForm = ({
         onChange={handleInputChange}
         fullWidth
         inputProps={{
-            "data-testid": "questionnaires-title",
+          "data-testid": "questionnaires-title",
         }}
         margin="normal"
         sx={{
@@ -87,13 +87,43 @@ const OptionForm = ({
           "& .MuiFormLabel-root": {
             fontSize: 14,
           },
-            background:"#fff",
+          background: "#fff",
         }}
       />
     </Box>
-
+    <Box width="20%" mx={1}>
+      <TextField
+        required
+        label={<Trans i18nKey="value" />}
+        name="value"
+        value={newItem.value}
+        onChange={handleInputChange}
+        fullWidth
+        inputProps={{
+          "data-testid": "questionnaires-title",
+        }}
+        margin="normal"
+        sx={{
+          mt: 0.3,
+          fontSize: 14,
+          "& .MuiInputBase-root": {
+            height: 36,
+            fontSize: 14,
+          },
+          "& .MuiFormLabel-root": {
+            fontSize: 14,
+          },
+          background: "#fff",
+        }}
+      />
+    </Box>
     {/* Check and Close Buttons */}
-    <Box display="flex" alignItems="center" flexDirection={"column"} gap={"20px"}>
+    <Box
+      display="flex"
+      alignItems="center"
+      flexDirection={"column"}
+      gap={"20px"}
+    >
       <Link
         href="#subject-header"
         sx={{
@@ -102,14 +132,24 @@ const OptionForm = ({
           fontWeight: "bold",
           display: "flex",
           alignItems: "center",
-          gap:"20px"
+          gap: "20px",
         }}
       >
         {" "}
-        <IconButton size="small" color="primary" data-testid="questionnaires-check-icon" onClick={handleSave}>
+        <IconButton
+          size="small"
+          color="primary"
+          data-testid="questionnaires-check-icon"
+          onClick={handleSave}
+        >
           <CheckIcon />
         </IconButton>
-        <IconButton size="small" color="secondary" data-testid="questionnaires-close-icon" onClick={handleCancel}>
+        <IconButton
+          size="small"
+          color="secondary"
+          data-testid="questionnaires-close-icon"
+          onClick={handleCancel}
+        >
           <CloseIcon />
         </IconButton>
       </Link>
