@@ -47,8 +47,8 @@ interface SubjectTableProps {
   setNewAttribute: any;
   newAttribute: any;
   showNewAttributeForm: boolean;
-  handleDelete: any;
   handleEdit: any;
+  setOpenDeleteDialog: ({status:boolean,id:string})=> void;
 }
 
 const SubjectTable: React.FC<SubjectTableProps> = ({
@@ -60,8 +60,8 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
   setNewAttribute,
   newAttribute,
   showNewAttributeForm,
-  handleDelete,
   handleEdit,
+  setOpenDeleteDialog
 }) => {
   const [attributes, setAttributes] = useState<Attribute[]>(initialAttributes);
   const [targetSubjectId, setTargetSubjectId] = useState<number | null>(null);
@@ -303,7 +303,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                                           </IconButton>
                                           <IconButton
                                             onClick={() =>
-                                              handleDelete(attribute.id)
+                                                setOpenDeleteDialog({status:true,id:attribute.id})
                                             }
                                             size="small"
                                             color="secondary"

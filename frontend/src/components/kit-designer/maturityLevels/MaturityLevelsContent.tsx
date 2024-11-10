@@ -119,6 +119,7 @@ const MaturityLevelsContent = () => {
       value: maturityLevels.data.items.length + 1 || 1,
       id: null,
     });
+    setOpenDeleteDialog({status:false,id:""})
   };
 
   const handleEdit = async (maturityLevel: any) => {
@@ -160,7 +161,6 @@ const MaturityLevelsContent = () => {
       maturityLevels.query();
       maturityLevelsCompetences.query();
       handleCancel();
-      setOpenDeleteDialog( prev => ({...prev,status:false}))
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);

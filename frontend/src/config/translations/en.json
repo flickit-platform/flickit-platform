@@ -724,5 +724,6 @@
   "newImpact": "New Impact",
   "selectAttribute": "Select Attribute",
   "selectMaturityLevel": "Select Maturity Level",
-  "deleteMaturityLevel": "Are you sure you want to delete this Maturity Level?"
+  "deleteMaturityLevel": "Are you sure you want to delete this Maturity Level?",
+  "deleteAttribute": "Are you sure you want to delete this Attribute?"
 }
