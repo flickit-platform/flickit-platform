@@ -1520,11 +1520,14 @@ export const createService = (
       );
     },
     fetchExpertGroupAssessmentKits(
-      args: { id: TId },
+      args: { id: TId, size: number, page: number },
       config: AxiosRequestConfig<any> | undefined,
     ) {
-      const { id } = args ?? {};
-      return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, config);
+      const { id, size, page } = args ?? {};
+      return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, {
+          ...config || {},
+          params:{ size: size, page: page - 1 }
+      });
     },
     fetchExpertGroupUnpublishedAssessmentKits(
       args: { id: TId },
