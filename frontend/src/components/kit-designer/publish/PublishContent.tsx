@@ -82,7 +82,7 @@ const PublishContent = ({ kitVersion }: { kitVersion: IKitVersion }) => {
             variant="contained"
             onClick={handlePublish}
             component={Link}
-            to={`/user/expert-groups/${expertGroupId}/assessment-kits/${kitVersion.assessmentKit.id}`}
+            to={`/user/expert-groups/${expertGroupId}/assessment-kits/${kitVersion?.assessmentKit?.id}`}
           >
             <Trans i18nKey="release" />
           </Button>

@@ -23,7 +23,18 @@ const KitDesignerContainer = () => {
 
   const handleTabChange = (event: any, newValue: any) => {
     setSelectedTab(newValue);
+    window.location.hash = newValue;
   };
+
+    useEffect(() => {
+        let currentHash = window.location.hash.replace("#","");
+        if (isNaN(+currentHash)) {
+            window.location.hash = `0`;
+            setSelectedTab(0);
+        }else{
+            setSelectedTab(+currentHash);
+        }
+    }, []);
 
   const kitVersion = useQuery<IKitVersion>({
     service: (args = { kitVersionId }, config) =>
