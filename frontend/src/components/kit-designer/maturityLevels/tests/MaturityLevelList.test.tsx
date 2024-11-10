@@ -9,6 +9,7 @@ const mockMaturityLevels: IMaturityLevel[] = [
   { id: 2, title: "Level 2", description: "Description 2", value: 2, index: 2 },
 ];
 
+const mockSetOpenDeleteDialog = {status: false, id:""}
 const mockOnEdit = vi.fn();
 const mockOnDelete = vi.fn();
 const mockOnReorder = vi.fn();
@@ -20,6 +21,7 @@ describe("MaturityLevelList", () => {
         maturityLevels={mockMaturityLevels}
         onEdit={mockOnEdit}
         onReorder={mockOnReorder}
+        setOpenDeleteDialog={mockSetOpenDeleteDialog}
       />,
     );
   });

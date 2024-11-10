@@ -26,6 +26,7 @@ const mockOnDelete = vi.fn();
 const mockOnReorder = vi.fn();
 const mockName = "questionnaires";
 const deleteBtn = true;
+const mockSetOpenDeleteDialog = {status: false, id:""}
 
 describe("questionnairesList", ()=>{
     beforeEach(()=>{
@@ -36,6 +37,7 @@ describe("questionnairesList", ()=>{
         deleteBtn={deleteBtn}
         onReorder={mockOnReorder}
         name={mockName}
+        setOpenDeleteDialog={mockSetOpenDeleteDialog}
       />,
     );
     })
