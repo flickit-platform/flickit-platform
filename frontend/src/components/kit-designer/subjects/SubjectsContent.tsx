@@ -16,10 +16,12 @@ import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
 import KitDHeader from "@/components/kit-designer/common/KitHeader";
 import SubjectForm from "./SubjectForm";
+import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
 
 const SubjectsContent = () => {
   const { service } = useServiceContext();
   const {  kitVersionId = "" } = useParams();
+  const [openDeleteDialog,setOpenDeleteDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
 
   const fetchSubjectKit = useQuery({
     service: (args = { kitVersionId }, config) =>
@@ -128,6 +130,7 @@ const SubjectsContent = () => {
       weight: 0,
       id: null,
     });
+    setOpenDeleteDialog({status:false,id:""})
   };
 
   const handleEdit = async (subjectItem: any) => {
@@ -162,8 +165,9 @@ const SubjectsContent = () => {
     }
   };
 
-  const handleDelete = async (subjectId: number) => {
+  const handleDelete = async () => {
     try {
+      let subjectId = openDeleteDialog.id
       await deleteSubjectKit.query({ kitVersionId, subjectId });
       await fetchSubjectKit.query();
       handleCancel();
@@ -222,10 +226,10 @@ const SubjectsContent = () => {
                       <ListOfItems
                         items={subjectData?.items}
                         onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        deleteBtn={false}
+                        deleteBtn={true}
                         onReorder={handleReorder}
                         name={"subject"}
+                        setOpenDeleteDialog={setOpenDeleteDialog}
                       />
                     </Box>
                 ) : (
@@ -249,6 +253,13 @@ const SubjectsContent = () => {
           }}
         />
       </Box>
+      <DeleteConfirmationDialog
+          open={openDeleteDialog.status}
+          onClose={() => setOpenDeleteDialog({...openDeleteDialog,status:false})}
+          onConfirm={handleDelete}
+          title="warning"
+          content="deleteSubject"
+      />
     </PermissionControl>
   );
 };
