@@ -21,7 +21,7 @@ interface ListOfItemsProps {
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean;
   name: string;
-  setOpenDeleteDialog: (status:boolean,id:string)=> void;
+  setOpenDeleteDialog: any;
 }
 interface ITempValues {
   title: string;

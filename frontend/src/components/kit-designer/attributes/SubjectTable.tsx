@@ -48,7 +48,7 @@ interface SubjectTableProps {
   newAttribute: any;
   showNewAttributeForm: boolean;
   handleEdit: any;
-  setOpenDeleteDialog: (status:boolean,id:string)=> void;
+  setOpenDeleteDialog: any;
 }
 
 const SubjectTable: React.FC<SubjectTableProps> = ({
@@ -302,9 +302,7 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                                             <EditIcon fontSize="small" />
                                           </IconButton>
                                           <IconButton
-                                            onClick={() =>
-                                                setOpenDeleteDialog({status:true,id:attribute.id})
-                                            }
+                                            onClick={() => setOpenDeleteDialog({status:true,id:attribute.id})}
                                             size="small"
                                             color="secondary"
                                           >
