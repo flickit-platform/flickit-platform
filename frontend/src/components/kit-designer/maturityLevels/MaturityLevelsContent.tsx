@@ -215,7 +215,6 @@ const MaturityLevelsContent = () => {
                       <MaturityLevelList
                         maturityLevels={maturityLevelsData?.items}
                         onEdit={handleEdit}
-                        onDelete={handleDelete}
                         onReorder={handleReorder}
                         setOpenDeleteDialog={setOpenDeleteDialog}
                       />

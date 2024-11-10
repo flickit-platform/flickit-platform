@@ -721,11 +721,11 @@ export const createService = (
       );
     },
     deleteQuestionnairesKit(
-      { kitVersionId, subjectId }: { kitVersionId: TId; subjectId: TId },
+      { kitVersionId, questionnaireId }: { kitVersionId: TId; questionnaireId: TId },
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.delete(
-        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${subjectId}/`,
+        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/`,
         config,
       );
     },

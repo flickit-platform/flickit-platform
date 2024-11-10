@@ -33,11 +33,11 @@ import QuestionForm from "./questions/QuestionForm";
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
   onEdit: (id: any) => void;
-  onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean;
   name: string;
   fetchQuery?: any;
+  setOpenDeleteDialog: ({status:boolean ,id:string})=> void;
 }
 interface ITempValues {
   title: string;
@@ -58,10 +58,10 @@ const ListOfItems = ({
   items,
   fetchQuery,
   onEdit,
-  onDelete,
   onReorder,
   deleteBtn,
   name,
+  setOpenDeleteDialog
 }: ListOfItemsProps) => {
   const fetchQuestionListKit = useQuery({
     service: (args, config) => service.fetchQuestionListKit(args, config),
@@ -467,7 +467,7 @@ const ListOfItems = ({
                                   {deleteBtn && (
                                     <IconButton
                                       size="small"
-                                      onClick={() => onDelete(item.id)}
+                                      onClick={() =>setOpenDeleteDialog({status: true,id:item.id})}
                                       sx={{ mx: 1 }}
                                       color="secondary"
                                       data-testid="items-delete-icon"
