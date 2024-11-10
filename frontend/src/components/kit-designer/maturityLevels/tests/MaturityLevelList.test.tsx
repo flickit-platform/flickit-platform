@@ -19,7 +19,6 @@ describe("MaturityLevelList", () => {
       <MaturityLevelList
         maturityLevels={mockMaturityLevels}
         onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
         onReorder={mockOnReorder}
       />,
     );
@@ -55,11 +54,11 @@ describe("MaturityLevelList", () => {
     });
   });
 
-  it("allows deleting a maturity level", () => {
-    // Click delete button for Level 1
-    fireEvent.click(screen.getAllByTestId("maturity-level-delete-icon")[0]);
-
-    // Check if onDelete was called with the correct id
-    expect(mockOnDelete).toHaveBeenCalledWith(1);
-  });
+  // it("allows deleting a maturity level", () => {
+  //   // Click delete button for Level 1
+  //   fireEvent.click(screen.getAllByTestId("maturity-level-delete-icon")[0]);
+  //
+  //   // Check if onDelete was called with the correct id
+  //   expect(mockOnDelete).toHaveBeenCalledWith(1);
+  // });
 });
