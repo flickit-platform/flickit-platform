@@ -31,12 +31,14 @@
           function () {
             (c[a].q = c[a].q || []).push(arguments);
           };
+
         t = l.createElement(r);
         t.async = 1;
         t.src = "https://www.clarity.ms/tag/" + i;
         y = l.getElementsByTagName(r)[0];
         y.parentNode.insertBefore(t, y);
-        window.clarity("consent")
+
+        window.clarity("consent");
 
         function generateClaritySessionId() {
           return (
@@ -59,30 +61,41 @@
           }
         }
 
-        const clarityUserId = localStorage.getItem("clarityUserId");
-        if (clarityUserId) {
-          window.clarity("set", "userId", clarityUserId);
-          c.clarity("set", "userId", clarityUserId);
+        const loggedInUserId = localStorage.getItem("loggedInUserId"); 
+        let clarityUserId;
+
+        if (loggedInUserId) {
+          clarityUserId = loggedInUserId;
         } else {
-          setUserIdTagBasedOnIP();
+          clarityUserId = localStorage.getItem("clarityUserId");
+          if (!clarityUserId) {
+            setUserIdTagBasedOnIP();
+          }
         }
 
         const claritySessionId =
           localStorage.getItem("claritySessionId") ||
           generateClaritySessionId();
         localStorage.setItem("claritySessionId", claritySessionId);
-        c.clarity("identify", claritySessionId);
-        window.clarity("identify", claritySessionId);
+
+        const clarityPageId = window.location.pathname;
+        const friendlyName = localStorage.getItem("username");
+
+        window.clarity(
+          "identify",
+          clarityUserId,
+          claritySessionId,
+          clarityPageId,
+          friendlyName,
+        );
+        c.clarity(
+          "identify",
+          clarityUserId,
+          claritySessionId,
+          clarityPageId,
+          friendlyName,
+        );
       })(window, document, "clarity", "script", "%VITE_CLARITY_KEY%");
-      window._mfq = window._mfq || [];
-      (function () {
-        var mf = document.createElement("script");
-        mf.type = "text/javascript";
-        mf.defer = true;
-        mf.src =
-          "//cdn.mouseflow.com/projects/b50a49ae-a246-45d1-9aa3-e451cd2863b2.js";
-        document.getElementsByTagName("head")[0].appendChild(mf);
-      })();
     </script>
   </body>
 </html>
