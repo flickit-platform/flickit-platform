@@ -50,6 +50,7 @@ interface AttributeImpactListProps {
   isAddingNew: boolean;
   setIsAddingNew: any;
   handleDeleteImpact: any;
+  handleEditImpact: any;
 }
 
 const AttributeImpactList = ({
@@ -60,6 +61,7 @@ const AttributeImpactList = ({
   isAddingNew,
   setIsAddingNew,
   handleDeleteImpact,
+  handleEditImpact,
 }: AttributeImpactListProps) => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
@@ -70,13 +72,25 @@ const AttributeImpactList = ({
     maturityLevelId: undefined,
     weight: 1,
   });
-  const toggleEditMode = (id: number | null) => setEditMode(id);
+
+  const toggleEditMode = (id: number | null, item?: any, attribute?: any) => {
+    if (id !== null && item && attribute) {
+      setTempValues({
+        questionId,
+        attributeId: attribute?.attributeId || undefined,
+        maturityLevelId: item?.maturityLevel?.maturityLevelId || undefined,
+        weight: item.weight || 1,
+      });
+    }
+    setEditMode(id);
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setTempValues((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSaveClick = async (item: Impact) => {
+    handleEditImpact(tempValues, item);
     toggleEditMode(null);
   };
 
@@ -116,7 +130,9 @@ const AttributeImpactList = ({
                 editMode={editMode}
                 tempValues={tempValues}
                 handleInputChange={handleInputChange}
-                toggleEditMode={toggleEditMode}
+                toggleEditMode={() =>
+                  toggleEditMode(item.questionImpactId, item, attribute)
+                }
                 attributes={attributes}
                 maturityLevels={maturityLevels}
               />
@@ -126,7 +142,9 @@ const AttributeImpactList = ({
                 editMode={editMode === item.questionImpactId}
                 onSave={() => handleSaveClick(item)}
                 onCancel={handleCancelClick}
-                onEdit={() => toggleEditMode(item.questionImpactId)}
+                onEdit={() =>
+                  toggleEditMode(item.questionImpactId, item, attribute)
+                }
                 onDelete={() => handleDeleteImpact(item)}
               />
             </Box>
@@ -152,6 +170,8 @@ const AttributeImpactList = ({
   );
 };
 
+// Rest of your components here
+
 const ImpactDetails = ({
   attribute,
   item,
@@ -171,7 +191,6 @@ const ImpactDetails = ({
           variant="outlined"
           fullWidth
           size="small"
-          label={<Trans i18nKey="title" />}
           sx={textFieldStyle}
         >
           {attributes?.map((attr: IAttribute) => (

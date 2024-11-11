@@ -724,6 +724,6 @@
   "newImpact": "New Impact",
   "selectAttribute": "Select Attribute",
   "selectMaturityLevel": "Select Maturity Level",
-  "chooseOption": "Choose an option",
+  "chooseAnswerRange": "Choose an answer range",
   "emptyAnswerRange": "No answer range had been created yet"
 }
