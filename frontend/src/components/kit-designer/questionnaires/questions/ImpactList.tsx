@@ -49,6 +49,7 @@ interface AttributeImpactListProps {
   questionId: TId;
   isAddingNew: boolean;
   setIsAddingNew: any;
+  handleDeleteImpact: any;
 }
 
 const AttributeImpactList = ({
@@ -58,6 +59,7 @@ const AttributeImpactList = ({
   questionId,
   isAddingNew,
   setIsAddingNew,
+  handleDeleteImpact,
 }: AttributeImpactListProps) => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
@@ -119,6 +121,7 @@ const AttributeImpactList = ({
                 onSave={() => handleSaveClick(item)}
                 onCancel={handleCancelClick}
                 onEdit={() => toggleEditMode(item.questionImpactId)}
+                onDelete={() => handleDeleteImpact(item)}
               />
             </Box>
           ))}
@@ -210,45 +213,54 @@ const ImpactDetails = ({
   </Box>
 );
 
-const ActionButtons = ({ editMode, onSave, onCancel, onEdit, item }: any) => (
-  <Box sx={{ display: "flex", alignItems: "center" }}>
-    <Chip
-      label={`${t("weight")}: ${item.weight}`}
-      color="primary"
-      size="small"
-      sx={{ ml: 2, fontSize: 12 }}
-    />
-    {editMode ? (
-      <>
-        <IconButton
-          size="small"
-          onClick={onSave}
-          sx={{ ml: 1 }}
-          color="success"
-        >
-          <CheckRoundedIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          size="small"
-          onClick={onCancel}
-          sx={{ ml: 1 }}
-          color="secondary"
-        >
-          <CloseRoundedIcon fontSize="small" />
-        </IconButton>
-      </>
-    ) : (
-      <>
-        <IconButton size="small" onClick={onEdit} sx={{ ml: 1 }}>
-          <EditRoundedIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ ml: 1 }}>
-          <DeleteRoundedIcon fontSize="small" />
-        </IconButton>
-      </>
-    )}
-  </Box>
-);
+const ActionButtons = ({
+  editMode,
+  onSave,
+  onCancel,
+  onEdit,
+  item,
+  onDelete,
+}: any) => {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Chip
+        label={`${t("weight")}: ${item.weight}`}
+        color="primary"
+        size="small"
+        sx={{ ml: 2, fontSize: 12 }}
+      />
+      {editMode ? (
+        <>
+          <IconButton
+            size="small"
+            onClick={onSave}
+            sx={{ ml: 1 }}
+            color="success"
+          >
+            <CheckRoundedIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={onCancel}
+            sx={{ ml: 1 }}
+            color="secondary"
+          >
+            <CloseRoundedIcon fontSize="small" />
+          </IconButton>
+        </>
+      ) : (
+        <>
+          <IconButton size="small" onClick={onEdit} sx={{ ml: 1 }}>
+            <EditRoundedIcon fontSize="small" />
+          </IconButton>
+          <IconButton size="small" sx={{ ml: 1 }} onClick={onDelete}>
+            <DeleteRoundedIcon fontSize="small" />
+          </IconButton>
+        </>
+      )}
+    </Box>
+  );
+};
 
 const textFieldStyle = {
   fontSize: 14,
