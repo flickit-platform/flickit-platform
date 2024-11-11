@@ -49,6 +49,8 @@ interface AttributeImpactListProps {
   questionId: TId;
   isAddingNew: boolean;
   setIsAddingNew: any;
+  handleDeleteImpact: any;
+  handleEditImpact: any;
 }
 
 const AttributeImpactList = ({
@@ -58,6 +60,8 @@ const AttributeImpactList = ({
   questionId,
   isAddingNew,
   setIsAddingNew,
+  handleDeleteImpact,
+  handleEditImpact,
 }: AttributeImpactListProps) => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
@@ -68,13 +72,25 @@ const AttributeImpactList = ({
     maturityLevelId: undefined,
     weight: 1,
   });
-  const toggleEditMode = (id: number | null) => setEditMode(id);
+
+  const toggleEditMode = (id: number | null, item?: any, attribute?: any) => {
+    if (id !== null && item && attribute) {
+      setTempValues({
+        questionId,
+        attributeId: attribute?.attributeId || undefined,
+        maturityLevelId: item?.maturityLevel?.maturityLevelId || undefined,
+        weight: item.weight || 1,
+      });
+    }
+    setEditMode(id);
+  };
 
   const handleInputChange = (field: string, value: any) => {
     setTempValues((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSaveClick = async (item: Impact) => {
+    handleEditImpact(tempValues, item);
     toggleEditMode(null);
   };
 
@@ -91,7 +107,13 @@ const AttributeImpactList = ({
   return (
     <Box mt={2}>
       {attributeImpacts.map((attribute) => (
-        <Box key={attribute.attributeId} sx={{ mb: 2 }}>
+        <Box
+          key={attribute.attributeId}
+          sx={{ mb: 2 }}
+          paddingX={2}
+          maxHeight={200}
+          overflow="auto"
+        >
           {attribute.impacts.map((item) => (
             <Box
               key={item.questionImpactId}
@@ -108,7 +130,9 @@ const AttributeImpactList = ({
                 editMode={editMode}
                 tempValues={tempValues}
                 handleInputChange={handleInputChange}
-                toggleEditMode={toggleEditMode}
+                toggleEditMode={() =>
+                  toggleEditMode(item.questionImpactId, item, attribute)
+                }
                 attributes={attributes}
                 maturityLevels={maturityLevels}
               />
@@ -118,7 +142,10 @@ const AttributeImpactList = ({
                 editMode={editMode === item.questionImpactId}
                 onSave={() => handleSaveClick(item)}
                 onCancel={handleCancelClick}
-                onEdit={() => toggleEditMode(item.questionImpactId)}
+                onEdit={() =>
+                  toggleEditMode(item.questionImpactId, item, attribute)
+                }
+                onDelete={() => handleDeleteImpact(item)}
               />
             </Box>
           ))}
@@ -143,6 +170,8 @@ const AttributeImpactList = ({
   );
 };
 
+// Rest of your components here
+
 const ImpactDetails = ({
   attribute,
   item,
@@ -162,7 +191,6 @@ const ImpactDetails = ({
           variant="outlined"
           fullWidth
           size="small"
-          label={<Trans i18nKey="title" />}
           sx={textFieldStyle}
         >
           {attributes?.map((attr: IAttribute) => (
@@ -210,45 +238,54 @@ const ImpactDetails = ({
   </Box>
 );
 
-const ActionButtons = ({ editMode, onSave, onCancel, onEdit, item }: any) => (
-  <Box sx={{ display: "flex", alignItems: "center" }}>
-    <Chip
-      label={`${t("weight")}: ${item.weight}`}
-      color="primary"
-      size="small"
-      sx={{ ml: 2, fontSize: 12 }}
-    />
-    {editMode ? (
-      <>
-        <IconButton
-          size="small"
-          onClick={onSave}
-          sx={{ ml: 1 }}
-          color="success"
-        >
-          <CheckRoundedIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          size="small"
-          onClick={onCancel}
-          sx={{ ml: 1 }}
-          color="secondary"
-        >
-          <CloseRoundedIcon fontSize="small" />
-        </IconButton>
-      </>
-    ) : (
-      <>
-        <IconButton size="small" onClick={onEdit} sx={{ ml: 1 }}>
-          <EditRoundedIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ ml: 1 }}>
-          <DeleteRoundedIcon fontSize="small" />
-        </IconButton>
-      </>
-    )}
-  </Box>
-);
+const ActionButtons = ({
+  editMode,
+  onSave,
+  onCancel,
+  onEdit,
+  item,
+  onDelete,
+}: any) => {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Chip
+        label={`${t("weight")}: ${item.weight}`}
+        color="primary"
+        size="small"
+        sx={{ ml: 2, fontSize: 12 }}
+      />
+      {editMode ? (
+        <>
+          <IconButton
+            size="small"
+            onClick={onSave}
+            sx={{ ml: 1 }}
+            color="success"
+          >
+            <CheckRoundedIcon fontSize="small" />
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={onCancel}
+            sx={{ ml: 1 }}
+            color="secondary"
+          >
+            <CloseRoundedIcon fontSize="small" />
+          </IconButton>
+        </>
+      ) : (
+        <>
+          <IconButton size="small" onClick={onEdit} sx={{ ml: 1 }}>
+            <EditRoundedIcon fontSize="small" />
+          </IconButton>
+          <IconButton size="small" sx={{ ml: 1 }} onClick={onDelete}>
+            <DeleteRoundedIcon fontSize="small" />
+          </IconButton>
+        </>
+      )}
+    </Box>
+  );
+};
 
 const textFieldStyle = {
   fontSize: 14,

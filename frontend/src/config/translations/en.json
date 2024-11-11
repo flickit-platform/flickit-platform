@@ -727,5 +727,7 @@
   "deleteMaturityLevel": "Are you sure you want to delete this Maturity Level?",
   "deleteAttribute": "Are you sure you want to delete this Attribute?",
   "deleteSubject": "Are you sure you want to delete this subject?",
-  "deleteQuestionnaires": "Are you sure you want to delete this Questionnaires?"
+  "deleteQuestionnaires": "Are you sure you want to delete this Questionnaires?",
+  "chooseAnswerRange": "Choose an answer range",
+  "emptyAnswerRange": "No answer range had been created yet"
 }

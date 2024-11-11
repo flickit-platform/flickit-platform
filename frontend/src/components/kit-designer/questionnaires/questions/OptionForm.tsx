@@ -6,6 +6,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { Trans } from "react-i18next";
 import { styles } from "@/config/styles";
+import { SwapVertRounded } from "@mui/icons-material";
+import { Typography } from "@mui/material";
+import { t } from "i18next";
 
 interface OptionFormProps {
   newItem: {
@@ -36,34 +39,19 @@ const OptionForm = ({
       position: "relative",
     }}
   >
-    <Box
-      sx={{ ...styles.centerCVH, background: "#F3F5F6" }}
-      borderRadius="0.5rem"
-      mr={2}
-      p={0.25}
+    <Typography
+      variant="body2"
+      sx={{
+        alignItems: "center",
+        ml: 1,
+        mt: 1,
+        paddingInlineEnd: 1.5,
+        borderRadius: "8px",
+        width: "120px",
+      }}
     >
-      <TextField
-        required
-        id="new-maturity"
-        type="number"
-        name="index"
-        value={newItem.index}
-        onChange={handleInputChange}
-        variant="outlined"
-        size="small"
-        inputProps={{
-          "data-testid": "question-value",
-          style: { textAlign: "center", width: "40px" },
-        }}
-        sx={{
-          fontSize: 14,
-          "& .MuiInputBase-root": {
-            fontSize: 14,
-          },
-          background: "#fff",
-        }}
-      />
-    </Box>
+      {`${t("option")} ${newItem.index}`}
+    </Typography>
 
     <Box width="100%" mx={1}>
       <TextField

@@ -23,10 +23,11 @@ interface ImpactFormProps {
   maturityLevels: IMaturityLevel[];
 }
 
-const dropdownStyle = {
+export const dropdownStyle = {
   fullWidth: true,
   displayEmpty: true,
   backgroundColor: "#fff",
+  fontSize: "14px"
 };
 
 const ImpactForm: React.FC<ImpactFormProps> = ({
@@ -39,7 +40,6 @@ const ImpactForm: React.FC<ImpactFormProps> = ({
 }) => {
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    console.log(e.target)
     handleInputChange(name, value);
   };
 

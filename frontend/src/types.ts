@@ -708,4 +708,5 @@ export interface IOption {
   title: string;
   index: number;
   value: number;
+  questionId?: TId;
 }
