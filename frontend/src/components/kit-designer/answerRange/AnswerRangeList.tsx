@@ -29,6 +29,10 @@ import { debounce } from "lodash";
 import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 import { Add } from "@mui/icons-material";
 import EmptyStateOptions from "@components/kit-designer/answerRange/options/emptyStateOptions";
+import Divider from "@mui/material/Divider";
+import OptionContain from "@components/kit-designer/answerRange/options/optionsContain";
+import Chip from "@mui/material/Chip";
+import {t} from "i18next";
 
 interface ListOfItemsProps {
   // items: Array<KitDesignListItems>;
@@ -375,9 +379,11 @@ const ListOfItems = ({
                                 </Typography>
                               )}
                               <Box sx={{ width: "60%",px:3}}>
-                                <Box sx={{width:"fit-content", background:"#EAF2FB", borderRadius:"1000px",py:1, px:2}}>
-                                  {item.answerOptions.length} <Trans i18nKey={"options"} />
-                                </Box>
+                                <Chip
+                                    label={t("options") + " " + item.answerOptions.length}
+                                    size="small"
+                                    sx={{backgroundColor: "#EAF2FB", fontSize:14,py: 1.4 }}
+                                />
                               </Box>
                               {/* Icons (Edit/Delete or Check/Close) */}
                               {editMode === item.id ? (
@@ -451,18 +457,35 @@ const ListOfItems = ({
                           py: questionData.length != 0 ? "20px" : "unset",
                         }}
                       >
-                        {/*{fetchQuestionListKit.loading ? (*/}
-                        {/*  <Box*/}
-                        {/*    sx={{*/}
-                        {/*      display: "flex",*/}
-                        {/*      justifyContent: "center",*/}
-                        {/*      alignItems: "center",*/}
-                        {/*      py: 2,*/}
-                        {/*    }}*/}
-                        {/*  >*/}
-                        {/*    <CircularProgress />*/}
-                        {/*  </Box>*/}
-                        {/*) : (*/}
+                        <Box sx={{
+                          width:"100%",
+                          height:36,
+                          display: "flex",
+                          alignItems:"center",
+                          justifyContent:"flex-start",
+                          px: "1rem",
+                          color: "#6C8093",
+                          ...theme.typography.semiBoldMedium
+                        }}>
+                          <Box
+                            sx={{
+                              width: { xs: "65px", md: "95px" },
+                              textAlign:"center"
+                          }}
+                            mr={2}
+                            px={0.2}
+                          >index</Box>
+                          <Box
+                              sx={{ width: { xs: "50%", md: "60%" } }}
+                          >Title</Box>
+                          <Box
+                          sx={{
+                            width: { xs: "20%", md: "10%" },
+                            textAlign:"center"
+                          }}
+                          >Value</Box>
+                        </Box>
+                        <Divider />
                           <>
                             {item?.answerOptions?.length >= 1 ? (
                               <>
@@ -478,10 +501,10 @@ const ListOfItems = ({
                                         ref={provided.innerRef}
                                       >
                                         {item.answerOptions?.map(
-                                          (question: any, index: number) => (
+                                          (answerOption: any, index: number) => (
                                             <Draggable
-                                              key={question.id}
-                                              draggableId={question.id.toString()}
+                                              key={answerOption.id}
+                                              draggableId={answerOption.id.toString()}
                                               index={index}
                                             >
                                               {(provided) => (
@@ -491,10 +514,10 @@ const ListOfItems = ({
                                                   {...provided.dragHandleProps}
                                                   sx={{ marginBottom: 1 }}
                                                 >
-                                                  <QuestionContainer
+                                                  <OptionContain
                                                     fetchQuery={fetchQuery}
-                                                    key={question.id}
-                                                    question={question}
+                                                    key={answerOption.id}
+                                                    answerOption={answerOption}
                                                   />
                                                 </Box>
                                               )}
@@ -543,7 +566,6 @@ const ListOfItems = ({
                               </>
                             )}
                           </>
-                        {/* )}*/}
                         {showNewQuestionForm[item.id] && (
                           <Box sx={{ mt: 2 }}>
                             {/*<QuestionForm*/}
