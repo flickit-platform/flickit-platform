@@ -11,7 +11,7 @@ interface QuestionnairesFormProps {
     newItem: {
     title: string;
     index: number;
-    value: number;
+    id: any
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSave: () => void;
@@ -46,8 +46,8 @@ const AnswerRangeForm = ({
         required
         id="new-maturity"
         type="number"
-        name="value"
-        value={newItem.value}
+        name="index"
+        value={newItem.index}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
