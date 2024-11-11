@@ -47,7 +47,7 @@ const OptionForm = ({
                 id="new-maturity"
                 type="number"
                 name="value"
-                value={newItem.value}
+                value={newItem.index}
                 onChange={handleInputChange}
                 variant="outlined"
                 size="small"
@@ -65,7 +65,7 @@ const OptionForm = ({
             />
         </Box>
 
-        <Box width="100%" mx={1}>
+        <Box sx={{ width: {xs: "50%", md: "60%"}}} mx={1}>
             <TextField
                 required
                 label={<Trans i18nKey="title" />}
@@ -88,12 +88,36 @@ const OptionForm = ({
                         fontSize: 14,
                     },
                     background:"#fff",
+                    width: "100%"
                 }}
             />
         </Box>
-
+        <Box sx={{width: { xs: "20%", md: "10%" }}}>
+        <TextField
+            required
+            id="new-maturity"
+            type="number"
+            name="value"
+            value={newItem.value}
+            onChange={handleInputChange}
+            variant="outlined"
+            size="small"
+            inputProps={{
+                "data-testid": "question-value",
+                style: { textAlign: "center", width: "100%" },
+            }}
+            sx={{
+                fontSize: 14,
+                "& .MuiInputBase-root": {
+                    fontSize: 14,
+                },
+                background:"#fff",
+                width: "100%",
+            }}
+        />
+        </Box>
         {/* Check and Close Buttons */}
-        <Box display="flex" alignItems="center" flexDirection={"column"} gap={"20px"}>
+        <Box sx={{marginLeft:"auto" }} display="flex" alignItems="center" flexDirection={"column"} gap={"20px"}>
             <Link
                 href="#subject-header"
                 sx={{

@@ -260,8 +260,8 @@ const ListOfItems = ({
     }));
     setNewOptions({
       title: "",
-      index: fetchOptionListKit.data?.items.length + 1 || 1,
-      value: fetchOptionListKit.data?.items.length + 1 || 1,
+      index: newOptions.index + 1 || 1,
+      value: newOptions.value + 1 || 1,
       id: null,
     });
   };
@@ -553,7 +553,7 @@ const ListOfItems = ({
                                       }
                                     >
                                       <Add fontSize="small" />
-                                      <Trans i18nKey="newQuestion" />
+                                      <Trans i18nKey="newOption" />
                                     </Button>
                                   </Box>
                                 )}
