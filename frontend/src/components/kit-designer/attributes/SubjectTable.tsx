@@ -301,13 +301,13 @@ const SubjectTable: React.FC<SubjectTableProps> = ({
                                           >
                                             <EditIcon fontSize="small" />
                                           </IconButton>
-                                          <IconButton
+                                          {/* <IconButton
                                             onClick={() => setOpenDeleteDialog({status:true,id:attribute.id})}
                                             size="small"
                                             color="secondary"
                                           >
                                             <DeleteIcon fontSize="small" />
-                                          </IconButton>
+                                          </IconButton> */}
                                         </TableCell>
                                       </>
                                     )}
