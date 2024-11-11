@@ -753,15 +753,15 @@ export const createService = (
         config,
       );
     },
-    fetchQuestionListKit(
+      fetchOptionListKit(
       {
         kitVersionId,
-        questionnaireId,
-      }: { kitVersionId: TId; questionnaireId: TId },
+        questionId,
+      }: { kitVersionId: TId; questionId: TId },
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.get(
-        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
+        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/options/`,
         {
           ...(config ?? {}),
           params: {
@@ -938,6 +938,16 @@ export const createService = (
       ) {
           return axios.post(
               `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
+              data,
+              config,
+          );
+      },
+      postOptionsKit(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/answer-range-options/`,
               data,
               config,
           );

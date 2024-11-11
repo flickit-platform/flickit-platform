@@ -726,5 +726,8 @@
   "newAnswerRange": "New Answer Range",
   "answerRangeListEmptyState": "Ops! No Answer range is Here ",
   "answerRangeEmptyStateDetailed": "Don’t worry! we made it easy for you! just click the button below and create your first template",
-  "addOption": "ADD OPTION"
+  "addOption": "ADD OPTION",
+  "noOptionHere": "No option here!",
+  "noOptionAtTheMoment": "No options for answer at the moment.",
+  "addFirstOption": "Add First option"
 }

@@ -33,6 +33,7 @@ import Divider from "@mui/material/Divider";
 import OptionContain from "@components/kit-designer/answerRange/options/optionsContain";
 import Chip from "@mui/material/Chip";
 import {t} from "i18next";
+import OptionForm from "@components/kit-designer/answerRange/options/optionForm";
 
 interface ListOfItemsProps {
   // items: Array<KitDesignListItems>;
@@ -68,12 +69,12 @@ const ListOfItems = ({
   deleteBtn,
   name,
 }: ListOfItemsProps) => {
-  const fetchQuestionListKit = useQuery({
-    service: (args, config) => service.fetchQuestionListKit(args, config),
+  const fetchOptionListKit = useQuery({
+    service: (args, config) => service.fetchOptionListKit(args, config),
     runOnMount: false,
   });
-  const postQuestionsKit = useQuery({
-    service: (args, config) => service.postQuestionsKit(args, config),
+  const postOptionsKit = useQuery({
+    service: (args, config) => service.postOptionsKit(args, config),
     runOnMount: false,
   });
 
@@ -86,7 +87,7 @@ const ListOfItems = ({
     service: (args, config) => service.updateKitQuestionnaires(args, config),
     runOnMount: false,
   });
-  const [showNewQuestionForm, setShowNewQuestionForm] = useState<{
+  const [showNewAnswerRangeForm, setShowNewAnswerRangeForm] = useState<{
     [key: string]: boolean;
   }>({});
   const [reorderedItems, setReorderedItems] = useState(items);
@@ -155,17 +156,17 @@ const ListOfItems = ({
       setQuestionnaireId(id as any);
       try {
         if (isExpanded) {
-          const data = await fetchQuestionListKit.query({
-            kitVersionId,
-            questionnaireId: id,
-          });
-          setNewQuestion({
-            title: "",
-            index: data?.items.length + 1 || 1,
-            value: data?.items.length + 1 || 1,
-            id: null,
-          });
-          setQuestionData(data?.items);
+          // const data = await fetchOptionListKit.query({
+          //   kitVersionId,
+          //   questionId: id,
+          // });
+          // setNewOptions({
+          //   title: "",
+          //   index: data?.items.length + 1 || 1,
+          //   value: data?.items.length + 1 || 1,
+          //   id: null,
+          // });
+          // setQuestionData(data?.items);
         } else {
           handleCancel(id);
         }
@@ -209,14 +210,14 @@ const ListOfItems = ({
     setQuestionData(reorderedQuestions);
   };
 
-  const handleAddNewQuestionClick = (id: any) => {
-    setShowNewQuestionForm((prev) => ({
+  const handleAddNewOptionClick = (id: any) => {
+    setShowNewAnswerRangeForm((prev) => ({
       ...prev,
       [id]: true,
     }));
   };
 
-  const [newQuestion, setNewQuestion] = useState({
+  const [newOptions, setNewOptions] = useState({
     title: "",
     index: 1,
     value: 1,
@@ -226,7 +227,7 @@ const ListOfItems = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const parsedValue = name === "value" ? parseInt(value) || 1 : value;
-    setNewQuestion((prev) => ({
+    setNewOptions((prev) => ({
       ...prev,
       [name]: parsedValue,
     }));
@@ -236,16 +237,14 @@ const ListOfItems = ({
     try {
       const data = {
         kitVersionId,
-        index: newQuestion.index,
-        value: newQuestion.value,
-        title: newQuestion.title,
-        advisable: false,
-        mayNotBeApplicable: false,
-        questionnaireId: id,
+        index: newOptions.index,
+        value: newOptions.value,
+        title: newOptions.title,
+        answerRangeId: id,
       };
       handleCancel(id);
 
-      await postQuestionsKit.query({ kitVersionId, data }).then(() => {
+      await postOptionsKit.query({ kitVersionId, data }).then(() => {
         fetchQuery.query();
       });
     } catch (e) {
@@ -255,18 +254,18 @@ const ListOfItems = ({
   };
 
   const handleCancel = (id: TId) => {
-    setShowNewQuestionForm((prev) => ({
+    setShowNewAnswerRangeForm((prev) => ({
       ...prev,
       [id]: false,
     }));
-    setNewQuestion({
+    setNewOptions({
       title: "",
-      index: fetchQuestionListKit.data?.items.length + 1 || 1,
-      value: fetchQuestionListKit.data?.items.length + 1 || 1,
+      index: fetchOptionListKit.data?.items.length + 1 || 1,
+      value: fetchOptionListKit.data?.items.length + 1 || 1,
       id: null,
     });
   };
-
+  console.log(items,"test items")
   return (
 
           <Box>
@@ -457,40 +456,42 @@ const ListOfItems = ({
                           py: questionData.length != 0 ? "20px" : "unset",
                         }}
                       >
-                        <Box sx={{
-                          width:"100%",
-                          height:36,
-                          display: "flex",
-                          alignItems:"center",
-                          justifyContent:"flex-start",
-                          px: "1rem",
-                          color: "#6C8093",
-                          ...theme.typography.semiBoldMedium
-                        }}>
-                          <Box
-                            sx={{
-                              width: { xs: "65px", md: "95px" },
-                              textAlign:"center"
-                          }}
-                            mr={2}
-                            px={0.2}
-                          >
-                            <Trans i18nKey={"index"} />
-                          </Box>
-                          <Box
-                              sx={{ width: { xs: "50%", md: "60%" } }}
-                          >
+                          {item?.answerOptions?.length >= 1 &&
+                              <Box sx={{
+                                width:"100%",
+                                height:36,
+                                display: "flex",
+                                alignItems:"center",
+                                justifyContent:"flex-start",
+                                px: "1rem",
+                                color: "#6C8093",
+                                ...theme.typography.semiBoldMedium
+                              }}>
+                              <Box
+                                  sx={{
+                                    width: { xs: "65px", md: "95px" },
+                                    textAlign:"center"
+                                  }}
+                                  mr={2}
+                                  px={0.2}
+                              >
+                                <Trans i18nKey={"index"} />
+                              </Box>
+                            <Box
+                            sx={{ width: { xs: "50%", md: "60%" } }}
+                            >
                             <Trans i18nKey={"title"} />
-                          </Box>
-                          <Box
-                          sx={{
+                            </Box>
+                            <Box
+                            sx={{
                             width: { xs: "20%", md: "10%" },
                             textAlign:"center"
                           }}
-                          >
+                            >
                             <Trans i18nKey={"value"} />
-                          </Box>
-                        </Box>
+                            </Box>
+                            </Box>
+                          }
                         <Divider />
                           <>
                             {item?.answerOptions?.length >= 1 ? (
@@ -535,7 +536,7 @@ const ListOfItems = ({
                                     )}
                                   </Droppable>
                                 </DragDropContext>
-                                {!showNewQuestionForm[item.id] && (
+                                {!showNewAnswerRangeForm[item.id] && (
                                   <Box
                                     sx={{
                                       display: "flex",
@@ -548,7 +549,7 @@ const ListOfItems = ({
                                       variant="outlined"
                                       color="primary"
                                       onClick={() =>
-                                        handleAddNewQuestionClick(item.id)
+                                          handleAddNewOptionClick(item.id)
                                       }
                                     >
                                       <Add fontSize="small" />
@@ -559,27 +560,27 @@ const ListOfItems = ({
                               </>
                             ) : (
                               <>
-                                {!showNewQuestionForm[item.id] && (
+                                {!showNewAnswerRangeForm[item.id] && (
                                   <EmptyStateOptions
-                                    btnTitle={"addFirstQuestion"}
-                                    title={"noQuestionHere"}
-                                    SubTitle={"noQuestionAtTheMoment"}
+                                    btnTitle={"addFirstOption"}
+                                    title={"noOptionHere"}
+                                    SubTitle={"noOptionAtTheMoment"}
                                     onAddNewRow={() =>
-                                      handleAddNewQuestionClick(item.id)
+                                        handleAddNewOptionClick(item.id)
                                     }
                                   />
                                 )}
                               </>
                             )}
                           </>
-                        {showNewQuestionForm[item.id] && (
-                          <Box sx={{ mt: 2 }}>
-                            {/*<QuestionForm*/}
-                            {/*  newItem={newQuestion}*/}
-                            {/*  handleInputChange={handleInputChange}*/}
-                            {/*  handleSave={() => handleSave(item.id)}*/}
-                            {/*  handleCancel={() => handleCancel(item.id)}*/}
-                            {/*/>*/}
+                        {showNewAnswerRangeForm[item.id] && (
+                          <Box >
+                            <OptionForm
+                              newItem={newOptions}
+                              handleInputChange={handleInputChange}
+                              handleSave={() => handleSave(item.id)}
+                              handleCancel={() => handleCancel(item.id)}
+                            />
                           </Box>
                         )}
                       </AccordionDetails>

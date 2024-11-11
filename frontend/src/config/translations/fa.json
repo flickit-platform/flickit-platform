@@ -698,5 +698,8 @@
     "newAnswerRange": "الگوی پاسخ جدید",
     "answerRangeListEmptyState": "متاسفانه هنوز الگوی پاسخی ساخته نشده است!",
     "answerRangeEmptyStateDetailed": "نگران نباش! ما آن را برای شما آسان کردیم! فقط روی دکمه زیر کلیک کنید و اولین الگوی خود را ایجاد کنید.",
-    "addOption": "اضافه کردن گزینه"
+    "addOption": "اضافه کردن گزینه",
+    "noOptionHere": "هیچ گزینه‌ای اینجا نیست!",
+    "noOptionAtTheMoment": "در حال حاضر گزینه‌ای برای پاسخ وجود ندارد.",
+    "addFirstOption": "اضافه کردن اولین گزینه"
 }
