@@ -3,6 +3,7 @@ import { t } from "i18next";
 import { TId } from "@types";
 import { BASE_URL } from "@constants";
 import keycloakService from "@/service//keycloakService";
+import { data } from "cypress/types/jquery";
 declare module "axios" {
   interface AxiosRequestConfig {
     isRefreshTokenReq?: boolean;
@@ -890,12 +891,28 @@ export const createService = (
         config,
       );
     },
+    postAnswerOptionsKit(
+      {
+        kitVersionId,
+        data,
+      }: {
+        kitVersionId: TId;
+        data?: { questionId: number; index: number; title: string };
+      },
+      config?: AxiosRequestConfig<any>,
+    ) {
+      return axios.post(
+        `/api/v1/kit-versions/${kitVersionId}/answer-options/`,
+        data,
+        config,
+      );
+    },
     loadAnswerRangesList(
-      { kitVersionId, questionId }: { kitVersionId: TId; questionId: any },
+      { kitVersionId }: { kitVersionId: TId },
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.get(
-        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/answer-ranges/`,
+        `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
         config,
       );
     },
@@ -1520,13 +1537,13 @@ export const createService = (
       );
     },
     fetchExpertGroupAssessmentKits(
-      args: { id: TId, size: number, page: number },
+      args: { id: TId; size: number; page: number },
       config: AxiosRequestConfig<any> | undefined,
     ) {
       const { id, size, page } = args ?? {};
       return axios.get(`/api/v1/expert-groups/${id}/assessment-kits/`, {
-          ...config || {},
-          params:{ size: size, page: page - 1 }
+        ...(config || {}),
+        params: { size: size, page: page - 1 },
       });
     },
     fetchExpertGroupUnpublishedAssessmentKits(
@@ -1681,13 +1698,13 @@ export const createService = (
         },
       });
     },
-      removeExpertGroupMembers(
+    removeExpertGroupMembers(
       args: { id: TId; userId: TId },
       config: AxiosRequestConfig<any> | undefined,
     ) {
-      const { id,userId  } = args ?? {};
-          return axios.delete(`/api/v1/expert-groups/${id}/members/${userId}`, {
-        ...(config ?? {})
+      const { id, userId } = args ?? {};
+      return axios.delete(`/api/v1/expert-groups/${id}/members/${userId}`, {
+        ...(config ?? {}),
       });
     },
     confirmExpertGroupInvitation(

@@ -723,5 +723,7 @@
   "optionsImpactsDisabled": "You can't add a new impact untill you've created options and attributes",
   "newImpact": "New Impact",
   "selectAttribute": "Select Attribute",
-  "selectMaturityLevel": "Select Maturity Level"
+  "selectMaturityLevel": "Select Maturity Level",
+  "chooseOption": "Choose an option",
+  "emptyAnswerRange": "No answer range had been created yet"
 }

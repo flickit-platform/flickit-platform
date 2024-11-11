@@ -93,7 +93,13 @@ const AttributeImpactList = ({
   return (
     <Box mt={2}>
       {attributeImpacts.map((attribute) => (
-        <Box key={attribute.attributeId} sx={{ mb: 2 }}>
+        <Box
+          key={attribute.attributeId}
+          sx={{ mb: 2 }}
+          paddingX={2}
+          maxHeight={200}
+          overflow="auto"
+        >
           {attribute.impacts.map((item) => (
             <Box
               key={item.questionImpactId}
