@@ -10,7 +10,6 @@ import { styles } from "@/config/styles";
 interface QuestionnairesFormProps {
     newItem: {
     title: string;
-    description: string;
     index: number;
     value: number;
   };

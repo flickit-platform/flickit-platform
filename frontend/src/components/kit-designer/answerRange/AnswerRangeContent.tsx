@@ -46,6 +46,7 @@ const AnaweRangeContent = () => {
   const [newAnswerRange, setNewAnswerRange] = useState({
     title: "",
     index: 1,
+    value: 1,
     id: null,
   });
 
@@ -54,6 +55,7 @@ const AnaweRangeContent = () => {
       setNewAnswerRange((prev) => ({
         ...prev,
         index: fetchAnswerRangeKit.data.items.length + 1,
+        value: fetchAnswerRangeKit.data.items.length + 1,
         id: null,
       }));
     }
@@ -111,6 +113,7 @@ const AnaweRangeContent = () => {
     setNewAnswerRange({
       title: "",
       index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
+      value:fetchAnswerRangeKit.data?.items.length + 1 || 1,
       id: null,
     });
   };
