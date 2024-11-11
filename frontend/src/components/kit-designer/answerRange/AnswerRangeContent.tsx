@@ -133,12 +133,13 @@ const AnaweRangeContent = () => {
       });
 
       setShowNewAnswerRangeForm(false);
-      fetchAnswerRangeKit.query();
+      await fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
       setNewAnswerRange({
         title: "",
         index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
+        value:  fetchAnswerRangeKit.data?.items.length + 1 || 1,
         id: null,
       });
     } catch (e) {
