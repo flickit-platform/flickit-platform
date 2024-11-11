@@ -40,7 +40,8 @@ interface ListOfItemsProps {
   items: any;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
-  onReorder: (reorderedItems: KitDesignListItems[]) => void;
+  // onReorder: (reorderedItems: KitDesignListItems[]) => void;
+  onReorder: any;
   deleteBtn: boolean;
   name: string;
   fetchQuery?: any;
@@ -113,7 +114,7 @@ const ListOfItems = ({
     setReorderedItems(newReorderedItems);
     onReorder(newReorderedItems);
   };
-  const handleEditClick = (e: any, item: KitDesignListItems) => {
+  const handleEditClick = (e: any, item: any) => {
     e.stopPropagation();
     setEditMode(Number(item.id));
     setTempValues({
@@ -268,7 +269,7 @@ const ListOfItems = ({
   return (
 
           <Box>
-            {reorderedItems?.map((item, index) => (
+            {reorderedItems?.map((item : any, index : any) => (
                   <Box
                     mt={1.5}
                     sx={{

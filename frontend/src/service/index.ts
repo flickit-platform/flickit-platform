@@ -753,15 +753,15 @@ export const createService = (
         config,
       );
     },
-      fetchOptionListKit(
+      fetchQuestionListKit(
       {
         kitVersionId,
-        questionId,
-      }: { kitVersionId: TId; questionId: TId },
+        questionnaireId,
+      }: { kitVersionId: TId; questionnaireId: TId },
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.get(
-        `/api/v1/kit-versions/${kitVersionId}/questions/${questionId}/options/`,
+          `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
         {
           ...(config ?? {}),
           params: {
