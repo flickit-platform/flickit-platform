@@ -28,9 +28,11 @@ import { alpha, Button, CircularProgress } from "@mui/material";
 import { debounce } from "lodash";
 import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 import { Add } from "@mui/icons-material";
+import EmptyStateOptions from "@components/kit-designer/answerRange/options/emptyStateOptions";
 
 interface ListOfItemsProps {
-  items: Array<KitDesignListItems>;
+  // items: Array<KitDesignListItems>;
+  items: any;
   onEdit: (id: any) => void;
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
@@ -374,7 +376,7 @@ const ListOfItems = ({
                               )}
                               <Box sx={{ width: "60%",px:3}}>
                                 <Box sx={{width:"fit-content", background:"#EAF2FB", borderRadius:"1000px",py:1, px:2}}>
-                                  6 options
+                                  {item.answerOptions.length} <Trans i18nKey={"options"} />
                                 </Box>
                               </Box>
                               {/* Icons (Edit/Delete or Check/Close) */}
@@ -449,20 +451,20 @@ const ListOfItems = ({
                           py: questionData.length != 0 ? "20px" : "unset",
                         }}
                       >
-                        {fetchQuestionListKit.loading ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              py: 2,
-                            }}
-                          >
-                            <CircularProgress />
-                          </Box>
-                        ) : (
+                        {/*{fetchQuestionListKit.loading ? (*/}
+                        {/*  <Box*/}
+                        {/*    sx={{*/}
+                        {/*      display: "flex",*/}
+                        {/*      justifyContent: "center",*/}
+                        {/*      alignItems: "center",*/}
+                        {/*      py: 2,*/}
+                        {/*    }}*/}
+                        {/*  >*/}
+                        {/*    <CircularProgress />*/}
+                        {/*  </Box>*/}
+                        {/*) : (*/}
                           <>
-                            {questionData.length >= 1 ? (
+                            {item?.answerOptions?.length >= 1 ? (
                               <>
                                 <DragDropContext
                                   onDragEnd={handleQuestionDragEnd}
@@ -475,7 +477,7 @@ const ListOfItems = ({
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
                                       >
-                                        {questionData?.map(
+                                        {item.answerOptions?.map(
                                           (question: any, index: number) => (
                                             <Draggable
                                               key={question.id}
@@ -529,7 +531,7 @@ const ListOfItems = ({
                             ) : (
                               <>
                                 {!showNewQuestionForm[item.id] && (
-                                  <EmptyStateQuestion
+                                  <EmptyStateOptions
                                     btnTitle={"addFirstQuestion"}
                                     title={"noQuestionHere"}
                                     SubTitle={"noQuestionAtTheMoment"}
@@ -541,7 +543,7 @@ const ListOfItems = ({
                               </>
                             )}
                           </>
-                        )}
+                        {/* )}*/}
                         {showNewQuestionForm[item.id] && (
                           <Box sx={{ mt: 2 }}>
                             {/*<QuestionForm*/}
