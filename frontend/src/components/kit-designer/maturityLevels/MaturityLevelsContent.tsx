@@ -18,10 +18,12 @@ import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
+import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
 
 const MaturityLevelsContent = () => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
+  const [openDeleteDialog,setOpenDeleteDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
   const maturityLevels = useQuery({
     service: (args = { kitVersionId }, config) =>
       service.getMaturityLevels(args, config),
@@ -117,6 +119,7 @@ const MaturityLevelsContent = () => {
       value: maturityLevels.data.items.length + 1 || 1,
       id: null,
     });
+    setOpenDeleteDialog({status:false,id:""})
   };
 
   const handleEdit = async (maturityLevel: any) => {
@@ -151,8 +154,9 @@ const MaturityLevelsContent = () => {
     }
   };
 
-  const handleDelete = async (maturityLevelId: number) => {
+  const handleDelete = async () => {
     try {
+      let maturityLevelId = openDeleteDialog.id
       await service.deleteMaturityLevel({ kitVersionId, maturityLevelId });
       maturityLevels.query();
       maturityLevelsCompetences.query();
@@ -211,8 +215,8 @@ const MaturityLevelsContent = () => {
                       <MaturityLevelList
                         maturityLevels={maturityLevelsData?.items}
                         onEdit={handleEdit}
-                        onDelete={handleDelete}
                         onReorder={handleReorder}
+                        setOpenDeleteDialog={setOpenDeleteDialog}
                       />
                     </Box>
 
@@ -268,6 +272,13 @@ const MaturityLevelsContent = () => {
           </Box>
         ) : null}
       </Box>
+      <DeleteConfirmationDialog
+            open={openDeleteDialog.status}
+            onClose={() => setOpenDeleteDialog({...openDeleteDialog,status:false})}
+            onConfirm={handleDelete}
+            title="warning"
+            content="deleteMaturityLevel"
+      />
     </PermissionControl>
   );
 };
