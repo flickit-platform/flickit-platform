@@ -219,15 +219,41 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     service: (args, config) => service.deleteQuestionImpactsKit(args, config),
     runOnMount: false,
   });
+  const updateQuestionImpactsKit = useQuery({
+    service: (args, config) => service.updateQuestionImpactsKit(args, config),
+    runOnMount: false,
+  });
   const handleDeleteImpact = (item: any) => {
-    deleteQuestionImpactsKit
-      .query({
-        kitVersionId: kitVersionId,
-        questionImpactId: item.questionImpactId,
-      })
-      .then(() => {
-        fetchImpacts.query();
-      });
+    try {
+      deleteQuestionImpactsKit
+        .query({
+          kitVersionId: kitVersionId,
+          questionImpactId: item.questionImpactId,
+        })
+        .then(() => {
+          fetchImpacts.query();
+        });
+    } catch (err) {
+      const error = err as ICustomError;
+      toastError(error);
+    }
+  };
+
+  const handleEditImpact = (tempValues: any, item: any) => {
+    try {
+      updateQuestionImpactsKit
+        .query({
+          kitVersionId: kitVersionId,
+          questionImpactId: item.questionImpactId,
+          data: tempValues,
+        })
+        .then(() => {
+          fetchImpacts.query();
+        });
+    } catch (err) {
+      const error = err as ICustomError;
+      toastError(error);
+    }
   };
 
   const fetchAnswerRanges = useQuery({
@@ -258,12 +284,15 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
 
   const handleAddOption = async (item: any) => {
     try {
-      await postAnswerOptionsKit.query({
-        kitVersionId,
-        data: { ...item, questionId: question.id },
-      });
-      fetchOptions.query();
-      setShowNewOptionForm(false);
+      await postAnswerOptionsKit
+        .query({
+          kitVersionId,
+          data: { ...item, questionId: question.id },
+        })
+        .then(() => {
+          fetchOptions.query();
+          setShowNewOptionForm(false);
+        });
     } catch (err) {
       const error = err as ICustomError;
       toastError(error);
@@ -343,7 +372,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                   disabled={fetchAnswerRanges?.data?.items?.length === 0}
                 >
                   <MenuItem value="" disabled>
-                    <Trans i18nKey="chooseAnswerRange" />
+                    <Trans i18nKey="chooseOption" />
                   </MenuItem>
                   {fetchAnswerRanges?.data?.answerRanges?.map((range: any) => (
                     <MenuItem key={range.id} value={range.id}>
@@ -355,15 +384,17 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             </Box>
             {fetchOptions?.data?.answerOptions?.length > 0 ? (
               <>
-                <OptionList
-                  Options={fetchOptions?.data?.answerOptions}
-                  onEdit={handleAddNewRow}
-                  onDelete={handleAddNewRow}
-                  onReorder={handleAddNewRow}
-                  onAdd={handleAddOption}
-                  isAddingNew={showNewOptionForm}
-                  setIsAddingNew={setShowNewOptionForm}
-                />
+                <Box maxHeight={500} overflow="auto">
+                  <OptionList
+                    Options={fetchOptions?.data?.answerOptions}
+                    onEdit={handleAddNewRow}
+                    onDelete={handleAddNewRow}
+                    onReorder={handleAddNewRow}
+                    onAdd={handleAddOption}
+                    isAddingNew={showNewOptionForm}
+                    setIsAddingNew={setShowNewImpactForm}
+                  />
+                </Box>
               </>
             ) : (
               <>
@@ -407,6 +438,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                 isAddingNew={showNewImpactForm}
                 setIsAddingNew={setShowNewImpactForm}
                 handleDeleteImpact={handleDeleteImpact}
+                handleEditImpact={handleEditImpact}
               />
             </Box>
             {showNewImpactForm && (

@@ -40,7 +40,6 @@ const ImpactForm: React.FC<ImpactFormProps> = ({
 }) => {
   const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const { name, value } = e.target;
-    console.log(e.target)
     handleInputChange(name, value);
   };
 
