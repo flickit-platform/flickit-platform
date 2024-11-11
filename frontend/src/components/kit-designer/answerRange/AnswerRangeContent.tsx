@@ -26,8 +26,8 @@ const AnaweRangeContent = () => {
     service: (args = { kitVersionId }, config) =>
       service.fetchAnswerRangeKit(args, config),
   });
-  const postQuestionnairesKit = useQuery({
-    service: (args, config) => service.postQuestionnairesKit(args, config),
+  const postKitAnswerRange = useQuery({
+    service: (args, config) => service.postKitAnswerRange(args, config),
     runOnMount: false,
   });
 
@@ -43,22 +43,17 @@ const AnaweRangeContent = () => {
 
   const [showNewQuestionnairesForm, setShowNewQuestionnairesForm] =
     useState(false);
-  const [newQuestionnaires, setNewQuestionnaires] = useState({
+  const [newAnswerRange, setNewAnswerRange] = useState({
     title: "",
-    description: "",
     index: 1,
-    value: 1,
     id: null,
-    weight: 1,
   });
 
   useEffect(() => {
     if (fetchAnswerRangeKit.data?.items?.length) {
-      setNewQuestionnaires((prev) => ({
+      setNewAnswerRange((prev) => ({
         ...prev,
         index: fetchAnswerRangeKit.data.items.length + 1,
-        value: fetchAnswerRangeKit.data.items.length + 1,
-        weight: 1,
         id: null,
       }));
     }
@@ -66,7 +61,7 @@ const AnaweRangeContent = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const parsedValue = name === "value" ? parseInt(value) || 1 : value;
-    setNewQuestionnaires((prev) => ({
+    setNewAnswerRange((prev) => ({
       ...prev,
       [name]: parsedValue,
     }));
@@ -81,20 +76,17 @@ const AnaweRangeContent = () => {
     try {
       const data = {
         kitVersionId,
-        index: newQuestionnaires.index,
-        value: newQuestionnaires.value,
-        title: newQuestionnaires.title,
-        weight: newQuestionnaires.weight,
-        description: newQuestionnaires.description,
+        answerRangeId: newAnswerRange.index,
+        title: newAnswerRange.title,
       };
-      if (newQuestionnaires.id) {
+      if (newAnswerRange.id) {
         await service.updateKitAnswerRange({
           kitVersionId,
-          answerRangeId: newQuestionnaires.id,
+          answerRangeId: newAnswerRange.id,
           data,
         });
       } else {
-        await postQuestionnairesKit.query({ kitVersionId, data });
+        await postKitAnswerRange.query({ kitVersionId, data });
       }
 
       // Reset form and re-fetch data after saving
@@ -103,12 +95,9 @@ const AnaweRangeContent = () => {
       // maturityLevelsCompetences.query();
 
       // Reset the form values
-      setNewQuestionnaires({
+      setNewAnswerRange({
         title: "",
-        description: "",
         index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-        value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-        weight: 1,
         id: null,
       });
     } catch (e) {
@@ -119,12 +108,9 @@ const AnaweRangeContent = () => {
 
   const handleCancel = () => {
     setShowNewQuestionnairesForm(false);
-    setNewQuestionnaires({
+    setNewAnswerRange({
       title: "",
-      description: "",
       index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-      value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-      weight: 0,
       id: null,
     });
   };
@@ -134,10 +120,7 @@ const AnaweRangeContent = () => {
       const data = {
         kitVersionId,
         index: QuestionnairesItem.index,
-        value: QuestionnairesItem.value,
         title: QuestionnairesItem.title,
-        weight: QuestionnairesItem.weight,
-        description: QuestionnairesItem.description,
       };
       await updateKitAnswerRange.query({
         kitVersionId,
@@ -149,12 +132,9 @@ const AnaweRangeContent = () => {
       fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
-      setNewQuestionnaires({
+      setNewAnswerRange({
         title: "",
-        description: "",
         index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-        value: fetchAnswerRangeKit.data?.items.length + 1 || 1,
-        weight: 0,
         id: null,
       });
     } catch (e) {
@@ -194,128 +174,128 @@ const AnaweRangeContent = () => {
     debouncedHandleReorder(newOrder);
   };
 
-  const answerrangeItem =  [
-    {
-      "id": 7,
-      "title": "test_1",
-      "answerOptions": [
-        {
-          "id": 77091,
-          "title": "Poor",
-          "index": 1,
-          "value": 1.0
-        },
-        {
-          "id": 77092,
-          "title": "Weak",
-          "index": 2,
-          "value": 2.0
-        },
-        {
-          "id": 77093,
-          "title": "Moderate",
-          "index": 3,
-          "value": 3.0
-        },
-        {
-          "id": 77094,
-          "title": "Good",
-          "index": 4,
-          "value": 4.0
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "title": "test_2",
-      "answerOptions": [
-        {
-          "id": 77537,
-          "title": "Poor",
-          "index": 1,
-          "value": 1.0
-        },
-        {
-          "id": 77538,
-          "title": "Weak",
-          "index": 2,
-          "value": 2.0
-        },
-        {
-          "id": 77539,
-          "title": "Moderate",
-          "index": 3,
-          "value": 3.0
-        },
-        {
-          "id": 77540,
-          "title": "Good",
-          "index": 4,
-          "value": 4.0
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "title": "test_3",
-      "answerOptions": [
-        {
-          "id": 77541,
-          "title": "Poor",
-          "index": 1,
-          "value": 1.0
-        },
-        {
-          "id": 77542,
-          "title": "Weak",
-          "index": 2,
-          "value": 2.0
-        },
-        {
-          "id": 77543,
-          "title": "Moderate",
-          "index": 3,
-          "value": 3.0
-        },
-        {
-          "id": 77544,
-          "title": "Good",
-          "index": 4,
-          "value": 4.0
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "title": "test_4",
-      "answerOptions": [
-        {
-          "id": 77545,
-          "title": "Poor",
-          "index": 1,
-          "value": 1.0
-        },
-        {
-          "id": 77546,
-          "title": "Weak",
-          "index": 2,
-          "value": 2.0
-        },
-        {
-          "id": 77547,
-          "title": "Moderate",
-          "index": 3,
-          "value": 3.0
-        },
-        {
-          "id": 77548,
-          "title": "Good",
-          "index": 4,
-          "value": 4.0
-        }
-      ]
-    }
-  ]
+  // const answerrangeItem =  [
+  //   {
+  //     "id": 7,
+  //     "title": "test_1",
+  //     "answerOptions": [
+  //       {
+  //         "id": 77091,
+  //         "title": "Poor",
+  //         "index": 1,
+  //         "value": 1.0
+  //       },
+  //       {
+  //         "id": 77092,
+  //         "title": "Weak",
+  //         "index": 2,
+  //         "value": 2.0
+  //       },
+  //       {
+  //         "id": 77093,
+  //         "title": "Moderate",
+  //         "index": 3,
+  //         "value": 3.0
+  //       },
+  //       {
+  //         "id": 77094,
+  //         "title": "Good",
+  //         "index": 4,
+  //         "value": 4.0
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     "id": 8,
+  //     "title": "test_2",
+  //     "answerOptions": [
+  //       {
+  //         "id": 77537,
+  //         "title": "Poor",
+  //         "index": 1,
+  //         "value": 1.0
+  //       },
+  //       {
+  //         "id": 77538,
+  //         "title": "Weak",
+  //         "index": 2,
+  //         "value": 2.0
+  //       },
+  //       {
+  //         "id": 77539,
+  //         "title": "Moderate",
+  //         "index": 3,
+  //         "value": 3.0
+  //       },
+  //       {
+  //         "id": 77540,
+  //         "title": "Good",
+  //         "index": 4,
+  //         "value": 4.0
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     "id": 9,
+  //     "title": "test_3",
+  //     "answerOptions": [
+  //       {
+  //         "id": 77541,
+  //         "title": "Poor",
+  //         "index": 1,
+  //         "value": 1.0
+  //       },
+  //       {
+  //         "id": 77542,
+  //         "title": "Weak",
+  //         "index": 2,
+  //         "value": 2.0
+  //       },
+  //       {
+  //         "id": 77543,
+  //         "title": "Moderate",
+  //         "index": 3,
+  //         "value": 3.0
+  //       },
+  //       {
+  //         "id": 77544,
+  //         "title": "Good",
+  //         "index": 4,
+  //         "value": 4.0
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     "id": 10,
+  //     "title": "test_4",
+  //     "answerOptions": [
+  //       {
+  //         "id": 77545,
+  //         "title": "Poor",
+  //         "index": 1,
+  //         "value": 1.0
+  //       },
+  //       {
+  //         "id": 77546,
+  //         "title": "Weak",
+  //         "index": 2,
+  //         "value": 2.0
+  //       },
+  //       {
+  //         "id": 77547,
+  //         "title": "Moderate",
+  //         "index": 3,
+  //         "value": 3.0
+  //       },
+  //       {
+  //         "id": 77548,
+  //         "title": "Good",
+  //         "index": 4,
+  //         "value": 4.0
+  //       }
+  //     ]
+  //   }
+  // ]
 
   return (
     <PermissionControl scopes={["edit-assessment-kit"]}>
@@ -338,11 +318,10 @@ const AnaweRangeContent = () => {
           render={([AnswerRangeData]) => {
             return (
               <>
-                {AnswerRangeData?.items?.length == 0 ? (
+                {AnswerRangeData?.items?.length !== 0 ? (
                   <Box maxHeight={500} overflow="auto">
                     <ListOfItems
-                      // items={AnswerRangeData?.items}
-                      items={answerrangeItem}
+                      items={AnswerRangeData?.items}
                       fetchQuery={fetchAnswerRangeKit}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
@@ -361,7 +340,7 @@ const AnaweRangeContent = () => {
                 )}
                 {showNewQuestionnairesForm && (
                   <AnswerRangeForm
-                    newItem={newQuestionnaires}
+                    newItem={newAnswerRange}
                     handleInputChange={handleInputChange}
                     handleSave={handleSave}
                     handleCancel={handleCancel}

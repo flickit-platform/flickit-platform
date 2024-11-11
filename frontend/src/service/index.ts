@@ -931,6 +931,16 @@ export const createService = (
               config,
           )
       },
+      postKitAnswerRange(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
+              data,
+              config,
+          );
+      },
     createAdvice(
       {
         assessmentId,
