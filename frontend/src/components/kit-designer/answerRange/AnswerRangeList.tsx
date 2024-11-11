@@ -70,10 +70,10 @@ const ListOfItems = ({
   deleteBtn,
   name,
 }: ListOfItemsProps) => {
-  const fetchOptionListKit = useQuery({
-    service: (args, config) => service.fetchOptionListKit(args, config),
-    runOnMount: false,
-  });
+  // const fetchOptionListKit = useQuery({
+  //   service: (args, config) => service.fetchOptionListKit(args, config),
+  //   runOnMount: false,
+  // });
   const postOptionsKit = useQuery({
     service: (args, config) => service.postOptionsKit(args, config),
     runOnMount: false,
