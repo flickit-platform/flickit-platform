@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import MLink from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useServiceContext } from "@providers/ServiceProvider";
 import { useQuery } from "@utils/useQuery";
 import QueryData from "@common/QueryData";
@@ -23,7 +23,7 @@ import RichEditor from "@common/rich-editor/RichEditor";
 import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
-import {t} from "i18next";
+import { t } from "i18next";
 import forLoopComponent from "@utils/forLoopComponent";
 import { LoadingSkeleton } from "@common/loadings/LoadingSkeleton";
 import AssessmentKitListItem from "../assessment-kit/AssessmentKitListItem";
@@ -61,18 +61,19 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
-import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
+import { DeleteConfirmationDialog } from "@common/dialogs/DeleteConfirmationDialog";
 
 const ExpertGroupContainer = () => {
   const { service } = useServiceContext();
   const { expertGroupId } = useParams();
   const { userInfo } = useAuthContext();
 
-  const {assessmentKitQuery, handleChangePage, ...rest } = useFetchAssessmentKit()
+  const { assessmentKitQuery, handleChangePage, ...rest } =
+    useFetchAssessmentKit();
   const { size, total, page } = rest;
 
-    const pageCount = size === 0 ? 1 : Math.ceil(total / size);
-    const queryData = useQuery({
+  const pageCount = size === 0 ? 1 : Math.ceil(total / size);
+  const queryData = useQuery({
     service: (args = { id: expertGroupId }, config) =>
       service.fetchUserExpertGroup(args, config),
   });
@@ -86,9 +87,8 @@ const ExpertGroupContainer = () => {
       service.fetchExpertGroupMembers(args, config),
   });
   const removeExpertGroupMembers = useQuery({
-    service: (args, config) =>
-      service.removeExpertGroupMembers(args, config),
-      runOnMount: false
+    service: (args, config) => service.removeExpertGroupMembers(args, config),
+    runOnMount: false,
   });
 
   const setDocTitle = useDocumentTitle(t("expertGroup") as string);
@@ -102,251 +102,208 @@ const ExpertGroupContainer = () => {
 
   const [assessmentKitsCounts, setAssessmentKitsCounts] = useState<any>([]);
   const [numberOfMembers, setNumberOfMembers] = useState<any>(Number);
-  const [removeMemberDialog,setRemoveMemberDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
-  const handelRemoveMember = async (userId: any) =>{
-      try {
-          await removeExpertGroupMembers.query({id: expertGroupId, userId: removeMemberDialog.id})
-          await expertGroupMembersQueryData.query()
-          setRemoveMemberDialog({status:false,id:""})
-      }catch (e : any) {
-          const err = e as ICustomError;
-          toastError(err)
-          setRemoveMemberDialog({status:false,id:""})
-      }
-  }
+  const [removeMemberDialog, setRemoveMemberDialog] = useState<{
+    status: boolean;
+    id: string;
+  }>({ status: false, id: "" });
+  const handelRemoveMember = async (userId: any) => {
+    try {
+      await removeExpertGroupMembers.query({
+        id: expertGroupId,
+        userId: removeMemberDialog.id,
+      });
+      await expertGroupMembersQueryData.query();
+      setRemoveMemberDialog({ status: false, id: "" });
+    } catch (e: any) {
+      const err = e as ICustomError;
+      toastError(err);
+      setRemoveMemberDialog({ status: false, id: "" });
+    }
+  };
   return (
-      <>
-    <QueryData
-      {...queryData}
-      render={(data) => {
-        const {
-          title,
-          pictureLink,
-          website,
-          about = "",
-          bio,
-          editable,
-        } = data || {};
-        const is_member = expertGroupMembersQueryData.data?.items?.some(
-          (res: any) => {
-            return res.id === userInfo.id;
-          },
-        );
-        const hasAccess = editable;
-        setDocTitle(`${t("expertGroup")}: ${title || ""}`);
-        return (
-          <Box>
-            <Title
-              backLink="/"
-              borderBottom
-              pb={1}
-              avatar={
-                <AvatarComponent
-                  queryData={queryData}
-                  picture={pictureLink}
-                  editable={editable}
-                />
-              }
-              sup={
-                <SupTitleBreadcrumb
-                  routes={[
-                    {
-                      title: t("expertGroups") as string,
-                      to: `/user/expert-groups`,
-                    },
-                    {
-                      title: title,
-                    },
-                  ]}
-                />
-              }
-              toolbar={
-                editable ? (
-                  <EditExpertGroupButton fetchExpertGroup={queryData.query} />
-                ) : (
-                  <></>
-                )
-              }
-            >
-              {title}
-            </Title>
-            <Grid container spacing={3} sx={{ mt: 1 }}>
-              <Grid item xs={12} md={8}>
-                {about && (
-                  <>
-                    <Title size="small">
-                      <Trans i18nKey="about" />
-                    </Title>
-                    <Box
-                      sx={{ p: 3, mt: 1, borderRadius: 2, background: "white" }}
-                    >
-                      <Box minHeight={"160px"} mb={4}>
-                        <RichEditor content={about} />
-                      </Box>
-                    </Box>
-                  </>
-                )}
-                <Box mt={5}>
-                  <AssessmentKitsList
+    <>
+      <QueryData
+        {...queryData}
+        render={(data) => {
+          const {
+            title,
+            pictureLink,
+            website,
+            about = "",
+            bio,
+            editable,
+          } = data || {};
+          const is_member = expertGroupMembersQueryData.data?.items?.some(
+            (res: any) => {
+              return res.id === userInfo.id;
+            },
+          );
+          const hasAccess = editable;
+          setDocTitle(`${t("expertGroup")}: ${title || ""}`);
+          return (
+            <Box>
+              <Title
+                backLink="/"
+                borderBottom
+                pb={1}
+                avatar={
+                  <AvatarComponent
                     queryData={queryData}
-                    hasAccess={editable}
-                    dialogProps={createAssessmentKitDialogProps}
-                    excelToDslDialogProps={excelToDslDialogProps}
-                    is_member={is_member}
-                    is_expert={editable}
-                    setAssessmentKitsCounts={setAssessmentKitsCounts}
-                    assessmentKitQuery={assessmentKitQuery}
+                    picture={pictureLink}
+                    editable={editable}
                   />
-                    <Stack
-                        spacing={2}
+                }
+                sup={
+                  <SupTitleBreadcrumb
+                    routes={[
+                      {
+                        title: t("expertGroups") as string,
+                        to: `/user/expert-groups`,
+                      },
+                      {
+                        title: title,
+                      },
+                    ]}
+                  />
+                }
+                toolbar={
+                  editable ? (
+                    <EditExpertGroupButton fetchExpertGroup={queryData.query} />
+                  ) : (
+                    <></>
+                  )
+                }
+              >
+                {title}
+              </Title>
+              <Grid container spacing={3} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={8}>
+                  {about && (
+                    <>
+                      <Title size="small">
+                        <Trans i18nKey="about" />
+                      </Title>
+                      <Box
                         sx={{
-                            mt: 3,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
+                          p: 3,
+                          mt: 1,
+                          borderRadius: 2,
+                          background: "white",
                         }}
-                    >
-                        <Pagination
-                            variant="outlined"
-                            color="primary"
-                            count={pageCount}
-                            onChange={handleChangePage}
-                            page={page}
-                        />
-                    </Stack>
-                </Box>
-                <Box mt={5}>
-                  <ExpertGroupMembersDetail
-                    queryData={expertGroupMembersQueryData}
-                    inviteeQueryData={expertGroupMembersInviteeQueryData}
-                    hasAccess={editable}
-                    setNumberOfMembers={setNumberOfMembers}
-                    setRemoveMemberDialog={setRemoveMemberDialog}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Box
-                  p={2}
-                  sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}
-                >
-                  <Box>
-                    <Typography
-                      variant="h6"
-                      display="flex"
-                      alignItems={"center"}
-                      sx={{ mb: 1.5 }}
-                    >
-                      <Trans i18nKey="groupSummary" />
-                    </Typography>
-                    {bio && (
-                      <Box mt={1}>
-                        <Typography>{bio}</Typography>
+                      >
+                        <Box minHeight={"160px"} mb={4}>
+                          <RichEditor content={about} />
+                        </Box>
                       </Box>
-                    )}
-                    {website && (
-                      <Box sx={{ ...styles.centerV, mt: 1 }}>
-                        <InsertLinkRoundedIcon
+                    </>
+                  )}
+                  <Box mt={5}>
+                    <AssessmentKitsList
+                      queryData={queryData}
+                      hasAccess={editable}
+                      dialogProps={createAssessmentKitDialogProps}
+                      excelToDslDialogProps={excelToDslDialogProps}
+                      is_member={is_member}
+                      is_expert={editable}
+                      setAssessmentKitsCounts={setAssessmentKitsCounts}
+                      assessmentKitQuery={assessmentKitQuery}
+                    />
+                    <Stack
+                      spacing={2}
+                      sx={{
+                        mt: 3,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Pagination
+                        variant="outlined"
+                        color="primary"
+                        count={pageCount}
+                        onChange={handleChangePage}
+                        page={page}
+                      />
+                    </Stack>
+                  </Box>
+                  <Box mt={5}>
+                    <ExpertGroupMembersDetail
+                      queryData={expertGroupMembersQueryData}
+                      inviteeQueryData={expertGroupMembersInviteeQueryData}
+                      hasAccess={editable}
+                      setNumberOfMembers={setNumberOfMembers}
+                      setRemoveMemberDialog={setRemoveMemberDialog}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Box
+                    p={2}
+                    sx={{ borderRadius: 2, p: 3, background: "white", mt: 5 }}
+                  >
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        display="flex"
+                        alignItems={"center"}
+                        sx={{ mb: 1.5 }}
+                      >
+                        <Trans i18nKey="groupSummary" />
+                      </Typography>
+                      {bio && (
+                        <Box mt={1}>
+                          <Typography>{bio}</Typography>
+                        </Box>
+                      )}
+                      {website && (
+                        <Box sx={{ ...styles.centerV, mt: 1 }}>
+                          <InsertLinkRoundedIcon
+                            fontSize="small"
+                            sx={{
+                              marginRight:
+                                theme.direction === "ltr" ? 1 : "unset",
+                              marginLeft:
+                                theme.direction === "rtl" ? 1 : "unset",
+                              transform: "rotateZ(-45deg)",
+                              opacity: 0.8,
+                            }}
+                          />
+
+                          <MLink
+                            target="_blank"
+                            href={website}
+                            sx={{
+                              textDecoration: "none",
+                              opacity: 0.9,
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {website
+                              ?.replace("https://", "")
+                              ?.replace("http://", "")}
+                          </MLink>
+                        </Box>
+                      )}
+                      <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
+                        <PeopleRoundedIcon
                           fontSize="small"
                           sx={{
                             marginRight:
                               theme.direction === "ltr" ? 1 : "unset",
                             marginLeft: theme.direction === "rtl" ? 1 : "unset",
-                            transform: "rotateZ(-45deg)",
                             opacity: 0.8,
                           }}
                         />
 
-                        <MLink
-                          target="_blank"
-                          href={website}
+                        <Typography
                           sx={{
-                            textDecoration: "none",
                             opacity: 0.9,
-                            fontWeight: "bold",
+                            fontSize: "inherit",
                           }}
                         >
-                          {website
-                            ?.replace("https://", "")
-                            ?.replace("http://", "")}
-                        </MLink>
+                          {numberOfMembers} {t("members").toLowerCase()}
+                        </Typography>
                       </Box>
-                    )}
-                    <Box sx={{ ...styles.centerV, mt: 1, fontSize: ".9rem" }}>
-                      <PeopleRoundedIcon
-                        fontSize="small"
-                        sx={{
-                          marginRight: theme.direction === "ltr" ? 1 : "unset",
-                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
-                          opacity: 0.8,
-                        }}
-                      />
-
-                      <Typography
-                        sx={{
-                          opacity: 0.9,
-                          fontSize: "inherit",
-                        }}
-                      >
-                        {numberOfMembers} {t("members").toLowerCase()}
-                      </Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        ...styles.centerV,
-                        mt: 1,
-                        fontSize: ".9rem",
-                        textDecoration: "none",
-                        color: "inherit",
-                      }}
-                      component="a"
-                      href="#assessment-kits"
-                    >
-                      <AssignmentRoundedIcon
-                        fontSize="small"
-                        sx={{
-                          marginRight: theme.direction === "ltr" ? 1 : "unset",
-                          marginLeft: theme.direction === "rtl" ? 1 : "unset",
-                          opacity: 0.8,
-                        }}
-                      />
-
-                      <Typography
-                        sx={{
-                          opacity: 0.9,
-                          fontSize: "inherit",
-                        }}
-                      >
-                        {assessmentKitsCounts.filter(
-                          (item: any) => item.published,
-                        ) &&
-                          `${
-                            assessmentKitsCounts.filter(
-                              (item: any) => item.published,
-                            ).length
-                          } ${t("publishedAssessmentKits").toLowerCase()}`}
-                      </Typography>
-                      {editable && (
-                        <Box
-                          ml={theme.direction === "rtl" ? "unset" : "auto"}
-                          mr={theme.direction !== "rtl" ? "unset" : "auto"}
-                        >
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={() => {
-                              createAssessmentKitDialogProps.openDialog({
-                                type: "create",
-                                data: { expertGroupId },
-                              });
-                            }}
-                          >
-                            <AddRoundedIcon fontSize="small" />
-                          </IconButton>
-                        </Box>
-                      )}
-                    </Box>
-                    {editable && (
                       <Box
                         sx={{
                           ...styles.centerV,
@@ -358,7 +315,7 @@ const ExpertGroupContainer = () => {
                         component="a"
                         href="#assessment-kits"
                       >
-                        <AssignmentLateRoundedIcon
+                        <AssignmentRoundedIcon
                           fontSize="small"
                           sx={{
                             marginRight:
@@ -375,77 +332,141 @@ const ExpertGroupContainer = () => {
                           }}
                         >
                           {assessmentKitsCounts.filter(
-                            (item: any) => !item.published,
+                            (item: any) => item.published,
                           ) &&
                             `${
                               assessmentKitsCounts.filter(
-                                (item: any) => !item.published,
+                                (item: any) => item.published,
                               ).length
-                            } ${t("unpublishedAssessmentKits").toLowerCase()}`}
+                            } ${t("publishedAssessmentKits").toLowerCase()}`}
                         </Typography>
+                        {editable && (
+                          <Box
+                            ml={theme.direction === "rtl" ? "unset" : "auto"}
+                            mr={theme.direction !== "rtl" ? "unset" : "auto"}
+                          >
+                            <IconButton
+                              size="small"
+                              color="primary"
+                              onClick={() => {
+                                createAssessmentKitDialogProps.openDialog({
+                                  type: "create",
+                                  data: { expertGroupId },
+                                });
+                              }}
+                            >
+                              <AddRoundedIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
+                        )}
+                      </Box>
+                      {editable && (
+                        <Box
+                          sx={{
+                            ...styles.centerV,
+                            mt: 1,
+                            fontSize: ".9rem",
+                            textDecoration: "none",
+                            color: "inherit",
+                          }}
+                          component="a"
+                          href="#assessment-kits"
+                        >
+                          <AssignmentLateRoundedIcon
+                            fontSize="small"
+                            sx={{
+                              marginRight:
+                                theme.direction === "ltr" ? 1 : "unset",
+                              marginLeft:
+                                theme.direction === "rtl" ? 1 : "unset",
+                              opacity: 0.8,
+                            }}
+                          />
+
+                          <Typography
+                            sx={{
+                              opacity: 0.9,
+                              fontSize: "inherit",
+                            }}
+                          >
+                            {assessmentKitsCounts.filter(
+                              (item: any) => !item.published,
+                            ) &&
+                              `${
+                                assessmentKitsCounts.filter(
+                                  (item: any) => !item.published,
+                                ).length
+                              } ${t("unpublishedAssessmentKits").toLowerCase()}`}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+
+                    {editable && (
+                      <Box>
+                        <Divider sx={{ mt: 2, mb: 2 }} />
+                        <ExpertGroupMembers
+                          query={expertGroupMembersQueryData}
+                          inviteeQuery={expertGroupMembersInviteeQueryData}
+                          hasAccess={hasAccess}
+                        />
                       </Box>
                     )}
                   </Box>
-
-                  {editable && (
-                    <Box>
-                      <Divider sx={{ mt: 2, mb: 2 }} />
-                      <ExpertGroupMembers
-                        query={expertGroupMembersQueryData}
-                        inviteeQuery={expertGroupMembersInviteeQueryData}
-                        hasAccess={hasAccess}
-                      />
-                    </Box>
-                  )}
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        );
-      }}
-    />
-          <DeleteConfirmationDialog
-              open={removeMemberDialog.status}
-              onClose={() => setRemoveMemberDialog({...removeMemberDialog,status: false})}
-              onConfirm={()=>handelRemoveMember}
-              title="warning"
-              content="removeMemberExpertGroup"
-          />
-      </>
+            </Box>
+          );
+        }}
+      />
+      <DeleteConfirmationDialog
+        open={removeMemberDialog.status}
+        onClose={() =>
+          setRemoveMemberDialog({ ...removeMemberDialog, status: false })
+        }
+        onConfirm={() => handelRemoveMember}
+        title="warning"
+        content="removeMemberExpertGroup"
+      />
+    </>
   );
 };
 
-const useFetchAssessmentKit = () =>{
-        const { service } = useServiceContext();
-        const { expertGroupId = "" } = useParams();
-        const PAGESIZE: number = 10;
+const useFetchAssessmentKit = () => {
+  const { service } = useServiceContext();
+  const { expertGroupId = "" } = useParams();
+  const PAGESIZE: number = 10;
 
-        useEffect(() => {
-            assessmentKitQuery.query({ id: expertGroupId, size:PAGESIZE, page: 1 })
-        }, []);
+  useEffect(() => {
+    assessmentKitQuery.query({ id: expertGroupId, size: PAGESIZE, page: 1 });
+  }, []);
 
-    const handleChangePage = (
-        event: React.ChangeEvent<unknown>,
-        value: number,
-    ) => {
-        assessmentKitQuery.query({ id: expertGroupId, size:PAGESIZE, page: value || 1 })
-    };
-
-    const assessmentKitQuery = useQuery({
-        service: (args , config) =>
-            service.fetchExpertGroupAssessmentKits(args, config),
-        runOnMount: false
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    assessmentKitQuery.query({
+      id: expertGroupId,
+      size: PAGESIZE,
+      page: value || 1,
     });
-        return {
-            data: assessmentKitQuery?.data?.items || [],
-            page: (assessmentKitQuery?.data?.page + 1)|| 0,
-            size: assessmentKitQuery?.data?.size || 0,
-            total: assessmentKitQuery?.data?.total || 0,
-            requested_space: assessmentKitQuery?.data?.requested_space,
-            loaded: !!assessmentKitQuery?.data,
-            assessmentKitQuery,
-            handleChangePage
-        };
+  };
+
+  const assessmentKitQuery = useQuery({
+    service: (args, config) =>
+      service.fetchExpertGroupAssessmentKits(args, config),
+    runOnMount: false,
+  });
+  return {
+    data: assessmentKitQuery?.data?.items || [],
+    page: assessmentKitQuery?.data?.page + 1 || 0,
+    size: assessmentKitQuery?.data?.size || 0,
+    total: assessmentKitQuery?.data?.total || 0,
+    requested_space: assessmentKitQuery?.data?.requested_space,
+    loaded: !!assessmentKitQuery?.data,
+    assessmentKitQuery,
+    handleChangePage,
+  };
 };
 
 const AvatarComponent = (props: any) => {
@@ -796,7 +817,9 @@ const Invitees = (props: any) => {
                         }}
                       />
                       <Typography variant="body2">
-                          {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
+                        {theme.direction == "rtl"
+                          ? formatDate(inviteExpirationDate, "Shamsi")
+                          : formatDate(inviteExpirationDate, "Miladi")}
                       </Typography>
                     </Box>
                   </Box>
@@ -1021,7 +1044,7 @@ const AssessmentKitsList = (props: any) => {
     setAssessmentKitsCounts,
     is_member,
     excelToDslDialogProps,
-    assessmentKitQuery
+    assessmentKitQuery,
   } = props;
   const { expertGroupId } = useParams();
   const kitDesignerDialogProps = useDialog({
@@ -1106,14 +1129,17 @@ const AssessmentKitsList = (props: any) => {
                     <Trans i18nKey="viaKitDesigner" />
                   </MenuItem>
                 </Menu>
-                <AssessmentKitCEFromDialog {...dialogProps}  onSubmitForm={assessmentKitQuery.query}/>
+                <AssessmentKitCEFromDialog
+                  {...dialogProps}
+                  assessmentKits={assessmentKitQuery}
+                />
                 <AssessmentKitCEFromDialog
                   {...kitDesignerDialogProps}
-                  onSubmitForm={assessmentKitQuery.query}
+                  assessmentKits={assessmentKitQuery}
                 />
                 <AssessmentKitCEFromDialog
                   {...excelToDslDialogProps}
-                  onSubmitForm={assessmentKitQuery.query}
+                  assessmentKits={assessmentKitQuery}
                 />
               </>
             )}
@@ -1165,7 +1191,7 @@ const AssessmentKitsList = (props: any) => {
                         }
                         key={assessment_kit?.id}
                         data={assessment_kit}
-                        fetchAssessmentKits={assessmentKitQuery.query}
+                        fetchAssessmentKits={assessmentKitQuery}
                         hasAccess={hasAccess}
                         is_member={is_member}
                         is_active={true}
@@ -1185,7 +1211,7 @@ const AssessmentKitsList = (props: any) => {
                           }
                           key={assessment_kit?.id}
                           data={assessment_kit}
-                          fetchAssessmentKits={assessmentKitQuery.query}
+                          fetchAssessmentKits={assessmentKitQuery}
                           hasAccess={hasAccess}
                           is_member={is_member}
                           is_active={false}
@@ -1202,7 +1228,13 @@ const AssessmentKitsList = (props: any) => {
 };
 
 const ExpertGroupMembersDetail = (props: any) => {
-  const { queryData, inviteeQueryData, hasAccess, setNumberOfMembers, setRemoveMemberDialog } = props;
+  const {
+    queryData,
+    inviteeQueryData,
+    hasAccess,
+    setNumberOfMembers,
+    setRemoveMemberDialog,
+  } = props;
 
   return (
     <>
@@ -1251,13 +1283,8 @@ const ExpertGroupMembersDetail = (props: any) => {
                     )}
                     <Grid container spacing={2}>
                       {users.map((member: any) => {
-                        const {
-                          displayName,
-                          id,
-                          pictureLink,
-                          linkedin,
-                          bio,
-                        } = member;
+                        const { displayName, id, pictureLink, linkedin, bio } =
+                          member;
 
                         return (
                           <Grid item xs={12} sm={6} md={4} key={id}>
@@ -1272,16 +1299,26 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 backgroundRepeat: "no-repeat",
                                 py: 1,
                                 px: 1.8,
-                                height:"220px",
-                                position: "relative"
+                                height: "220px",
+                                position: "relative",
                               }}
                             >
-                                <Tooltip title={<Trans i18nKey={"remove"} />}>
-                                    <IconButton onClick={()=>setRemoveMemberDialog({status:true,id})}
-                                                sx={{position: "absolute", right: 0, top: 0}} size="small" color="secondary" >
-                                        <DeleteRoundedIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
+                              <Tooltip title={<Trans i18nKey={"remove"} />}>
+                                <IconButton
+                                  onClick={() =>
+                                    setRemoveMemberDialog({ status: true, id })
+                                  }
+                                  sx={{
+                                    position: "absolute",
+                                    right: 0,
+                                    top: 0,
+                                  }}
+                                  size="small"
+                                  color="secondary"
+                                >
+                                  <DeleteRoundedIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
                               <Box
                                 sx={{
                                   mt: "28px",
@@ -1426,7 +1463,9 @@ const ExpertGroupMembersDetail = (props: any) => {
                                 }}
                               />
                               <Typography variant="body2">
-                                  {theme.direction == "rtl" ? formatDate(inviteExpirationDate, "Shamsi") : formatDate(inviteExpirationDate, "Miladi")}
+                                {theme.direction == "rtl"
+                                  ? formatDate(inviteExpirationDate, "Shamsi")
+                                  : formatDate(inviteExpirationDate, "Miladi")}
                               </Typography>
                             </Box>
                             <MemberActions

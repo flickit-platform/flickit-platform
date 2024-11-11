@@ -13,7 +13,7 @@ import useMenu from "@utils/useMenu";
 import { useQuery } from "@utils/useQuery";
 import MoreActions from "@common/MoreActions";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import formatDate from "@utils/formatDate";
 import { theme } from "@/config/theme";
 import { Tooltip } from "@mui/material";
@@ -46,11 +46,12 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
   const { id, title, lastModificationTime, isPrivate, draftVersionId } =
     data || {};
   const draftClicked = () => {
-    !draftVersionId && cloneAssessmentKit.query({ assessmentKitId: id }).then((res: any) => {
-      navigate(`kit-designer/${res?.kitVersionId}`)
-    })
-    draftVersionId && navigate(`kit-designer/${draftVersionId}`)
-  }
+    !draftVersionId &&
+      cloneAssessmentKit.query({ assessmentKitId: id }).then((res: any) => {
+        navigate(`kit-designer/${res?.kitVersionId}`);
+      });
+    draftVersionId && navigate(`kit-designer/${draftVersionId}`);
+  };
   return (
     <Box
       sx={{
@@ -88,7 +89,10 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             {title}
           </Typography>
           <Typography color="GrayText" variant="body2">
-            <Trans i18nKey="lastUpdated" /> {theme.direction == "rtl" ? formatDate(lastModificationTime, "Shamsi") : formatDate(lastModificationTime, "Miladi")}
+            <Trans i18nKey="lastUpdated" />{" "}
+            {theme.direction == "rtl"
+              ? formatDate(lastModificationTime, "Shamsi")
+              : formatDate(lastModificationTime, "Miladi")}
           </Typography>
         </Box>
 
@@ -125,19 +129,20 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
             title={!draftVersionId && <Trans i18nKey="noDraftVersion" />}
           >
             <div>
-              {hasAccess && <LoadingButton
-                variant="outlined"
-                size="small"
-                // disabled={!draftVersionId}
-                // component={!draftVersionId ? Link : "div"}
-                // to={!draftVersionId ? `kit-designer/${draftVersionId}` : ''}
-                color={!draftVersionId ? "primary" : "inherit"}
-                onClick={draftClicked}
-                loading={cloneAssessmentKit.loading}
-              >
-                <Trans i18nKey={!draftVersionId ? "newDraft" : "draft"} />
-              </LoadingButton>
-              }
+              {hasAccess && (
+                <LoadingButton
+                  variant="outlined"
+                  size="small"
+                  // disabled={!draftVersionId}
+                  // component={!draftVersionId ? Link : "div"}
+                  // to={!draftVersionId ? `kit-designer/${draftVersionId}` : ''}
+                  color={!draftVersionId ? "primary" : "inherit"}
+                  onClick={draftClicked}
+                  loading={cloneAssessmentKit.loading}
+                >
+                  <Trans i18nKey={!draftVersionId ? "newDraft" : "draft"} />
+                </LoadingButton>
+              )}
             </div>
           </Tooltip>
           <Actions
@@ -154,6 +159,7 @@ const AssessmentKitListItem = (props: IAssessmentKitListItemProps) => {
 };
 
 const Actions = (props: any) => {
+  const { expertGroupId = "" } = useParams();
   const { assessment_kit, fetchAssessmentKits, hasAccess } = props;
   const { id } = assessment_kit;
   const { service } = useServiceContext();
@@ -197,7 +203,11 @@ const Actions = (props: any) => {
   const deleteItem = async (e: any) => {
     try {
       await deleteAssessmentKitQuery.query();
-      await fetchAssessmentKits?.();
+      await fetchAssessmentKits?.query({
+        id: expertGroupId,
+        size: 10,
+        page: 1,
+      });
       // await setUserInfo();
     } catch (e) {
       const err = e as ICustomError;
