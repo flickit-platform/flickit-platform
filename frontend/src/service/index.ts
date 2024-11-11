@@ -923,11 +923,12 @@ export const createService = (
         );
       },
       updateKitAnswerRange(
-          { kitVersionId,answerRangeId } : { kitVersionId: TId,answerRangeId: TId},
+          { kitVersionId,answerRangeId,data } : { kitVersionId: TId,answerRangeId: TId, data: any},
           config?: AxiosRequestConfig<any>,
       ){
           return axios.put(
               `/api/v1/kit-versions/${kitVersionId}/answer-ranges/${answerRangeId}/`,
+              data,
               config,
           )
       },
