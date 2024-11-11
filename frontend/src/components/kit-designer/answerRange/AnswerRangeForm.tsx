@@ -75,50 +75,20 @@ const AnswerRangeForm = ({
         onChange={handleInputChange}
         fullWidth
         inputProps={{
-            "data-testid": "questionnaires-title",
+            "data-testid": "AnswerRange-title",
         }}
         margin="normal"
         sx={{
-          mt: 0,
+          mt: .3,
           fontSize: 14,
           "& .MuiInputBase-root": {
-            height: 32,
+            height: 36,
             fontSize: 14,
           },
           "& .MuiFormLabel-root": {
             fontSize: 14,
           },
             background:"#fff",
-            width:{xs:"100%",md:"60%"},
-        }}
-      />
-
-      <TextField
-        label={<Trans i18nKey="description" />}
-        name="description"
-        required
-        value={newItem.description}
-        onChange={handleInputChange}
-        inputProps={{
-            "data-testid": "questionnaires-description",
-        }}
-        fullWidth
-        margin="normal"
-        multiline
-        minRows={2}
-        maxRows={3}
-        sx={{
-          mt: 1,
-          fontSize: 14,
-          "& .MuiInputBase-root": {
-            fontSize: 14,
-            overflow: "auto",
-          },
-          "& .MuiFormLabel-root": {
-            fontSize: 14,
-          },
-            background:"#fff",
-            width:{xs:"100%",md:"85%"},
         }}
       />
     </Box>

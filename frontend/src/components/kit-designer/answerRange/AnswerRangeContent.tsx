@@ -212,13 +212,13 @@ const AnaweRangeContent = () => {
         <QueryBatchData
           queryBatchData={[fetchAnswerRangeKit]}
           renderLoading={() => <LoadingSkeletonKitCard />}
-          render={([QuestionnairesData]) => {
+          render={([AnswerRangeData]) => {
             return (
               <>
-                {QuestionnairesData?.items?.length != 0 ? (
+                {AnswerRangeData?.items?.length != 0 ? (
                   <Box maxHeight={500} overflow="auto">
                     <ListOfItems
-                      items={QuestionnairesData?.items}
+                      items={AnswerRangeData?.items}
                       fetchQuery={fetchAnswerRangeKit}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
