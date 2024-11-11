@@ -26,6 +26,7 @@ interface OptionListProps {
   onAdd: (newOption: IOption) => void;
   isAddingNew: boolean;
   setIsAddingNew: any;
+  disableAddOption: boolean;
 }
 
 const OptionList = ({
@@ -36,6 +37,7 @@ const OptionList = ({
   onAdd,
   isAddingNew,
   setIsAddingNew,
+  disableAddOption,
 }: OptionListProps) => {
   const [reorderedItems, setReorderedItems] = useState(Options);
   const [editMode, setEditMode] = useState<number | null>(null);
@@ -112,9 +114,15 @@ const OptionList = ({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="Options" >
+      <Droppable droppableId="Options">
         {(provided: any) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef} paddingX={2} maxHeight={220} overflow="auto">
+          <Box
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            paddingX={2}
+            maxHeight={220}
+            overflow="auto"
+          >
             {reorderedItems?.map((item, index) => (
               <Draggable
                 key={item.id}
@@ -286,7 +294,13 @@ const OptionList = ({
           handleCancel={handleCancelNewOption}
         />
       ) : (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Box
+          sx={{
+            display: disableAddOption ? "none" : "flex",
+            justifyContent: "center",
+            mt: 2,
+          }}
+        >
           <Button
             onClick={handleAddNewClick}
             variant="outlined"

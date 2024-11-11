@@ -54,6 +54,7 @@ export interface IQuestionInfo {
   is_not_applicable?: boolean;
   confidence_level?: any;
   advisable?: boolean;
+  answerRangeId?: number;
 }
 
 export interface IPermissions {

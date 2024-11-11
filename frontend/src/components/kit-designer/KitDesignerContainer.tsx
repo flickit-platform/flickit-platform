@@ -36,7 +36,6 @@ const KitDesignerContainer = () => {
   return (
     <QueryBatchData
       queryBatchData={[kitVersionQuery]}
-      renderLoading={() => <LoadingSkeletonKitCard />}
       render={([kitVersion]) => {
         return (
           <Box m="auto" pb={3} sx={{ px: { xl: 30, lg: 12, xs: 2, sm: 3 } }}>
