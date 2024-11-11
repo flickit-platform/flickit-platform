@@ -106,6 +106,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
         mayNotBeApplicable: question?.mayNotBeApplicable || false,
         advisable: question?.advisable || false,
       });
+      setSelectedAnswerRange(null);
     }
   }, [open, question, formMethods]);
 
@@ -113,7 +114,8 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     try {
       const requestData = {
         ...data,
-        index: 1,
+        index: question.index,
+        answerRangeId: selectedAnswerRange,
       };
       await service.updateQuestionsKit({
         kitVersionId,
@@ -268,18 +270,41 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     runOnMount: false,
   });
 
-  const [selectedAnswerRange, setSelectedAnswerRange] = useState<string | null>(
-    null,
-  );
+  const [selectedAnswerRange, setSelectedAnswerRange] = useState(null);
 
+  const [selectedAnswerOptions, setSelectedAnswerOptions] = useState([]);
   useEffect(() => {
     if (selectedAnswerRange) {
-      fetchOptions.query({ answerRangeId: selectedAnswerRange });
+      const selectedAnswerRangeData = fetchAnswerRanges.data.items.find(
+        (res: any) => {
+          if (res.id === selectedAnswerRange) return res.answerOptions;
+        },
+      );
+      setSelectedAnswerOptions(selectedAnswerRangeData);
     }
   }, [selectedAnswerRange]);
 
-  const handleAnswerRangeChange = (event: any) => {
-    setSelectedAnswerRange(event.target.value as string);
+  const handleAnswerRangeChange = async (event: any) => {
+    const requestData = {
+      ...question,
+      answerRangeId: event.target.value,
+    };
+    try {
+      await service
+        .updateQuestionsKit({
+          ...question,
+          kitVersionId,
+          questionId: question?.id,
+          data: requestData,
+        })
+        .then(() => {
+          setSelectedAnswerRange(event.target.value);
+          fetchOptions.query();
+        });
+    } catch (err) {
+      const error = err as ICustomError;
+      toastError(error);
+    }
   };
 
   const handleAddOption = async (item: any) => {
@@ -372,9 +397,9 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                   disabled={fetchAnswerRanges?.data?.items?.length === 0}
                 >
                   <MenuItem value="" disabled>
-                    <Trans i18nKey="chooseOption" />
+                    <Trans i18nKey="chooseAnswerRange" />
                   </MenuItem>
-                  {fetchAnswerRanges?.data?.answerRanges?.map((range: any) => (
+                  {fetchAnswerRanges?.data?.items?.map((range: any) => (
                     <MenuItem key={range.id} value={range.id}>
                       {range.title}
                     </MenuItem>
@@ -392,7 +417,8 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                     onReorder={handleAddNewRow}
                     onAdd={handleAddOption}
                     isAddingNew={showNewOptionForm}
-                    setIsAddingNew={setShowNewImpactForm}
+                    setIsAddingNew={setShowNewOptionForm}
+                    disableAddOption={selectedAnswerRange !== null}
                   />
                 </Box>
               </>
