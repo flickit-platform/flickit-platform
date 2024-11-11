@@ -754,7 +754,7 @@ export const createService = (
         config,
       );
     },
-    fetchQuestionListKit(
+      fetchQuestionListKit(
       {
         kitVersionId,
         questionnaireId,
@@ -762,7 +762,7 @@ export const createService = (
       config?: AxiosRequestConfig<any>,
     ) {
       return axios.get(
-        `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
+          `/api/v1/kit-versions/${kitVersionId}/questionnaires/${questionnaireId}/questions/`,
         {
           ...(config ?? {}),
           params: {
@@ -930,6 +930,45 @@ export const createService = (
         config,
       );
     },
+      fetchAnswerRangeKit(
+      { kitVersionId }: { kitVersionId: TId},
+      config?: AxiosRequestConfig<any>,
+      ){
+        return axios.get(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
+            config,
+        );
+      },
+      updateKitAnswerRange(
+          { kitVersionId,answerRangeId,data } : { kitVersionId: TId,answerRangeId: TId, data: any},
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.put(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/${answerRangeId}/`,
+              data,
+              config,
+          )
+      },
+      postKitAnswerRange(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/answer-ranges/`,
+              data,
+              config,
+          );
+      },
+      postOptionsKit(
+          { kitVersionId, data }: { kitVersionId: TId; data: any },
+          config?: AxiosRequestConfig<any>,
+      ) {
+          return axios.post(
+              `/api/v1/kit-versions/${kitVersionId}/answer-range-options/`,
+              data,
+              config,
+          );
+      },
     createAdvice(
       {
         assessmentId,
