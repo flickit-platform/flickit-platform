@@ -28,7 +28,7 @@ import { theme } from "@/config/theme";
 
 interface IAssessmentKitCEFromDialogProps extends DialogProps {
   onClose: () => void;
-  onSubmitForm?: any;
+  assessmentKits?: any;
   openDialog?: any;
   context?: any;
 }
@@ -47,7 +47,7 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
   const { service } = useServiceContext();
   const {
     onClose: closeDialog,
-    onSubmitForm,
+    assessmentKits,
     context = {},
     openDialog,
     ...rest
@@ -124,9 +124,12 @@ const AssessmentKitCEFromDialog = (props: IAssessmentKitCEFromDialogProps) => {
               );
       setLoading(false);
       close();
-      onSubmitForm();
+      assessmentKits.query({
+        id: expertGroupId,
+        size: 10,
+        page: 1,
+      });
       shouldView && res?.kitId && navigate(`assessment-kits/${res.kitId}`);
-
     } catch (e: any) {
       const err = e as ICustomError;
       toastError(err);
