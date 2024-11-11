@@ -114,7 +114,7 @@ const OptionList = ({
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="Options" >
         {(provided: any) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef} paddingX={2} maxHeight={200} overflow="auto">
+          <Box {...provided.droppableProps} ref={provided.innerRef} paddingX={2} maxHeight={220} overflow="auto">
             {reorderedItems?.map((item, index) => (
               <Draggable
                 key={item.id}
