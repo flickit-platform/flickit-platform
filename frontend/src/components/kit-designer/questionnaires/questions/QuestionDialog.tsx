@@ -343,7 +343,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                   disabled={fetchAnswerRanges?.data?.items?.length === 0}
                 >
                   <MenuItem value="" disabled>
-                    <Trans i18nKey="chooseOption" />
+                    <Trans i18nKey="chooseAnswerRange" />
                   </MenuItem>
                   {fetchAnswerRanges?.data?.answerRanges?.map((range: any) => (
                     <MenuItem key={range.id} value={range.id}>
