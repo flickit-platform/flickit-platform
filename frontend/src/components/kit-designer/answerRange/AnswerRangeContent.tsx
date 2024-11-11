@@ -41,7 +41,7 @@ const AnaweRangeContent = () => {
     runOnMount: false,
   });
 
-  const [showNewQuestionnairesForm, setShowNewQuestionnairesForm] =
+  const [showNewAnswerRangeForm, setShowNewAnswerRangeForm] =
     useState(false);
   const [newAnswerRange, setNewAnswerRange] = useState({
     title: "",
@@ -69,7 +69,7 @@ const AnaweRangeContent = () => {
 
   const handleAddNewRow = () => {
     handleCancel();
-    setShowNewQuestionnairesForm(true);
+    setShowNewAnswerRangeForm(true);
   };
 
   const handleSave = async () => {
@@ -107,7 +107,7 @@ const AnaweRangeContent = () => {
   };
 
   const handleCancel = () => {
-    setShowNewQuestionnairesForm(false);
+    setShowNewAnswerRangeForm(false);
     setNewAnswerRange({
       title: "",
       index: fetchAnswerRangeKit.data?.items.length + 1 || 1,
@@ -128,7 +128,7 @@ const AnaweRangeContent = () => {
         data,
       });
 
-      setShowNewQuestionnairesForm(false);
+      setShowNewAnswerRangeForm(false);
       fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
@@ -174,129 +174,6 @@ const AnaweRangeContent = () => {
     debouncedHandleReorder(newOrder);
   };
 
-  // const answerrangeItem =  [
-  //   {
-  //     "id": 7,
-  //     "title": "test_1",
-  //     "answerOptions": [
-  //       {
-  //         "id": 77091,
-  //         "title": "Poor",
-  //         "index": 1,
-  //         "value": 1.0
-  //       },
-  //       {
-  //         "id": 77092,
-  //         "title": "Weak",
-  //         "index": 2,
-  //         "value": 2.0
-  //       },
-  //       {
-  //         "id": 77093,
-  //         "title": "Moderate",
-  //         "index": 3,
-  //         "value": 3.0
-  //       },
-  //       {
-  //         "id": 77094,
-  //         "title": "Good",
-  //         "index": 4,
-  //         "value": 4.0
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     "id": 8,
-  //     "title": "test_2",
-  //     "answerOptions": [
-  //       {
-  //         "id": 77537,
-  //         "title": "Poor",
-  //         "index": 1,
-  //         "value": 1.0
-  //       },
-  //       {
-  //         "id": 77538,
-  //         "title": "Weak",
-  //         "index": 2,
-  //         "value": 2.0
-  //       },
-  //       {
-  //         "id": 77539,
-  //         "title": "Moderate",
-  //         "index": 3,
-  //         "value": 3.0
-  //       },
-  //       {
-  //         "id": 77540,
-  //         "title": "Good",
-  //         "index": 4,
-  //         "value": 4.0
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     "id": 9,
-  //     "title": "test_3",
-  //     "answerOptions": [
-  //       {
-  //         "id": 77541,
-  //         "title": "Poor",
-  //         "index": 1,
-  //         "value": 1.0
-  //       },
-  //       {
-  //         "id": 77542,
-  //         "title": "Weak",
-  //         "index": 2,
-  //         "value": 2.0
-  //       },
-  //       {
-  //         "id": 77543,
-  //         "title": "Moderate",
-  //         "index": 3,
-  //         "value": 3.0
-  //       },
-  //       {
-  //         "id": 77544,
-  //         "title": "Good",
-  //         "index": 4,
-  //         "value": 4.0
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     "id": 10,
-  //     "title": "test_4",
-  //     "answerOptions": [
-  //       {
-  //         "id": 77545,
-  //         "title": "Poor",
-  //         "index": 1,
-  //         "value": 1.0
-  //       },
-  //       {
-  //         "id": 77546,
-  //         "title": "Weak",
-  //         "index": 2,
-  //         "value": 2.0
-  //       },
-  //       {
-  //         "id": 77547,
-  //         "title": "Moderate",
-  //         "index": 3,
-  //         "value": 3.0
-  //       },
-  //       {
-  //         "id": 77548,
-  //         "title": "Good",
-  //         "index": 4,
-  //         "value": 4.0
-  //       }
-  //     ]
-  //   }
-  // ]
-
   return (
     <PermissionControl scopes={["edit-assessment-kit"]}>
       <Box width="100%">
@@ -327,7 +204,7 @@ const AnaweRangeContent = () => {
                       onDelete={handleDelete}
                       deleteBtn={false}
                       onReorder={handleReorder}
-                      name={"questionnaires"}
+                      name={"answerRange"}
                     />
                   </Box>
                 ) : (
@@ -338,7 +215,7 @@ const AnaweRangeContent = () => {
                     onAddNewRow={handleAddNewRow}
                   />
                 )}
-                {showNewQuestionnairesForm && (
+                {showNewAnswerRangeForm && (
                   <AnswerRangeForm
                     newItem={newAnswerRange}
                     handleInputChange={handleInputChange}

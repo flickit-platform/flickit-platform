@@ -474,16 +474,22 @@ const ListOfItems = ({
                           }}
                             mr={2}
                             px={0.2}
-                          >index</Box>
+                          >
+                            <Trans i18nKey={"index"} />
+                          </Box>
                           <Box
                               sx={{ width: { xs: "50%", md: "60%" } }}
-                          >Title</Box>
+                          >
+                            <Trans i18nKey={"title"} />
+                          </Box>
                           <Box
                           sx={{
                             width: { xs: "20%", md: "10%" },
                             textAlign:"center"
                           }}
-                          >Value</Box>
+                          >
+                            <Trans i18nKey={"value"} />
+                          </Box>
                         </Box>
                         <Divider />
                           <>

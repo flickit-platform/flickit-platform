@@ -697,5 +697,6 @@
     "answerRangeTemplates": "الگوی پاسخ ها",
     "newAnswerRange": "الگوی پاسخ جدید",
     "answerRangeListEmptyState": "متاسفانه هنوز الگوی پاسخی ساخته نشده است!",
-    "answerRangeEmptyStateDetailed": "نگران نباش! ما آن را برای شما آسان کردیم! فقط روی دکمه زیر کلیک کنید و اولین الگوی خود را ایجاد کنید."
+    "answerRangeEmptyStateDetailed": "نگران نباش! ما آن را برای شما آسان کردیم! فقط روی دکمه زیر کلیک کنید و اولین الگوی خود را ایجاد کنید.",
+    "addOption": "اضافه کردن گزینه"
 }
