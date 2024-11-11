@@ -160,12 +160,12 @@ const ListOfItems = ({
           //   kitVersionId,
           //   questionId: id,
           // });
-          // setNewOptions({
-          //   title: "",
-          //   index: data?.items.length + 1 || 1,
-          //   value: data?.items.length + 1 || 1,
-          //   id: null,
-          // });
+          setNewOptions({
+            title: "",
+            index: items.length + 1 || 1,
+            value: 1,
+            id: null,
+          });
           // setQuestionData(data?.items);
         } else {
           handleCancel(id);
@@ -226,7 +226,7 @@ const ListOfItems = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const parsedValue = name === "value" ? parseInt(value) || 1 : value;
+    const parsedValue = ( name === "value" || name == "index") ? parseInt(value) || 1 : value;
     setNewOptions((prev) => ({
       ...prev,
       [name]: parsedValue,
@@ -265,7 +265,6 @@ const ListOfItems = ({
       id: null,
     });
   };
-  console.log(items,"test items")
   return (
 
           <Box>
