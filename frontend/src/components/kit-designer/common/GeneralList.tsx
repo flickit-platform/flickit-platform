@@ -18,10 +18,10 @@ import languageDetector from "@utils/languageDetector";
 interface ListOfItemsProps {
   items: Array<KitDesignListItems>;
   onEdit: (id: any) => void;
-  onDelete: (id: any) => void;
   onReorder: (reorderedItems: KitDesignListItems[]) => void;
   deleteBtn: boolean;
   name: string;
+  setOpenDeleteDialog: any;
 }
 interface ITempValues {
   title: string;
@@ -32,10 +32,10 @@ interface ITempValues {
 const ListOfItems = ({
   items,
   onEdit,
-  onDelete,
   onReorder,
   deleteBtn,
   name,
+  setOpenDeleteDialog
 }: ListOfItemsProps) => {
   const [reorderedItems, setReorderedItems] = useState(items);
   const [editMode, setEditMode] = useState<number | null>(null);
@@ -233,7 +233,7 @@ const ListOfItems = ({
                             {deleteBtn && (
                               <IconButton
                                 size="small"
-                                onClick={() => onDelete(item.id)}
+                                onClick={() => setOpenDeleteDialog({status:true,id: item.id})}
                                 sx={{ mx: 1 }}
                                 color="secondary"
                                 data-testid="items-delete-icon"

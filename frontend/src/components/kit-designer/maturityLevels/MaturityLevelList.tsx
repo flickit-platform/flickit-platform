@@ -17,15 +17,15 @@ import { Trans } from "react-i18next";
 interface MaturityLevelListProps {
   maturityLevels: Array<IMaturityLevel>;
   onEdit: (id: any) => void;
-  onDelete: (id: any) => void;
   onReorder: (reorderedItems: IMaturityLevel[]) => void;
+  setOpenDeleteDialog: any;
 }
 
 const MaturityLevelList = ({
   maturityLevels,
   onEdit,
-  onDelete,
   onReorder,
+  setOpenDeleteDialog
 }: MaturityLevelListProps) => {
   const [reorderedItems, setReorderedItems] = useState(maturityLevels);
   const [editMode, setEditMode] = useState<number | null>(null);
@@ -180,7 +180,7 @@ const MaturityLevelList = ({
                             </IconButton>
                             <IconButton
                               size="small"
-                              onClick={() => onDelete(item.id)}
+                              onClick={() =>setOpenDeleteDialog({status:true,id: item.id})}
                               sx={{ ml: 1 }}
                               color="secondary"
                               data-testid="maturity-level-delete-icon"
