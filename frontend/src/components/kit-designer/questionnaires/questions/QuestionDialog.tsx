@@ -211,6 +211,22 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       weight: 1,
     });
   };
+
+  const deleteQuestionImpactsKit = useQuery({
+    service: (args, config) => service.deleteQuestionImpactsKit(args, config),
+    runOnMount: false,
+  });
+  const handleDeleteImpact = (item: any) => {
+    deleteQuestionImpactsKit
+      .query({
+        kitVersionId: kitVersionId,
+        questionImpactId: item.questionImpactId,
+      })
+      .then(() => {
+        fetchImpacts.query();
+      });
+  };
+
   return (
     <CEDialog
       open={open}
@@ -319,6 +335,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                 questionId={question.id}
                 isAddingNew={showNewImpactForm}
                 setIsAddingNew={setShowNewImpactForm}
+                handleDeleteImpact={handleDeleteImpact}
               />
             </Box>
             {showNewImpactForm && (
