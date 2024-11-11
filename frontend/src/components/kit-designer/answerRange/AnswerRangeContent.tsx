@@ -118,16 +118,17 @@ const AnaweRangeContent = () => {
     });
   };
 
-  const handleEdit = async (QuestionnairesItem: any) => {
+  const handleEdit = async (AnswerRangeItem: any) => {
     try {
       const data = {
         kitVersionId,
-        index: QuestionnairesItem.index,
-        title: QuestionnairesItem.title,
+        index: AnswerRangeItem.index,
+        title: AnswerRangeItem.title,
+        reusable:true,
       };
       await updateKitAnswerRange.query({
         kitVersionId,
-        answerRangeId: QuestionnairesItem.id,
+        answerRangeId: AnswerRangeItem.id,
         data,
       });
 
