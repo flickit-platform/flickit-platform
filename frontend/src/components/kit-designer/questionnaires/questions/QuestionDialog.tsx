@@ -124,7 +124,8 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       fetchQuery.query();
       onClose();
     } catch (error) {
-      console.error("Failed to update question:", error);
+      const err = error as ICustomError;
+      toastError(err);
     }
   };
 
