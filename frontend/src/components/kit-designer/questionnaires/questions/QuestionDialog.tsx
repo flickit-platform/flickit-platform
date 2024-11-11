@@ -115,7 +115,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       const requestData = {
         ...data,
         index: question.index,
-        answerRangeId: selectedAnswerRange,
       };
       await service.updateQuestionsKit({
         kitVersionId,
