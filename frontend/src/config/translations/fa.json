@@ -695,5 +695,7 @@
     "optionsImpactsDisabled": "تا وقتی که هیچ گزینه‌ یا ویژگی‌ای نساخته‌اید نمی‌توانید اثرگذاری تعریف کنید.",
     "newImpact": "اثرگذاری جدید",
     "selectAttribute": "یک ویژگی انتخاب کنید",
-    "selectMaturityLevel": "یک سطح بلوغ انتخاب کنید"
+    "selectMaturityLevel": "یک سطح بلوغ انتخاب کنید",
+    "chooseOption": "یک مورد را انتخاب کنید",
+    "emptyAnswerRange": "هیچ رنجی از پاسخ‌ها وجود ندارد."
 }

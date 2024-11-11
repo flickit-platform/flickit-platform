@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -24,6 +24,8 @@ interface OptionListProps {
   onDelete: (id: any) => void;
   onReorder: (reorderedItems: IOption[]) => void;
   onAdd: (newOption: IOption) => void;
+  isAddingNew: boolean;
+  setIsAddingNew: any;
 }
 
 const OptionList = ({
@@ -32,6 +34,8 @@ const OptionList = ({
   onDelete,
   onReorder,
   onAdd,
+  isAddingNew,
+  setIsAddingNew,
 }: OptionListProps) => {
   const [reorderedItems, setReorderedItems] = useState(Options);
   const [editMode, setEditMode] = useState<number | null>(null);
@@ -40,7 +44,6 @@ const OptionList = ({
     value: 1,
     index: reorderedItems.length + 1,
   });
-  const [isAddingNew, setIsAddingNew] = useState(false);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -87,9 +90,20 @@ const OptionList = ({
       title: tempValues.title,
       value: tempValues.value,
     });
-    setIsAddingNew(false);
-    setTempValues({ title: "", value: 1, index: reorderedItems.length + 1 });
+    // setIsAddingNew(false);
+    // setTempValues({ title: "", value: 1, index: reorderedItems.length + 1 });
   };
+
+  useEffect(() => {
+    if (isAddingNew === false) {
+      setTempValues({ title: "", value: 1, index: reorderedItems.length + 1 });
+      setIsAddingNew(false);
+    }
+  }, [isAddingNew]);
+
+  useEffect(() => {
+    setReorderedItems(Options);
+  }, [Options]);
 
   const handleCancelNewOption = () => {
     setIsAddingNew(false);
@@ -98,9 +112,9 @@ const OptionList = ({
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId="Options">
+      <Droppable droppableId="Options" >
         {(provided: any) => (
-          <Box {...provided.droppableProps} ref={provided.innerRef}>
+          <Box {...provided.droppableProps} ref={provided.innerRef} paddingX={2} maxHeight={200} overflow="auto">
             {reorderedItems?.map((item, index) => (
               <Draggable
                 key={item.id}
@@ -232,7 +246,7 @@ const OptionList = ({
                           </>
                         ) : (
                           <>
-                            <IconButton
+                            {/* <IconButton
                               size="small"
                               onClick={() => handleEditClick(item)}
                               sx={{ ml: 1 }}
@@ -245,7 +259,7 @@ const OptionList = ({
                               sx={{ ml: 1 }}
                             >
                               <DeleteRoundedIcon fontSize="small" />
-                            </IconButton>
+                            </IconButton> */}
                           </>
                         )}
                       </Box>
@@ -256,35 +270,34 @@ const OptionList = ({
               </Draggable>
             ))}
             {provided.placeholder}
-
-            {isAddingNew ? (
-              <OptionForm
-                newItem={tempValues}
-                handleInputChange={(e) =>
-                  setTempValues({
-                    ...tempValues,
-                    [e.target.name]: e.target.value,
-                  })
-                }
-                handleSave={handleSaveNewOption}
-                handleCancel={handleCancelNewOption}
-              />
-            ) : (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                <Button
-                  onClick={handleAddNewClick}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                >
-                  <Add fontSize="small" />
-                  <Trans i18nKey="newOption" />
-                </Button>
-              </Box>
-            )}
           </Box>
         )}
       </Droppable>
+      {isAddingNew ? (
+        <OptionForm
+          newItem={tempValues}
+          handleInputChange={(e) =>
+            setTempValues({
+              ...tempValues,
+              [e.target.name]: e.target.value,
+            })
+          }
+          handleSave={handleSaveNewOption}
+          handleCancel={handleCancelNewOption}
+        />
+      ) : (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Button
+            onClick={handleAddNewClick}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            <Add fontSize="small" />
+            <Trans i18nKey="newOption" />
+          </Button>
+        </Box>
+      )}
     </DragDropContext>
   );
 };

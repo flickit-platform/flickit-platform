@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import {
   Grid,
   TextField,
-  IconButton,
   Typography,
   Switch,
   Box,
-  Button,
   Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tooltip,
 } from "@mui/material";
 import { Trans } from "react-i18next";
-import { useForm, FormProvider } from "react-hook-form";
-import AddIcon from "@mui/icons-material/Add";
+import { useForm } from "react-hook-form";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { IQuestionInfo } from "@/types";
 import { useQuery } from "@/utils/useQuery";
@@ -28,7 +30,7 @@ import toastError from "@/utils/toastError";
 import OptionForm from "./OptionForm";
 import OptionList from "./OptionsList";
 import AttributeImpactList from "./ImpactList";
-import ImpactForm from "./ImpactForm";
+import ImpactForm, { dropdownStyle } from "./ImpactForm";
 
 interface QuestionDialogProps {
   open: boolean;
@@ -96,6 +98,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       fetchAttributeKit.query();
       fetchMaturityLevels.query();
       fetchOptions.query();
+      fetchAnswerRanges.query();
       formMethods.reset({
         title: question?.title || "",
         hint: question?.hint || "",
@@ -227,6 +230,46 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       });
   };
 
+  const fetchAnswerRanges = useQuery({
+    service: (args = { kitVersionId }, config) =>
+      service.loadAnswerRangesList(args, config),
+    runOnMount: false,
+  });
+
+  const postAnswerOptionsKit = useQuery({
+    service: (args = { kitVersionId, data: {} }, config) =>
+      service.postAnswerOptionsKit(args, config),
+    runOnMount: false,
+  });
+
+  const [selectedAnswerRange, setSelectedAnswerRange] = useState<string | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (selectedAnswerRange) {
+      fetchOptions.query({ answerRangeId: selectedAnswerRange });
+    }
+  }, [selectedAnswerRange]);
+
+  const handleAnswerRangeChange = (event: any) => {
+    setSelectedAnswerRange(event.target.value as string);
+  };
+
+  const handleAddOption = async (item: any) => {
+    try {
+      await postAnswerOptionsKit.query({
+        kitVersionId,
+        data: { ...item, questionId: question.id },
+      });
+      fetchOptions.query();
+      setShowNewOptionForm(false);
+    } catch (err) {
+      const error = err as ICustomError;
+      toastError(error);
+    }
+  };
+
   return (
     <CEDialog
       open={open}
@@ -271,20 +314,56 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body2">
-              <Trans i18nKey="answerOptions" />
-            </Typography>
+            <Box
+              mt={1.5}
+              p={1.5}
+              sx={{
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 2,
+              }}
+            >
+              <Typography variant="body2">
+                <Trans i18nKey="answerOptions" />
+              </Typography>
+              <Tooltip
+                title={
+                  fetchAnswerRanges?.data?.items.length === 0 &&
+                  t("emptyAnswerRange")
+                }
+              >
+                <Select
+                  value={selectedAnswerRange || ""}
+                  onChange={handleAnswerRangeChange}
+                  sx={dropdownStyle}
+                  size="small"
+                  displayEmpty
+                  disabled={fetchAnswerRanges?.data?.items?.length === 0}
+                >
+                  <MenuItem value="" disabled>
+                    <Trans i18nKey="chooseOption" />
+                  </MenuItem>
+                  {fetchAnswerRanges?.data?.answerRanges?.map((range: any) => (
+                    <MenuItem key={range.id} value={range.id}>
+                      {range.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Tooltip>
+            </Box>
             {fetchOptions?.data?.answerOptions?.length > 0 ? (
               <>
-                <Box maxHeight={500} overflow="auto">
-                  <OptionList
-                    Options={fetchOptions?.data?.answerOptions}
-                    onEdit={handleAddNewRow}
-                    onDelete={handleAddNewRow}
-                    onReorder={handleAddNewRow}
-                    onAdd={handleAddNewRow}
-                  />
-                </Box>
+                <OptionList
+                  Options={fetchOptions?.data?.answerOptions}
+                  onEdit={handleAddNewRow}
+                  onDelete={handleAddNewRow}
+                  onReorder={handleAddNewRow}
+                  onAdd={handleAddOption}
+                  isAddingNew={showNewOptionForm}
+                  setIsAddingNew={setShowNewOptionForm}
+                />
               </>
             ) : (
               <>
@@ -305,14 +384,6 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
                 )}
               </>
             )}
-            {/* <Button
-              startIcon={<AddIcon />}
-              variant="outlined"
-              sx={{ mt: 2 }}
-              size="small"
-            >
-              <Trans i18nKey="newOption" />
-            </Button> */}
           </Grid>
         </Grid>
         <Divider sx={{ my: 1, mt: 4 }} />
