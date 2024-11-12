@@ -2,20 +2,15 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import TextField from "@mui/material/TextField";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { styles } from "@styles";
 import { KitDesignListItems, TId } from "@types";
 import { Trans } from "react-i18next";
 import { theme } from "@config/theme";
-import languageDetector from "@utils/languageDetector";
-import QuestionContainer from "@components/kit-designer/questionnaires/questions/QuestionContainer";
-import QueryData from "@common/QueryData";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -24,9 +19,8 @@ import { useServiceContext } from "@providers/ServiceProvider";
 import { useParams } from "react-router-dom";
 import { ICustomError } from "@utils/CustomError";
 import toastError from "@utils/toastError";
-import { alpha, Button, CircularProgress } from "@mui/material";
+import { alpha, Button } from "@mui/material";
 import { debounce } from "lodash";
-import EmptyStateQuestion from "@components/kit-designer/questionnaires/questions/EmptyStateQuestion";
 import { Add } from "@mui/icons-material";
 import EmptyStateOptions from "@components/kit-designer/answerRange/options/emptyStateOptions";
 import Divider from "@mui/material/Divider";
@@ -48,9 +42,6 @@ interface ListOfItemsProps {
 }
 interface ITempValues {
   title: string;
-  description: string;
-  weight: number | undefined;
-  question: number | undefined;
 }
 interface IQuestion {
   advisable: boolean;
@@ -95,9 +86,12 @@ const ListOfItems = ({
   const [editMode, setEditMode] = useState<number | null>(null);
   const [tempValues, setTempValues] = useState<ITempValues>({
     title: "",
-    description: "",
-    weight: 0,
-    question: 0,
+  });
+  const [newOptions, setNewOptions] = useState({
+    title: "",
+    index: 1,
+    value: 1,
+    id: null,
   });
   const [expanded, setExpanded] = useState(false);
   const [questionnaireId, setQuestionnaireId] = useState(null);
@@ -119,9 +113,6 @@ const ListOfItems = ({
     setEditMode(Number(item.id));
     setTempValues({
       title: item.title,
-      description: item.description,
-      weight: item.weight,
-      question: item.questionsCount,
     });
   };
 
@@ -130,8 +121,6 @@ const ListOfItems = ({
     onEdit({
       ...item,
       title: tempValues.title,
-      description: tempValues.description,
-      weight: tempValues?.weight,
     });
     setEditMode(null);
   };
@@ -139,7 +128,7 @@ const ListOfItems = ({
   const handleCancelClick = (e: any) => {
     e.stopPropagation();
     setEditMode(null);
-    setTempValues({ title: "", description: "", weight: 0, question: 0 });
+    setTempValues({ title: ""});
   };
 
   const handelChange = (e: any) => {
@@ -163,7 +152,7 @@ const ListOfItems = ({
           // });
           setNewOptions({
             title: "",
-            index: items.length + 1 || 1,
+            index: items.find((item : any) => item.id === id).answerOptions.length + 1,
             value: 1,
             id: null,
           });
@@ -184,10 +173,10 @@ const ListOfItems = ({
         index: idx + 1,
       }));
 
-      await service.changeQuestionsOrder(
-        { kitVersionId },
-        { questionOrders: orders, questionnaireId: questionnaireId },
-      );
+      // await service.changeQuestionsOrder(
+      //   { kitVersionId },
+      //   { questionOrders: orders, questionnaireId: questionnaireId },
+      // );
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
@@ -216,18 +205,19 @@ const ListOfItems = ({
       ...prev,
       [id]: true,
     }));
+    setNewOptions({
+      title: "",
+      index: items.find((item : any) => item.id === id).answerOptions.length + 1,
+      value: 1,
+      id: null,
+    });
   };
 
-  const [newOptions, setNewOptions] = useState({
-    title: "",
-    index: 1,
-    value: 1,
-    id: null,
-  });
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const parsedValue = ( name === "value" || name == "index") ? parseInt(value) || 1 : value;
+    const parsedValue = name === "value"  ? parseInt(value) || 1 : value;
     setNewOptions((prev) => ({
       ...prev,
       [name]: parsedValue,
@@ -261,8 +251,8 @@ const ListOfItems = ({
     }));
     setNewOptions({
       title: "",
-      index: newOptions.index + 1 || 1,
-      value: newOptions.value + 1 || 1,
+      index:  1,
+      value:  1,
       id: null,
     });
   };
@@ -513,6 +503,7 @@ const ListOfItems = ({
                                               key={answerOption.id}
                                               draggableId={answerOption.id.toString()}
                                               index={index}
+                                              isDragDisabled={true}
                                             >
                                               {(provided) => (
                                                 <Box
