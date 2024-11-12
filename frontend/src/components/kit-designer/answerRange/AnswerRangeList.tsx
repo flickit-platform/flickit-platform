@@ -152,7 +152,7 @@ const ListOfItems = ({
           // });
           setNewOptions({
             title: "",
-            index: items.find(item => item.id === id).answerOptions.length + 1,
+            index: items.find((item : any) => item.id === id).answerOptions.length + 1,
             value: 1,
             id: null,
           });
@@ -207,7 +207,7 @@ const ListOfItems = ({
     }));
     setNewOptions({
       title: "",
-      index: items.find(item => item.id === id).answerOptions.length + 1,
+      index: items.find((item : any) => item.id === id).answerOptions.length + 1,
       value: 1,
       id: null,
     });
