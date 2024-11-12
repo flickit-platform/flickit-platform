@@ -39,6 +39,7 @@ interface ListOfItemsProps {
   deleteBtn: boolean;
   name: string;
   fetchQuery?: any;
+  setChangeData: any
 }
 interface ITempValues {
   title: string;
@@ -59,6 +60,7 @@ const ListOfItems = ({
   onDelete,
   onReorder,
   deleteBtn,
+  setChangeData,
   name,
 }: ListOfItemsProps) => {
   // const fetchOptionListKit = useQuery({
@@ -236,7 +238,8 @@ const ListOfItems = ({
       handleCancel(id);
 
       await postOptionsKit.query({ kitVersionId, data }).then(() => {
-        fetchQuery.query();
+        // fetchQuery.query();
+        setChangeData(prev => !prev)
       });
     } catch (e) {
       const err = e as ICustomError;
@@ -259,7 +262,7 @@ const ListOfItems = ({
   return (
 
           <Box>
-            {reorderedItems?.map((item : any, index : any) => (
+            {items?.map((item : any, index : any) => (
                   <Box
                     mt={1.5}
                     sx={{
@@ -516,6 +519,7 @@ const ListOfItems = ({
                                                     fetchQuery={fetchQuery}
                                                     key={answerOption.id}
                                                     answerOption={answerOption}
+                                                    setChangeData={setChangeData}
                                                   />
                                                 </Box>
                                               )}
