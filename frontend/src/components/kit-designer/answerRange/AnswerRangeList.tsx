@@ -48,9 +48,6 @@ interface ListOfItemsProps {
 }
 interface ITempValues {
   title: string;
-  description: string;
-  weight: number | undefined;
-  question: number | undefined;
 }
 interface IQuestion {
   advisable: boolean;
@@ -95,9 +92,6 @@ const ListOfItems = ({
   const [editMode, setEditMode] = useState<number | null>(null);
   const [tempValues, setTempValues] = useState<ITempValues>({
     title: "",
-    description: "",
-    weight: 0,
-    question: 0,
   });
   const [newOptions, setNewOptions] = useState({
     title: "",
@@ -125,9 +119,6 @@ const ListOfItems = ({
     setEditMode(Number(item.id));
     setTempValues({
       title: item.title,
-      description: item.description,
-      weight: item.weight,
-      question: item.questionsCount,
     });
   };
 
@@ -136,8 +127,6 @@ const ListOfItems = ({
     onEdit({
       ...item,
       title: tempValues.title,
-      description: tempValues.description,
-      weight: tempValues?.weight,
     });
     setEditMode(null);
   };
@@ -145,7 +134,7 @@ const ListOfItems = ({
   const handleCancelClick = (e: any) => {
     e.stopPropagation();
     setEditMode(null);
-    setTempValues({ title: "", description: "", weight: 0, question: 0 });
+    setTempValues({ title: ""});
   };
 
   const handelChange = (e: any) => {
@@ -169,7 +158,7 @@ const ListOfItems = ({
           // });
           setNewOptions({
             title: "",
-            index: items.length + 1 || 1,
+            index: items.find(item => item.id === id).answerOptions.length + 1,
             value: 1,
             id: null,
           });
@@ -190,10 +179,10 @@ const ListOfItems = ({
         index: idx + 1,
       }));
 
-      await service.changeQuestionsOrder(
-        { kitVersionId },
-        { questionOrders: orders, questionnaireId: questionnaireId },
-      );
+      // await service.changeQuestionsOrder(
+      //   { kitVersionId },
+      //   { questionOrders: orders, questionnaireId: questionnaireId },
+      // );
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
