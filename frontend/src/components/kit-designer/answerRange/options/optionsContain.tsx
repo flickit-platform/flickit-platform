@@ -79,7 +79,7 @@ const OptionContain = (props: any) => {
                     mr={2}
                     px={0.2}
                 >
-                    <Typography variant="semiBoldLarge">{`Q. ${answerOption?.index}`}</Typography>
+                    <Typography variant="semiBoldLarge">{`${answerOption?.index}`}</Typography>
                 </Box>
 
                 <Box sx={{
@@ -153,7 +153,7 @@ const OptionContain = (props: any) => {
                             borderRadius: "8px",
                         }}
                         name="title"
-                        label={<Trans i18nKey="title" />}
+                        label={<Trans i18nKey="value" />}
                     />
                 :
                     <Box  sx={{ width: { xs: "20%", md: "10%" },textAlign:"center" }}>{answerOption?.value}</Box>

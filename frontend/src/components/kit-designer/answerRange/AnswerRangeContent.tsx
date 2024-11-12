@@ -182,9 +182,9 @@ const AnaweRangeContent = () => {
               fetchAnswerRangeKit.data.items.length !== 0
           }
           btnTitle={"newAnswerRange"}
-          mainTitle={"answerRange"}
+          mainTitle={"answerRanges"}
           description={"answerRangeKitDesignerDescription"}
-          subTitle={"answerRangeTemplates"}
+          subTitle={"answerRangeList"}
         />
         <Divider sx={{ my: 1 }} />
         <QueryBatchData
