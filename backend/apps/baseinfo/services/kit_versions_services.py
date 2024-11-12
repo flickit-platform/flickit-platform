@@ -367,3 +367,11 @@ def update_answer_range(request, kit_version_id, answer_range_id):
     if response.status_code == 200:
         return {"Success": True, "body": None, "status_code": response.status_code}
     return {"Success": False, "body": response.json(), "status_code": response.status_code}
+
+
+def create_answer_option(request, kit_version_id):
+    response = requests.post(
+        ASSESSMENT_URL + f'assessment-core/api/kit-versions/{kit_version_id}/answer-options',
+        json=request.data,
+        headers={'Authorization': request.headers['Authorization']})
+    return {"Success": True, "body": response.json(), "status_code": response.status_code}

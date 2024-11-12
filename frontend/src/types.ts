@@ -54,6 +54,7 @@ export interface IQuestionInfo {
   is_not_applicable?: boolean;
   confidence_level?: any;
   advisable?: boolean;
+  answerRangeId?: number;
 }
 
 export interface IPermissions {
@@ -708,4 +709,5 @@ export interface IOption {
   title: string;
   index: number;
   value: number;
+  questionId?: TId;
 }

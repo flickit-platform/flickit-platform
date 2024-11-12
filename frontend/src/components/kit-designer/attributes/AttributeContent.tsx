@@ -17,12 +17,14 @@ import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkel
 import KitDHeader from "@/components/kit-designer/common/KitHeader";
 import AttributeForm from "./AttributeForm";
 import SubjectTable from "./SubjectTable";
+import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
 
 const AttributesContent = () => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
   const [subjectListOpen, setSubjectListOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
+  const [openDeleteDialog,setOpenDeleteDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
 
   const [subjects, setSubjects] = useState([]);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
@@ -156,6 +158,7 @@ const AttributesContent = () => {
       weight: 0,
       id: null,
     });
+    setOpenDeleteDialog({status:false,id:""})
   };
 
   const handleEdit = async (AttributeItem: any) => {
@@ -192,9 +195,10 @@ const AttributesContent = () => {
     }
   };
 
-  const handleDelete = async (attributeId: number) => {
+  const handleDelete = async () => {
     try {
-      await deleteAttributeKit.query({ kitVersionId, attributeId });
+      let attributeId = openDeleteDialog.id
+      await deleteAttributeKit.query({ kitVersionId, attributeId  });
       await fetchAttributeKit.query();
       handleCancel();
     } catch (e) {
@@ -267,8 +271,8 @@ const AttributesContent = () => {
                     handleSave={handleSave}
                     newAttribute={newAttribute}
                     setNewAttribute={setNewAttribute}
-                    handleDelete={handleDelete}
                     handleEdit={handleEdit}
+                    setOpenDeleteDialog={setOpenDeleteDialog}
                   />
                 </Box>
               ) : (
@@ -287,6 +291,13 @@ const AttributesContent = () => {
           )}
         />
       </Box>
+      <DeleteConfirmationDialog
+          open={openDeleteDialog.status}
+          onClose={() => setOpenDeleteDialog({...openDeleteDialog,status:false})}
+          onConfirm={handleDelete}
+          title="warning"
+          content="deleteAttribute"
+      />
     </PermissionControl>
   );
 };

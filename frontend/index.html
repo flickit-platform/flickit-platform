@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,6 +19,7 @@
 
     <title>Loading...</title>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
@@ -30,11 +31,70 @@
           function () {
             (c[a].q = c[a].q || []).push(arguments);
           };
+
         t = l.createElement(r);
         t.async = 1;
         t.src = "https://www.clarity.ms/tag/" + i;
         y = l.getElementsByTagName(r)[0];
         y.parentNode.insertBefore(t, y);
+
+        window.clarity("consent");
+
+        function generateClaritySessionId() {
+          return (
+            "session-" +
+            Math.random().toString(36).substring(2) +
+            "-" +
+            Date.now()
+          );
+        }
+
+        async function setUserIdTagBasedOnIP() {
+          try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            const userId = `ip-${data.ip}`;
+            sessionStorage.setItem("clarityUserId", userId);
+            c.clarity("set", "userId", userId);
+          } catch (error) {
+            console.error("Failed to fetch IP:", error);
+          }
+        }
+
+        const loggedInUserId = sessionStorage.getItem("loggedInUserId");
+        let clarityUserId;
+
+        if (loggedInUserId) {
+          clarityUserId = loggedInUserId;
+        } else {
+          clarityUserId = sessionStorage.getItem("clarityUserId");
+          if (!clarityUserId) {
+            setUserIdTagBasedOnIP();
+          }
+        }
+
+        const claritySessionId =
+          sessionStorage.getItem("claritySessionId") ||
+          generateClaritySessionId();
+        sessionStorage.setItem("claritySessionId", claritySessionId);
+
+        const clarityPageId = window.location.pathname;
+        const friendlyName = sessionStorage.getItem("username");
+
+        window.clarity(
+          "identify",
+          clarityUserId,
+          claritySessionId,
+          clarityPageId,
+          friendlyName,
+        );
+        c.clarity(
+          "identify",
+          clarityUserId,
+          claritySessionId,
+          clarityPageId,
+          friendlyName,
+        );
       })(window, document, "clarity", "script", "%VITE_CLARITY_KEY%");
     </script>
   </body>

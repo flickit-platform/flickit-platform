@@ -16,10 +16,12 @@ import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
 import KitDHeader from "@components/kit-designer/common/KitHeader";
 import QuestionnairesForm from "./QuestionnairesForm";
+import {DeleteConfirmationDialog} from "@common/dialogs/DeleteConfirmationDialog";
 
 const QuestionnairesContent = () => {
   const { service } = useServiceContext();
   const { kitVersionId = "" } = useParams();
+  const [openDeleteDialog,setOpenDeleteDialog] = useState<{status:boolean,id:string}>({status:false,id:""})
 
   const fetchQuestionnairesKit = useQuery({
     service: (args = { kitVersionId }, config) =>
@@ -126,6 +128,7 @@ const QuestionnairesContent = () => {
       weight: 0,
       id: null,
     });
+    setOpenDeleteDialog({status:false,id:""})
   };
 
   const handleEdit = async (QuestionnairesItem: any) => {
@@ -162,8 +165,9 @@ const QuestionnairesContent = () => {
     }
   };
 
-  const handleDelete = async (questionnaireId: number) => {
+  const handleDelete = async () => {
     try {
+      let questionnaireId = openDeleteDialog.id
       await deleteQuestionnairesKit.query({ kitVersionId, questionnaireId });
       await fetchQuestionnairesKit.query();
       handleCancel();
@@ -227,10 +231,10 @@ const QuestionnairesContent = () => {
                       items={QuestionnairesData?.items}
                       fetchQuery={fetchQuestionnairesKit}
                       onEdit={handleEdit}
-                      onDelete={handleDelete}
                       deleteBtn={false}
                       onReorder={handleReorder}
                       name={"questionnaires"}
+                      setOpenDeleteDialog={setOpenDeleteDialog}
                     />
                   </Box>
                 ) : (
@@ -254,6 +258,13 @@ const QuestionnairesContent = () => {
           }}
         />
       </Box>
+      <DeleteConfirmationDialog
+          open={openDeleteDialog.status}
+          onClose={() => setOpenDeleteDialog({...openDeleteDialog,status:false})}
+          onConfirm={handleDelete}
+          title="warning"
+          content="deleteQuestionnaires"
+      />
     </PermissionControl>
   );
 };

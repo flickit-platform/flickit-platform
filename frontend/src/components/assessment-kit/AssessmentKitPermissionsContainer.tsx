@@ -99,7 +99,7 @@ const AssessmentKitPermisson = (props: any) => {
                             },
                             {
                                 title: expertGroup.title,
-                                to: `/user/expert-groups/${expertGroup.id} `,
+                                to: `/user/expert-groups/${expertGroup.id}`,
                             },
                             {
                                 title: title,
