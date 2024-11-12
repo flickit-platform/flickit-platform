@@ -154,7 +154,7 @@ const OptionContain = (props: any) => {
                         <>
                             <IconButton
                                 size="small"
-                                // onClick={() => handleSaveClick(item)}
+                                onClick={() => handleSaveClick(answerOption)}
                                 sx={{ ml: 1 }}
                                 color="success"
                             >
@@ -178,13 +178,13 @@ const OptionContain = (props: any) => {
                             >
                                 <ModeEditOutlineOutlinedIcon fontSize="small" />
                             </IconButton>
-                            <IconButton
-                                size="small"
-                                // onClick={() => onDelete(item.id)}
-                                sx={{ ml: 1 }}
-                            >
-                                <DeleteRoundedIcon fontSize="small" />
-                            </IconButton>
+                            {/*<IconButton*/}
+                            {/*    size="small"*/}
+                            {/*    // onClick={() => onDelete(item.id)}*/}
+                            {/*    sx={{ ml: 1 }}*/}
+                            {/*>*/}
+                            {/*    <DeleteRoundedIcon fontSize="small" />*/}
+                            {/*</IconButton>*/}
                         </>
                     )}
                 </Box>

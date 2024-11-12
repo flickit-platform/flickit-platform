@@ -211,13 +211,19 @@ const ListOfItems = ({
       ...prev,
       [id]: true,
     }));
+    setNewOptions({
+      title: "",
+      index: items.find(item => item.id === id).answerOptions.length + 1,
+      value: 1,
+      id: null,
+    });
   };
 
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const parsedValue = ( name === "value" || name == "index") ? parseInt(value) || 1 : value;
+    const parsedValue = name === "value"  ? parseInt(value) || 1 : value;
     setNewOptions((prev) => ({
       ...prev,
       [name]: parsedValue,
@@ -251,8 +257,8 @@ const ListOfItems = ({
     }));
     setNewOptions({
       title: "",
-      index: newOptions.index + 1 || 1,
-      value: newOptions.value + 1 || 1,
+      index:  1,
+      value:  1,
       id: null,
     });
   };
@@ -503,6 +509,7 @@ const ListOfItems = ({
                                               key={answerOption.id}
                                               draggableId={answerOption.id.toString()}
                                               index={index}
+                                              isDragDisabled={true}
                                             >
                                               {(provided) => (
                                                 <Box
