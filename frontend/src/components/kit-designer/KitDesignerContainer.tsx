@@ -23,13 +23,13 @@ const KitDesignerContainer = () => {
 
   const handleTabChange = (event: any, newValue: any) => {
     setSelectedTab(newValue);
-    window.location.hash = newValue;
+    window.location.hash = event.target.textContent.replace(" ","-");
   };
 
     useEffect(() => {
         let currentHash = window.location.hash.replace("#","");
         if (isNaN(+currentHash)) {
-            window.location.hash = `0`;
+            window.location.hash = `Maturity-Levels`;
             setSelectedTab(0);
         }else{
             setSelectedTab(+currentHash);
