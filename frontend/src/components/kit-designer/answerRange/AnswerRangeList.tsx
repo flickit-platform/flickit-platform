@@ -99,6 +99,12 @@ const ListOfItems = ({
     weight: 0,
     question: 0,
   });
+  const [newOptions, setNewOptions] = useState({
+    title: "",
+    index: 1,
+    value: 1,
+    id: null,
+  });
   const [expanded, setExpanded] = useState(false);
   const [questionnaireId, setQuestionnaireId] = useState(null);
   const [questionData, setQuestionData] = useState<IQuestion[]>([]);
@@ -218,12 +224,7 @@ const ListOfItems = ({
     }));
   };
 
-  const [newOptions, setNewOptions] = useState({
-    title: "",
-    index: 1,
-    value: 1,
-    id: null,
-  });
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

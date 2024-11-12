@@ -10,7 +10,6 @@ import { styles } from "@/config/styles";
 interface QuestionnairesFormProps {
     newItem: {
     title: string;
-    index: number;
     id: any
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -36,35 +35,6 @@ const AnswerRangeForm = ({
       position: "relative",
     }}
   >
-    <Box
-      sx={{ ...styles.centerCVH, background: "#F3F5F6" }}
-      borderRadius="0.5rem"
-      mr={2}
-      p={0.25}
-    >
-      <TextField
-        required
-        id="new-maturity"
-        type="number"
-        name="index"
-        value={newItem.index}
-        onChange={handleInputChange}
-        variant="outlined"
-        size="small"
-        inputProps={{
-          "data-testid": "questionnaires-value",
-          style: { textAlign: "center", width: "40px" },
-        }}
-        sx={{
-          fontSize: 14,
-          "& .MuiInputBase-root": {
-            fontSize: 14,
-          },
-          background:"#fff",
-        }}
-      />
-    </Box>
-
     <Box width="100%" mx={1}>
       <TextField
         required
