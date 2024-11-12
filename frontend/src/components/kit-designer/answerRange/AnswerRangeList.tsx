@@ -239,7 +239,7 @@ const ListOfItems = ({
 
       await postOptionsKit.query({ kitVersionId, data }).then(() => {
         // fetchQuery.query();
-        setChangeData(prev => !prev)
+        setChangeData((prev : any) => !prev)
       });
     } catch (e) {
       const err = e as ICustomError;

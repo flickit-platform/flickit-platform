@@ -57,7 +57,7 @@ const OptionContain = (props: any) => {
        await EditAnswerRangeOption.query({
             kitVersionId,answerOptionId ,data
         }).then(()=>{
-           setChangeData(prev => !prev)
+           setChangeData((prev : any) => !prev)
        })
        // await fetchQuery.query()
     };
