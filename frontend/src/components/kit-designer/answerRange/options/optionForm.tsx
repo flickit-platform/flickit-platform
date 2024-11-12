@@ -24,7 +24,6 @@ const OptionForm = ({
                         handleSave,
                         handleCancel,
                     }: OptionFormProps) => {
-    console.log(newItem, "tetete")
     return (
         <Box
             // mt={1.5}
@@ -116,6 +115,7 @@ const OptionForm = ({
                         background: "#fff",
                         width: "100%",
                     }}
+                    label={<Trans i18nKey="value" />}
                 />
             </Box>
             {/* Check and Close Buttons */}

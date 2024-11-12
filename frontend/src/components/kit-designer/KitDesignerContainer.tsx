@@ -123,7 +123,7 @@ const KitDesignerContainer = () => {
                     }}
                     label={
                         <Typography variant="semiBoldLarge">
-                            <Trans i18nKey="answerRange" />
+                            <Trans i18nKey="answerRanges" />
                         </Typography>
                     }
                 />
