@@ -10,8 +10,8 @@ import TextField from "@mui/material/TextField";
 import {Trans} from "react-i18next";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import {useQuery} from "@utils/useQuery";
+import {useServiceContext} from "@providers/ServiceProvider";
 
 interface ITempValues {
     title: string;
@@ -21,10 +21,15 @@ interface ITempValues {
 const OptionContain = (props: any) => {
     const { answerOption, fetchQuery, onEdit } = props;
     const { kitVersionId = "" } = useParams();
+    const { service } = useServiceContext();
     const [isEditMode, setEditMode] = useState<any>(null);
     const [tempValues, setTempValues] = useState<ITempValues>({
         title: "",
         value: 0,
+    });
+    const EditAnswerRangeOption = useQuery({
+        service: (args, config) =>
+            service.EditAnswerRangeOption(args, config),
     });
     const handleEditClick = (answerOption: KitDesignListItems) => {
         const {id,title,value} = answerOption
@@ -34,13 +39,25 @@ const OptionContain = (props: any) => {
             value: value,
         });
     };
-    const handleSaveClick = (item: IOption) => {
-        onEdit({
+
+
+    const handleSaveClick =async (item: IOption) => {
+        // onEdit({
+        //     ...item,
+        //     title: tempValues.title,
+        //     value: tempValues.value,
+        // });
+        setEditMode(null);
+        const data ={
             ...item,
             title: tempValues.title,
             value: tempValues.value,
-        });
-        setEditMode(null);
+        }
+        let answerOptionId = item.id
+       await EditAnswerRangeOption.query({
+            kitVersionId,answerOptionId ,data
+        })
+       await fetchQuery.query()
     };
 
     const handleCancelClick = () => {
@@ -112,7 +129,7 @@ const OptionContain = (props: any) => {
                         onChange={(e) =>
                             setTempValues({
                                 ...tempValues,
-                                title: e.target.value,
+                                value: Number(e.target.value),
                             })
                         }
                         inputProps={{

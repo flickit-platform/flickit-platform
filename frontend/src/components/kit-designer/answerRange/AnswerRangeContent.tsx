@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
 import PermissionControl from "../../common/PermissionControl";
 import QueryBatchData from "../../common/QueryBatchData";
 import { useServiceContext } from "@/providers/ServiceProvider";
 import { useQuery } from "@/utils/useQuery";
 import ListOfItems from "./AnswerRangeList";
 import EmptyState from "../common/EmptyState";
-import { Trans } from "react-i18next";
 import { useParams } from "react-router-dom";
 import toastError from "@/utils/toastError";
 import { ICustomError } from "@/utils/CustomError";
 import { debounce } from "lodash";
 import { LoadingSkeletonKitCard } from "@/components/common/loadings/LoadingSkeletonKitCard";
 import KitDHeader from "@components/kit-designer/common/KitHeader";
-import QuestionnairesForm from "./AnswerRangeForm";
 import AnswerRangeForm from "./AnswerRangeForm";
 
 const AnaweRangeContent = () => {

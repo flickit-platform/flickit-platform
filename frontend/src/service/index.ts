@@ -952,6 +952,16 @@ export const createService = (
               config,
           );
       },
+      EditAnswerRangeOption(
+          { kitVersionId,answerOptionId, data }: { kitVersionId: TId;answerOptionId:TId ; data: any },
+          config?: AxiosRequestConfig<any>,
+      ){
+          return axios.put(
+              `/api/v1/kit-versions/${kitVersionId}/answer-options/${answerOptionId}/`,
+              data,
+              config,
+          );
+      },
     createAdvice(
       {
         assessmentId,
