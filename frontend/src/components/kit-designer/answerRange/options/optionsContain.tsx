@@ -19,7 +19,7 @@ interface ITempValues {
 }
 
 const OptionContain = (props: any) => {
-    const { answerOption, fetchQuery, onEdit } = props;
+    const { answerOption, fetchQuery, setChangeData } = props;
     const { kitVersionId = "" } = useParams();
     const { service } = useServiceContext();
     const [isEditMode, setEditMode] = useState<any>(null);
@@ -56,8 +56,10 @@ const OptionContain = (props: any) => {
         let answerOptionId = item.id
        await EditAnswerRangeOption.query({
             kitVersionId,answerOptionId ,data
-        })
-       await fetchQuery.query()
+        }).then(()=>{
+           setChangeData((prev : any) => !prev)
+       })
+       // await fetchQuery.query()
     };
 
     const handleCancelClick = () => {
