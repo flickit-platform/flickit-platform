@@ -133,58 +133,6 @@ const SUbjectAttributeCard = (props: any) => {
       </AccordionSummary>
       <AccordionDetails sx={{ padding: "0 !important", mb: 2 }}>
         <Typography
-          mt={4}
-          fontSize="1.5rem"
-          fontWeight={700}
-          sx={{
-            gap: "46px",
-            ...styles.centerVH,
-          }}
-        >
-          <Trans i18nKey={"relatedEvidences"} />
-        </Typography>
-        {emptyNegativeEvidence && emptyPositiveEvidence ? (
-          <Box width="100%" padding={4} gap={3} sx={{ ...styles.centerCVH }}>
-            <img style={{ maxWidth: "50vw" }} src={emptyState} alt="empty" />
-            <Typography fontSize="1.25rem" fontWeight={500} color="#9DA7B3">
-              <Trans i18nKey={"noEvidence"} />
-            </Typography>
-          </Box>
-        ) : (
-          <Box
-            sx={{
-              ...styles.centerVH,
-              paddingX: "10vw",
-            }}
-          >
-            <Grid container spacing={4} mt={1}>
-              {/* passing loading negative evidence for displaying circular progess till both of them had been loaded */}
-              <Grid item lg={6} md={6} xs={12}>
-                <RelatedEvidencesContainer
-                  expandedAttribute={expandedAttribute}
-                  attributeId={id}
-                  type={evidenceType.positive}
-                  setEmptyEvidence={setEmptyPositiveEvidence}
-                  setOpositeEvidenceLoading={setPositiveEvidenceLoading}
-                  opositeEvidenceLoading={negativeEvidenceLoading}
-                />
-              </Grid>
-              {/* passing loading positive evidence for displaying circular progess till both of them had been loaded */}
-              <Grid item lg={6} md={6} xs={12}>
-                <RelatedEvidencesContainer
-                  expandedAttribute={expandedAttribute}
-                  attributeId={id}
-                  type={evidenceType.negative}
-                  setEmptyEvidence={setEmptyNegativeEvidence}
-                  setOpositeEvidenceLoading={setNegativeEvidenceLoading}
-                  opositeEvidenceLoading={positiveEvidenceLoading}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        )}
-
-        <Typography
           textAlign="center"
           fontSize="1.5rem"
           fontWeight={700}
