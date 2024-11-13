@@ -91,7 +91,7 @@ const AnaweRangeContent = () => {
 
       // Reset form and re-fetch data after saving
       // setShowQuestionnairesForm(false);
-      await fetchAnswerRangeKit.query();
+      // await fetchAnswerRangeKit.query();
       // maturityLevelsCompetences.query();
 
       // Reset the form values
@@ -233,7 +233,7 @@ const AnaweRangeContent = () => {
                     />
                   </Box>
                 ) : (
-                 fetchAnswerRangeKit?.data?.length && <EmptyState
+                    data?.length == 0 && <EmptyState
                     btnTitle={"newAnswerRange"}
                     title={"answerRangeListEmptyState"}
                     SubTitle={"answerRangeEmptyStateDetailed"}
