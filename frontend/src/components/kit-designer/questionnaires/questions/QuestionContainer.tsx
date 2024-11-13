@@ -18,6 +18,7 @@ const QuestionContain = (props: any) => {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
+    fetchQuery.query();
   };
 
   return (

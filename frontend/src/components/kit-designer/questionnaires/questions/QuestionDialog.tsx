@@ -106,7 +106,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
         mayNotBeApplicable: question?.mayNotBeApplicable || false,
         advisable: question?.advisable || false,
       });
-      setSelectedAnswerRange(null);
+      setSelectedAnswerRange(question?.answerRangeId);
     }
   }, [open, question, formMethods]);
 
@@ -115,6 +115,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       const requestData = {
         ...data,
         index: question.index,
+        answerRangeId: selectedAnswerRange,
       };
       await service.updateQuestionsKit({
         kitVersionId,
@@ -124,7 +125,8 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
       fetchQuery.query();
       onClose();
     } catch (error) {
-      console.error("Failed to update question:", error);
+      const err = error as ICustomError;
+      toastError(err);
     }
   };
 
@@ -269,19 +271,9 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({
     runOnMount: false,
   });
 
-  const [selectedAnswerRange, setSelectedAnswerRange] = useState(null);
-
-  const [selectedAnswerOptions, setSelectedAnswerOptions] = useState([]);
-  useEffect(() => {
-    if (selectedAnswerRange) {
-      const selectedAnswerRangeData = fetchAnswerRanges.data.items.find(
-        (res: any) => {
-          if (res.id === selectedAnswerRange) return res.answerOptions;
-        },
-      );
-      setSelectedAnswerOptions(selectedAnswerRangeData);
-    }
-  }, [selectedAnswerRange]);
+  const [selectedAnswerRange, setSelectedAnswerRange] = useState<
+    number | undefined
+  >(question.answerRangeId);
 
   const handleAnswerRangeChange = async (event: any) => {
     const requestData = {
