@@ -1705,7 +1705,7 @@ const MaturityLevelsDetails = (props: any) => {
                         fontSize=".75rem"
                         color="#fff"
                       >
-                        {title}:  {value}%  {competences.length - 1 !== key && ",   "}
+                        {(theme.direction == "ltr" && key != 0 && "   ,")} {title}:  {value}%  {competences.length - 1 !== key && (theme.direction == "rtl" && ",   ")}
                       </Typography>
                     );
                   })}
