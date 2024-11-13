@@ -129,6 +129,7 @@ const AddMemberDialog = (props: {
 
   const onConfirm = async (e: any) => {
     try {
+    if (addedEmailType != EUserType.DEFAULT) {
       addedEmailType === EUserType.NONE
         ? await inviteMemberToAssessment.query({
             email: memberSelectedEmail,
@@ -139,6 +140,7 @@ const AddMemberDialog = (props: {
       // await fetchAssessmentsUserListRoles()
       setChangeData((prev: boolean) => !prev);
       closeDialog();
+    }
     } catch (e) {
       const err = e as ICustomError;
       toastError(err);
